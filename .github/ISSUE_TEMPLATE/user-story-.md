@@ -19,6 +19,6 @@ A clear and concise description of what the user story is.
 - [ ] Add Green Button
 - [x] Add Red Button
 
-**Additional context**
 <!-- Add any other context about the problem here or link any related issues -->
+**Additional context**
 N/A
