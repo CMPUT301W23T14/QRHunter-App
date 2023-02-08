@@ -16,6 +16,6 @@ A quick description on how to reproduce the bug and a screenshot / screen record
 **Expected behavior**
 A clear and concise description of what you expected to happen.
 
-**Additional context**
 <!-- Add any other context about the problem here or link any related issues -->
+**Additional context**
 N/A
