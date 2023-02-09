@@ -14,8 +14,8 @@ Replace the [U.S CODE] in the title with the related user story code / id and gi
 **Describe the user story**
 A clear and concise description of what the user story is.
 
-**Describe the required tasks**
 <!-- Add a one or more tasks as a checklist. Feel free to convert a single task into a separate issue -->
+**Describe the required tasks**
 - [ ] Add Green Button
 - [x] Add Red Button
 
