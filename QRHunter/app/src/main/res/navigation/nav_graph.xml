@@ -2,4 +2,35 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph" />
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mapFragment">
+    <fragment
+        android:id="@+id/leaderboardFragment"
+        android:name="com.example.qrhunter.ui.leaderboard.LeaderboardFragment"
+        android:label="fragment_leaderboard"
+        tools:layout="@layout/fragment_leaderboard" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.qrhunter.ui.profile.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.example.qrhunter.ui.map.MapFragment"
+        android:label="fragment_map"
+        tools:layout="@layout/fragment_map" />
+    <fragment
+        android:id="@+id/scanFragment"
+        android:name="com.example.qrhunter.ui.scan.ScanFragment"
+        android:label="fragment_scan"
+        tools:layout="@layout/fragment_scan">
+        <action
+            android:id="@+id/action_scanFragment_to_afterScanFragment"
+            app:destination="@id/afterScanFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/afterScanFragment"
+        android:name="com.example.qrhunter.ui.scan.AfterScanFragment"
+        android:label="fragment_after_scan"
+        tools:layout="@layout/fragment_after_scan" />
+</navigation>

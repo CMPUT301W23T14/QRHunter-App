@@ -11,4 +11,10 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Bottom nav menu titles -->
+    <string name="title_map">map</string>
+    <string name="title_scan">scan</string>
+    <string name="title_leaderboard">leaderboard</string>
+    <string name="title_profile">profile</string>
 </resources>
