@@ -1,5 +1,3 @@
-# Related Issue
-
 <!-- 
 A summary of the change and which issue is fixed. 
 -->
