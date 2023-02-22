@@ -24,8 +24,21 @@ public class ProfileFragment extends Fragment {
 
         // Inflate the layout for this fragment
         binding = FragmentProfileBinding.inflate(inflater, container, false);
+        binding.addButton.setOnClickListener(view -> {
+            profileViewModel.addCount();
+        });
+
+        profileViewModel.getCount().observe(getViewLifecycleOwner(), newInteger -> {
+            binding.counter.setText(String.valueOf(newInteger));
+        });
 
         return binding.getRoot();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 
 }

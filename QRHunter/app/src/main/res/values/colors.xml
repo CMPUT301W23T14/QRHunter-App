@@ -16,4 +16,5 @@
     <color name="secondary_dark">#9C910B</color>
     <color name="neutral_black">#383D3B</color>
     <color name="neutral_grey">#79747E</color>
+    <color name="neutral_light_grey">#B8B5BB</color>
 </resources>

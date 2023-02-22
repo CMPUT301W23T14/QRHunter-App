@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Theme.QRHunter" parent="Theme.Material3.Light">
         <!-- Primary brand color. -->
@@ -17,6 +17,10 @@
     <style name="Theme.QRHunter.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="App.Custom.Indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">@color/primary_light</item>
     </style>
 
     <style name="Theme.QRHunter.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

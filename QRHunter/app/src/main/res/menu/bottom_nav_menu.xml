@@ -1,24 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
         android:id="@+id/navigation_map"
+        android:checkable="false"
+        android:enabled="true"
         android:icon="@drawable/outline_location_on_24"
-        android:title="@string/title_map" />
+        android:title="@string/title_map"
+        android:visible="true" />
 
     <item
         android:id="@+id/navigation_scan"
-        android:icon="@drawable/ic_home_black_24dp"
+        android:enabled="true"
+        android:icon="@drawable/outline_photo_camera_24"
         android:title="@string/title_scan" />
 
     <item
         android:id="@+id/navigation_leaderboard"
-        android:icon="@drawable/ic_home_black_24dp"
+        android:enabled="true"
+        android:icon="@drawable/outline_bar_chart_24"
         android:title="@string/title_leaderboard" />
 
     <item
         android:id="@+id/navigation_profile"
-        android:icon="@drawable/ic_home_black_24dp"
+        android:enabled="true"
+        android:icon="@drawable/outline_person_24"
         android:title="@string/title_profile" />
 
 </menu>
