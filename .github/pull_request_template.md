@@ -1,7 +1,9 @@
-<!-- 
-A summary of the change and which issue is fixed. 
--->
 Fixes # (issue)
+
+<!-- 
+A summary of the change. 
+-->
+
 
 # Screenshot 
 <!-- 
