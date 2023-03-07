@@ -32,9 +32,9 @@ public class ExampleUnitTest {
     public void calculateScore_isCorrect() {
         QRCodeRepository test = new QRCodeRepository();
         String qrCode = test.hashQR("BFG5DGW54");
-        // Repeats in hash are 22, 55, 44, 88 which is 2+5+4+8=19
-        assertEquals(19, test.calculateScore(qrCode));
+        // Repeats in hash are 22, 55, 44, 88 which is 2+5+4+8=19 + 4 0's = 23
+        assertEquals(23, test.calculateScore(qrCode));
         // Hash given in project description
-        assertEquals(111, test.calculateScore("696ce4dbd7bb57cbfe58b64f530f428b74999cb37e2ee60980490cd9552de3a6"));
+        assertEquals(115, test.calculateScore("696ce4dbd7bb57cbfe58b64f530f428b74999cb37e2ee60980490cd9552de3a6"));
     }
 }

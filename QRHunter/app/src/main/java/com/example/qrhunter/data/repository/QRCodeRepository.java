@@ -13,8 +13,11 @@ public class QRCodeRepository {
         char[] array = hash.toCharArray();
         for (int i = 0; i < array.length-1; i++) {
             int value = 0;
-            if (array[i] == array [i+1] ) {
-                int j = i +1;
+            if (array[i] == '0' && array[i+1] != '0') {
+                score += 1;
+            }
+            else if (array[i] == array [i+1] ) {
+                int j = i + 1;
                 while (array[i] == array[j]) {
                     value += 1;
                     j += 1;
