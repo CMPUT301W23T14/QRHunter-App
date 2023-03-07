@@ -10,9 +10,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 
 public class ScanViewModel extends ViewModel {
+    private final MutableLiveData<String> scannedText = new MutableLiveData<>();
     // TODO: Implement the ViewModel
     private FirebaseFirestore db;
-    private final MutableLiveData<String> scannedText = new MutableLiveData<>();
 
     public void scan() {
 
@@ -31,5 +31,6 @@ public class ScanViewModel extends ViewModel {
         data.put("Scanned item(test)", text); // also temp document name
         usersRef.document("test").set(data);
         scannedText.setValue(text);
+
     }
 }
