@@ -38,7 +38,7 @@ public class ScanFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         //Get ViewModel
-        ScanViewModel scanViewModel = new ViewModelProvider(this).get(ScanViewModel.class);
+        ScanViewModel scanViewModel = new ViewModelProvider(requireActivity()).get(ScanViewModel.class);
 
         // Inflate the layout for this fragment
         binding = FragmentScanBinding.inflate(inflater, container, false);
@@ -52,6 +52,7 @@ public class ScanFragment extends Fragment {
                     new String[]{Manifest.permission.CAMERA},
                     MY_PERMISSIONS_REQUEST_CAMERA);
         }
+
         final Activity activity = getActivity();
         CodeScannerView scannerView = binding.scannerView;
         mCodeScanner = new CodeScanner(activity, scannerView);
@@ -62,7 +63,7 @@ public class ScanFragment extends Fragment {
                     @Override
                     public void run() {
                         Toast.makeText(activity, result.getText(), Toast.LENGTH_SHORT).show();
-                        scanViewModel.storeResult(result.getText());
+                        scanViewModel.scanQRCode(result.getText());
                         Navigation.findNavController(binding.getRoot()).navigate(R.id.action_scanFragment_to_afterScanFragment);
                     }
                 });
@@ -74,6 +75,7 @@ public class ScanFragment extends Fragment {
                 mCodeScanner.startPreview();
             }
         });
+
         return binding.getRoot();
     }
 
