@@ -4,32 +4,29 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.HashMap;
+import com.example.qrhunter.data.repository.QRCodeRepository;
 
 public class ScanViewModel extends ViewModel {
-    // TODO: Implement the ViewModel
-    private FirebaseFirestore db;
-    private final MutableLiveData<String> scannedText = new MutableLiveData<>();
+    private final MutableLiveData<String> qrCodeContent = new MutableLiveData<>();
+    private QRCodeRepository qrCodeRepository = new QRCodeRepository();
 
-    public void scan() {
-
+    public LiveData<String> getQRCodeContent() {
+        return qrCodeContent;
     }
 
-    public LiveData<String> getScannedText() {
-        return scannedText;
+    /**
+     * Called when user scans a qr code
+     *
+     * @param qrCodeContent The content of the QR Code
+     */
+    public void scanQRCode(String qrCodeContent) {
+        this.qrCodeContent.setValue(qrCodeContent);
     }
 
-    public void storeResult(String text) {
-        // store result in firebase
-        db = FirebaseFirestore.getInstance();
-        // result is stored in a collection called scanned_items_test and a document called test
-        CollectionReference usersRef = db.collection("scanned_items_test"); // this is just a temporary collection
-        HashMap<String, String> data = new HashMap<>();
-        data.put("Scanned item(test)", text); // also temp document name
-        usersRef.document("test").set(data);
-        scannedText.setValue(text);
+    /**
+     * Called when user has reviewed the QR Code details and wants to add to account
+     */
+    public void createQRCode() {
+        // qrCodeRepository.addQRCode();
     }
 }

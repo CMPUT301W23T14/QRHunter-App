@@ -1,5 +1,6 @@
 package com.example.qrhunter.ui.scan;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -14,36 +15,35 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
-//import com.example.qrhunter.Manifest;
 import com.example.qrhunter.R;
 import com.example.qrhunter.databinding.FragmentScanBinding;
 import com.google.zxing.Result;
-import android.Manifest;
 
 
 /**
  * This screen might make more sense as an activity
  */
 public class ScanFragment extends Fragment {
+    private final int MY_PERMISSIONS_REQUEST_CAMERA = 1001;
     private FragmentScanBinding binding;
     private CodeScanner mCodeScanner;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         //Get ViewModel
-        ScanViewModel scanViewModel = new ViewModelProvider(this).get(ScanViewModel.class);
+        ScanViewModel scanViewModel = new ViewModelProvider(requireActivity()).get(ScanViewModel.class);
 
         // Inflate the layout for this fragment
         binding = FragmentScanBinding.inflate(inflater, container, false);
 
-        final int MY_PERMISSIONS_REQUEST_CAMERA = 1001;
+
         //request permission to use the camera if permission is not granted
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -52,6 +52,7 @@ public class ScanFragment extends Fragment {
                     new String[]{Manifest.permission.CAMERA},
                     MY_PERMISSIONS_REQUEST_CAMERA);
         }
+
         final Activity activity = getActivity();
         CodeScannerView scannerView = binding.scannerView;
         mCodeScanner = new CodeScanner(activity, scannerView);
@@ -62,7 +63,7 @@ public class ScanFragment extends Fragment {
                     @Override
                     public void run() {
                         Toast.makeText(activity, result.getText(), Toast.LENGTH_SHORT).show();
-                        scanViewModel.storeResult(result.getText());
+                        scanViewModel.scanQRCode(result.getText());
                         Navigation.findNavController(binding.getRoot()).navigate(R.id.action_scanFragment_to_afterScanFragment);
                     }
                 });
@@ -74,6 +75,7 @@ public class ScanFragment extends Fragment {
                 mCodeScanner.startPreview();
             }
         });
+
         return binding.getRoot();
     }
 
