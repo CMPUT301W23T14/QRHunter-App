@@ -15,8 +15,8 @@ public class Player {
     // The rest of the attributes are public
     private String username;
     private String phoneNumber;
-    private Integer rank;
-    private Integer totalScore;
+    private int rank;
+    private int totalScore;
     private ArrayList<QRCode> scannedQRCodes;
 
     /**
@@ -31,12 +31,12 @@ public class Player {
     /**
      * Constructors for Players that already exist in Firestore
      */
-    public Player(String id, String username, String phoneNumber, Integer rank, Integer totalScore) {
+    public Player(String id, String username, String phoneNumber, int rank, int totalScore) {
         this.id = id;
         this.username = username;
         this.phoneNumber = phoneNumber;
         this.rank = rank;
-        this.totalScore = 0;
+        this.totalScore = totalScore;
     }
 
     public ArrayList<QRCode> getScannedQRCodes() {
@@ -67,19 +67,19 @@ public class Player {
         this.phoneNumber = phoneNumber;
     }
 
-    public Integer getRank() {
+    public int getRank() {
         return rank;
     }
 
-    public void setRank(Integer rank) {
+    public void setRank(int rank) {
         this.rank = rank;
     }
 
-    public Integer getTotalScore() {
+    public int getTotalScore() {
         return totalScore;
     }
 
-    public void setTotalScore(Integer totalScore) {
+    public void setTotalScore(int totalScore) {
         this.totalScore = totalScore;
     }
 }

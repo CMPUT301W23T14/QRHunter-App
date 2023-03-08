@@ -33,7 +33,7 @@ public final class QRCodeUtil {
      * @param hash The hash of the QR Code
      * @return A score
      */
-    public static Integer generateScore(String hash) {
+    public static int generateScore(String hash) {
         return 123;
     }
 

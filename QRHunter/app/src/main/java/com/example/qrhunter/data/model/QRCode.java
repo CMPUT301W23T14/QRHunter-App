@@ -27,7 +27,7 @@ public class QRCode {
     /**
      * The score of the QR Code calculated from the hash
      */
-    private Integer score;
+    private int score;
     private Location location;
     private ArrayList<Comment> comments;
 
@@ -48,7 +48,7 @@ public class QRCode {
     /**
      * Constructor for an existing QR Code in Firestore
      */
-    public QRCode(String hash, Location location, String name, Integer score, String visualRepresentation, ArrayList<Comment> comments) {
+    public QRCode(String hash, Location location, String name, int score, String visualRepresentation, ArrayList<Comment> comments) {
         this.hash = hash;
 
         this.name = name;

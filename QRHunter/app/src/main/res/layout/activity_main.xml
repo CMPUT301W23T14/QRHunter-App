@@ -25,7 +25,6 @@
         app:itemActiveIndicatorStyle="@style/App.Custom.Indicator"
         app:itemBackground="@color/neutral_light_grey"
         app:itemHorizontalTranslationEnabled="false"
-        app:itemIconSize="30dp"
         app:itemIconTint="@color/white"
         app:itemRippleColor="@color/primary_light"
         app:itemTextColor="@color/white"
