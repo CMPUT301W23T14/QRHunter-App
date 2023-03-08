@@ -20,9 +20,9 @@ jobs:
         distribution: 'temurin'
         cache: gradle
 
-    - name: Change working directory into QRHunter
-      run: cd QRHunter
     - name: Grant execute permission for gradlew
+      working-directory: ./QRHunter
       run: chmod +x gradlew
     - name: Build with Gradle
+      working-directory: ./QRHunter
       run: ./gradlew build
