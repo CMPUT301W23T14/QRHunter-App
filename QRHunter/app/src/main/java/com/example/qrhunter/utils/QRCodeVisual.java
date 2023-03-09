@@ -89,7 +89,7 @@ public class QRCodeVisual {
         }
 
         // bit 5 arm
-        if(bitValues.charAt(5) == '0'){
+        if(bitValues.charAt(3) == '0'){
             // bit 1 body
             if (bitValues.charAt(1) == '0') {
                 visualRepresentation += bigBody.substring(0, 1) + rightArm +
@@ -103,7 +103,7 @@ public class QRCodeVisual {
         }
         else{
             // bit 1 body
-            if(bitValues.charAt(1) == '0'){
+            if(bitValues.charAt(4) == '0'){
                 visualRepresentation += bigBody;
             }
             else{
@@ -112,7 +112,7 @@ public class QRCodeVisual {
         }
 
         // bit 2 legs
-        if(bitValues.charAt(2) == '0'){
+        if(bitValues.charAt(5) == '0'){
             visualRepresentation += legs;
         }
         else{
