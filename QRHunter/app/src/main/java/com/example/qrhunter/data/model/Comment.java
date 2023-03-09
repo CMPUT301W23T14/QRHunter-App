@@ -4,16 +4,16 @@ package com.example.qrhunter.data.model;
  * Model class for a comment.
  */
 public class Comment {
-    private final Player author;
+    private final String authorId;
     private String content;
 
-    public Comment(Player author, String content) {
-        this.author = author;
+    public Comment(String authorId, String content) {
+        this.authorId = authorId;
         this.content = content;
     }
 
-    public Player getAuthor() {
-        return author;
+    public String getAuthorId() {
+        return authorId;
     }
 
     public String getContent() {
