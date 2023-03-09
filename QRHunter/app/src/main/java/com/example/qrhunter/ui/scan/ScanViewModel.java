@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.qrhunter.data.repository.QRCodeRepository;
+import com.example.qrhunter.utils.QRCodeUtil;
 
 public class ScanViewModel extends ViewModel {
     private final MutableLiveData<String> qrCodeContent = new MutableLiveData<>();
@@ -23,6 +24,8 @@ public class ScanViewModel extends ViewModel {
      */
     public void scanQRCode(String qrCodeContent) {
         this.qrCodeContent.setValue(qrCodeContent);
+        // turn it into hashValue
+        QRCodeUtil.generateHash(this.qrCodeContent.toString());
         this.qrCodeHash.setValue(qrCodeContent);
     }
 
