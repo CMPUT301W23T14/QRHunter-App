@@ -5,19 +5,21 @@
     android:layout_height="match_parent"
     >
 
-    <Button
+    <ImageButton
         android:id="@+id/qrBackButton"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginStart="12dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="16dp"
-        android:background="@drawable/arrow_back"
-        android:textColorHighlight="@color/neutral_black"
+        android:backgroundTint="@color/white"
+        android:textColorHighlight="@color/white"
         android:textColorLink="#000000"
         app:layout_constraintEnd_toStartOf="@+id/QRCodeDetailsText"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:rippleColor="#000000" />
+        app:rippleColor="#000000"
+        app:srcCompat="@drawable/arrow_back" />
 
     <TextView
         android:id="@+id/QR_Visual"
@@ -100,9 +102,43 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:text="TextView"
+        android:text="0 points"
+        android:textColor="@color/primary"
+        android:textColorLink="@color/primary"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/QR_name" />
+
+    <ImageButton
+        android:id="@+id/addGeoLocationButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="152dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/white"
+        app:layout_constraintStart_toEndOf="@+id/showRecordGeoLocationText"
+        app:layout_constraintTop_toBottomOf="@+id/QR_Visual"
+        app:srcCompat="@drawable/add_icon" />
+
+    <ImageButton
+        android:id="@+id/addPhotoLocationButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="129dp"
+        android:backgroundTint="@color/white"
+        app:layout_constraintStart_toEndOf="@+id/showAddphotoText"
+        app:layout_constraintTop_toBottomOf="@+id/addGeoLocationButton"
+        app:srcCompat="@drawable/add_icon" />
+
+    <ImageView
+        android:id="@+id/locationImage"
+        android:layout_width="109dp"
+        android:layout_height="109dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/showAddphotoText" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
