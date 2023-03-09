@@ -159,6 +159,8 @@ public class AfterScanFragment extends Fragment {
                 canSaveValue = false;
                 
                 // navigate to somewhere after this is done
+                Toast.makeText(view.getContext(), "Successfully added your QRCode!", Toast.LENGTH_SHORT).show();
+                Navigation.findNavController(binding.getRoot()).navigate(R.id.action_navigation_after_scan_to_navigation_map);
             }
         });
 
