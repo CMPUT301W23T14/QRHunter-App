@@ -41,7 +41,7 @@ public class LeaderboardAdapter extends ArrayAdapter<Player> {
         TextView player_score = view.findViewById(R.id.player_score);
         TextView player_rank = view.findViewById(R.id.player_rank);
         player_score.setText(Integer.toString(player.getTotalScore()));
-        player_name.setText(player.getId());
+        player_name.setText(player.getUsername());
         player_rank.setText(Integer.toString(player.getRank()));
 
         return view;
