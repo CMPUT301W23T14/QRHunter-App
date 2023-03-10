@@ -1,11 +1,20 @@
 package com.example.qrhunter.data.repository;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
 import com.example.qrhunter.data.model.Player;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.auth.User;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class UserRepository extends DataRepository {
     /**
@@ -44,6 +53,26 @@ public class UserRepository extends DataRepository {
 
     public Task<QuerySnapshot> getPlayers() {
         return playersCollection.orderBy("totalScore", Query.Direction.DESCENDING).get();
+    }
+
+    public LiveData<List<Player>> getUsers() {
+        MutableLiveData<List<Player>> usersLiveData = new MutableLiveData<>();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference usersRef = db.collection("user_test");
+        usersRef.orderBy("totalScore", Query.Direction.DESCENDING).get().addOnSuccessListener(queryDocumentSnapshots -> {
+            List<Player> users = new ArrayList<>();
+            for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                String id = document.getId();
+                String username = document.getString("username");
+                int totalScore = Objects.requireNonNull(document.getLong("totalScore")).intValue();
+                String phoneNumber = document.getString("phoneNumber");
+                int rank = Objects.requireNonNull(document.getLong("rank")).intValue();
+                Player player = new Player(id, username, phoneNumber, rank, totalScore);
+                users.add(player);
+            }
+            usersLiveData.setValue(users);
+        });
+        return usersLiveData;
     }
 
 }

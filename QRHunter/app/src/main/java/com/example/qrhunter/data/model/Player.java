@@ -15,16 +15,13 @@ public class Player {
      * The unique id of a player. It is generated using the device id.
      * It is also the document id for the collection "players" in Firestore
      */
-    @PropertyName("id")
-    private String id;
-    // The rest of the attributes are public
+
+    private final String id;
     private String username;
     private String phoneNumber;
     private int rank;
     private int totalScore;
     private ArrayList<QRCode> scannedQRCodes;
-
-
 
     /**
      * Constructor for new Players
@@ -34,16 +31,6 @@ public class Player {
         this.username = username;
         this.totalScore = 0;
     }
-
-    public Player(String id, String username, int TotalScore){
-        this.id = id;
-        this.username = username;
-        this.totalScore = TotalScore;
-    }
-    public Player(){
-
-    }
-
     /**
      * Constructors for Players that already exist in Firestore
      */
