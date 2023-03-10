@@ -33,8 +33,7 @@ public class ScanViewModel extends ViewModel {
     public void scanQRCode(String qrCodeContent) {
         this.qrCodeContent.setValue(qrCodeContent);
         // turn it into hashValue
-        QRCodeUtil.generateHash(this.qrCodeContent.toString());
-        this.qrCodeHash.setValue(qrCodeContent);
+        this.qrCodeHash.setValue(QRCodeUtil.generateHash(this.qrCodeContent.toString()));
     }
 
     /**
