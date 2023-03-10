@@ -51,10 +51,14 @@ public class UserRepository extends DataRepository {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference playersCollection = db.collection("user_test");
 
-    public Task<QuerySnapshot> getPlayers() {
-        return playersCollection.orderBy("totalScore", Query.Direction.DESCENDING).get();
-    }
+//    public Task<QuerySnapshot> getPlayers() {
+//        return playersCollection.orderBy("totalScore", Query.Direction.DESCENDING).get();
+//    }
 
+    /**
+     * Get all users from Firestore, sorted by totalScore in descending order, setting id = documentid and rest of variables from fields
+     * @return LiveData of a list of users/players classes
+     */
     public LiveData<List<Player>> getUsers() {
         MutableLiveData<List<Player>> usersLiveData = new MutableLiveData<>();
         FirebaseFirestore db = FirebaseFirestore.getInstance();

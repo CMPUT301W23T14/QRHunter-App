@@ -43,13 +43,13 @@ public class LeaderboardFragment extends Fragment {
         binding = FragmentLeaderboardBinding.inflate(inflater, container, false);
         leaderboardViewModel.getPlayers().observe(getViewLifecycleOwner(), players -> {
             dataList = new ArrayList<>(players);
-            dataList.add(new Player("gweiujh", "wihbjnge", "123124", 12, 124124));
             // some dummy values to fill the list
+            dataList.add(new Player("gweiujh", "wihbjnge", "123124", 12, 124124));
             dataList.add(new Player("gweiu21jh", "wihbj124ge", "123124", 12, 124124));
             dataList.add(new Player("gweiu23jh", "wihbj124nge", "123124", 12, 124124));
             dataList.add(new Player("gwei512ujh", "GeneralFranky", "12345", 112, 124124));
             dataList.add(new Player("gweiu41jh", "wihb132jnge", "123124", 12, 124124));
-            dataList.add(new Player("gwei23ujh", "wihb4jnge", "123124", 12, 124124));
+            dataList.add(new Player("gwei23ujh", "wihb4jnge", "123124", 12, 12345));
             dataList.add(new Player("gwei412ujh", "wih1bjnge", "123124", 12, 124124));
             dataList.add(new Player("gwe4iujh", "wihbj23nge", "123124", 12, 124124));
             // remove this part later
