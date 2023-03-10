@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
@@ -57,7 +58,17 @@ public class LeaderboardFragment extends Fragment {
             recyclerView.setAdapter(leaderboardAdapter);
             leaderboardAdapter.notifyDataSetChanged();
         });
+
+
+
+
         recyclerView = binding.leaderboardRecyclerView;
+        recyclerView.setOnItemClickListener((parent, view, position, id) -> {
+//            Toast.makeText(getContext(), "ID of clicked " + dataList.get(position).getId(), Toast.LENGTH_SHORT).show();
+            Navigation.findNavController(binding.getRoot()).navigate(R.id.action_navigation_leaderboard_to_navigation_profile);
+        });
+
+
         return binding.getRoot();
     }
 }

@@ -17,4 +17,7 @@
     <string name="title_scan">Scan</string>
     <string name="title_leaderboard">Leaderboard</string>
     <string name="title_profile">Profile</string>
+    <string name="sample_rank">100</string>
+    <string name="sample_name">GeneralFrassky</string>
+    <string name="sample_score">39928</string>
 </resources>
