@@ -4,7 +4,7 @@ public class QRCodeName {
     /**
      * generates the name for qrcode
      */
-    private String hashValue;
+    private final String hashValue;
     private String bitValues;
 
     private String qrCodeName;

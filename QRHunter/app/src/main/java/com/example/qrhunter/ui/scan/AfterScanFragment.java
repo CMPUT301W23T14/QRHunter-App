@@ -55,16 +55,18 @@ public class AfterScanFragment extends Fragment {
     Bitmap savedPhoto = null;
 
     // location is 0,0 until user decides to record location
+    // these are temp values and have no use once the data is created
     private int latitude = 0;
     private int longitude = 0;
     boolean deletePhoto = false;
     boolean canSaveValue = false;
+    boolean deleteGeoLocation = false;
     //
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         //Get ViewModel
-        ScanViewModel scanViewModel = new ViewModelProvider(this).get(ScanViewModel.class);
+        ScanViewModel scanViewModel = new ViewModelProvider(requireActivity()).get(ScanViewModel.class);
 
         // Inflate the layout for this fragment
         binding = FragmentAfterScanBinding.inflate(inflater, container, false);
@@ -77,7 +79,7 @@ public class AfterScanFragment extends Fragment {
         binding.QRVisual.setText(QRCodeUtil.generateVisualRepresentation(hashValue));
         binding.QRName.setText(QRCodeUtil.generateName(hashValue));
         // put the score here
-        binding.QRCodeScoretext.setText(String.valueOf(QRCodeUtil.generateScore(hashValue))+ " Points");
+        binding.QRCodeScoretext.setText(Double.toString(QRCodeUtil.generateScore(hashValue)) + " Points");
 
         // put the return button
         binding.qrBackButton.setOnClickListener(view -> {
@@ -87,12 +89,21 @@ public class AfterScanFragment extends Fragment {
 
         // adding the geo location
         binding.addGeoLocationButton.setOnClickListener(view -> {
-            // put add geo location on here
-            //...
+            if(deleteGeoLocation == false) {
+                // put add geo location on here
+                //...
 
-            // after location has been added
-            Toast.makeText(view.getContext(), "added your location!", Toast.LENGTH_SHORT).show();
-            binding.addGeoLocationButton.setImageResource(R.drawable.checkbox_location);
+                // after location has been added
+                Toast.makeText(view.getContext(), "added your location!", Toast.LENGTH_SHORT).show();
+                binding.addGeoLocationButton.setImageResource(R.drawable.checkbox_location);
+                deleteGeoLocation = true;
+            }
+            else{
+                // remove the geo location
+                Toast.makeText(view.getContext(), "deleted your location!", Toast.LENGTH_SHORT).show();
+                binding.addGeoLocationButton.setImageResource(R.drawable.checkbox_outline);
+                deleteGeoLocation = false;
+            }
         });
 
         // set to get the image after taking the photo
@@ -148,16 +159,9 @@ public class AfterScanFragment extends Fragment {
 
         binding.MoreOptions.setOnClickListener(view -> {
             if(canSaveValue == true){
-                ArrayList<String> photos = new ArrayList<String>();
-                photos.add(BitMapToString(savedPhoto));
-                Location location = new Location(latitude, longitude, photos);
-                QRCode newQRCode = new QRCode(hashValue, location, null);
-                
-                // add qrcode to database
-                // QRCodeRepository.addQRCode(newQRCode);
-
+                // use the model to add the qrcode
+                scanViewModel.createQRCode(hashValue, savedPhoto, latitude, longitude);
                 canSaveValue = false;
-                
                 // navigate to somewhere after this is done
                 Toast.makeText(view.getContext(), "Successfully added your QRCode!", Toast.LENGTH_SHORT).show();
                 Navigation.findNavController(binding.getRoot()).navigate(R.id.action_navigation_after_scan_to_navigation_map);
@@ -183,12 +187,5 @@ public class AfterScanFragment extends Fragment {
         }
     }
 
-    public String BitMapToString(Bitmap bitmap){
-        ByteArrayOutputStream baos =new  ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG,100, baos);
-        byte [] b=baos.toByteArray();
-        String temp= Base64.encodeToString(b, Base64.DEFAULT);
-        return temp;
-    }
 
 }

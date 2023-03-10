@@ -4,7 +4,7 @@ public class QRCodeVisual {
     /**
      * generates the visual representation of the qrCode
      */
-    private String hashValue;
+    private final String hashValue;
     private String bitValues;
 
     // for the qrcode visual representation
