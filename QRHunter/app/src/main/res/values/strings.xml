@@ -17,4 +17,7 @@
     <string name="title_scan">Scan</string>
     <string name="title_leaderboard">Leaderboard</string>
     <string name="title_profile">Profile</string>
+
+    <!-- Profile page -->
+    <string name="welcome_back">Welcome Back,</string>
 </resources>

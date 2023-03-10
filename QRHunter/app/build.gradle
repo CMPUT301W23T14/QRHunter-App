@@ -70,6 +70,4 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore'
 
     implementation 'commons-codec:commons-codec:1.13'
-
-
 }
