@@ -1,5 +1,7 @@
 package com.example.qrhunter.utils;
 
+//import com.google.firebase.crashlytics.buildtools.reloc.org.apache.commons.codec.digest.DigestUtils;
+
 import org.apache.commons.codec.digest.DigestUtils;
 
 /**

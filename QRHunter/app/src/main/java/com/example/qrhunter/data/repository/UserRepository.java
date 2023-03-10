@@ -1,6 +1,11 @@
 package com.example.qrhunter.data.repository;
 
 import com.example.qrhunter.data.model.Player;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class UserRepository extends DataRepository {
     /**
@@ -34,4 +39,11 @@ public class UserRepository extends DataRepository {
             return;
         }
     }
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference playersCollection = db.collection("user_test");
+
+    public Task<QuerySnapshot> getPlayers() {
+        return playersCollection.orderBy("totalScore", Query.Direction.DESCENDING).get();
+    }
+
 }

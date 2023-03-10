@@ -1,23 +1,30 @@
 package com.example.qrhunter.data.model;
 
+import com.google.firebase.firestore.DocumentId;
+import com.google.firebase.firestore.PropertyName;
+
 import java.util.ArrayList;
 
 /**
  * Model class for a player
  * TODO: Update the attributes as needed add validation to the setters
  */
+
 public class Player {
     /**
      * The unique id of a player. It is generated using the device id.
      * It is also the document id for the collection "players" in Firestore
      */
-    private final String id;
+    @PropertyName("id")
+    private String id;
     // The rest of the attributes are public
     private String username;
     private String phoneNumber;
     private int rank;
     private int totalScore;
     private ArrayList<QRCode> scannedQRCodes;
+
+
 
     /**
      * Constructor for new Players
@@ -26,6 +33,15 @@ public class Player {
         this.id = id;
         this.username = username;
         this.totalScore = 0;
+    }
+
+    public Player(String id, String username, int TotalScore){
+        this.id = id;
+        this.username = username;
+        this.totalScore = TotalScore;
+    }
+    public Player(){
+
     }
 
     /**
@@ -38,6 +54,7 @@ public class Player {
         this.rank = rank;
         this.totalScore = totalScore;
     }
+
 
     public ArrayList<QRCode> getScannedQRCodes() {
         return scannedQRCodes;
