@@ -9,8 +9,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.qrhunter.data.model.QRCode;
 import com.example.qrhunter.databinding.FragmentProfileBinding;
+import com.example.qrhunter.ui.adapters.QRCodesAdapter;
+
+import java.util.ArrayList;
 
 public class ProfileFragment extends Fragment {
 
@@ -25,6 +31,28 @@ public class ProfileFragment extends Fragment {
 
         // Inflate the layout for this fragment
         binding = FragmentProfileBinding.inflate(inflater, container, false);
+
+        // Get recycler view
+        RecyclerView rvQRCodes = binding.qrCodeRecyclerView;
+
+        // Sample qr code list, normally we would get the data from ViewModel instead
+        ArrayList<QRCode> sampleQRCodes = new ArrayList<QRCode>() {
+            {
+                add(new QRCode("123", null, "SoloCrabMegaIce", 22.2, "", null));
+                add(new QRCode("123", null, "SoloCrabMegaIce", 22.2, "", null));
+                add(new QRCode("123", null, "SoloCrabMegaIce", 22.2, "", null));
+                add(new QRCode("123", null, "SoloCrabMegaIce", 22.2, "", null));
+                add(new QRCode("123", null, "SoloCrabMegaIce", 22.2, "", null));
+                add(new QRCode("123", null, "SoloCrabMegaIce", 22.2, "", null));
+                add(new QRCode("123", null, "SoloCrabMegaIce", 22.2, "", null));
+                add(new QRCode("123", null, "SoloCrabMegaIce", 22.2, "", null));
+            }
+        };
+
+        // Set up recycler view
+        QRCodesAdapter qrCodesAdapter = new QRCodesAdapter(sampleQRCodes);
+        rvQRCodes.setAdapter(qrCodesAdapter);
+        rvQRCodes.setLayoutManager(new LinearLayoutManager(requireContext()));
 
         return binding.getRoot();
     }
