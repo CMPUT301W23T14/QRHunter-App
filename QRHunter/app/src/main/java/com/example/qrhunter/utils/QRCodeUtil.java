@@ -7,7 +7,6 @@ import org.apache.commons.codec.digest.DigestUtils;
 /**
  * A class containing all the helper functions for QRCode.
  * You shouldn't have to initialize a QRCodeUtil object.
- * TODO: Update the methods with actual logic
  */
 public final class QRCodeUtil {
 
@@ -40,12 +39,11 @@ public final class QRCodeUtil {
     public static double generateScore(String hash) {
         int score = 0;
         char[] array = hash.toCharArray();
-        for (int i = 0; i < array.length-1; i++) {
+        for (int i = 0; i < array.length - 1; i++) {
             int value = 0;
-            if (array[i] == '0' && array[i+1] != '0') {
+            if (array[i] == '0' && array[i + 1] != '0') {
                 score += 1;
-            }
-            else if (array[i] == array [i+1] ) {
+            } else if (array[i] == array[i + 1]) {
                 int j = i + 1;
                 while (array[i] == array[j]) {
                     value += 1;
@@ -66,7 +64,7 @@ public final class QRCodeUtil {
     /**
      * Generates the score of a string of characters within a hash
      *
-     * @param key The character to be converted
+     * @param key   The character to be converted
      * @param value The exponent to multiply the points by
      * @return A score
      */
@@ -75,8 +73,7 @@ public final class QRCodeUtil {
         int ascii = (int) key;
         if (ascii < 58) {
             ascii -= 48;
-        }
-        else {
+        } else {
             ascii -= 87;
         }
         points = Math.pow(ascii, value);

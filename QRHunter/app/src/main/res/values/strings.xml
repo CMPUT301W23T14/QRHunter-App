@@ -17,7 +17,13 @@
     <string name="title_scan">Scan</string>
     <string name="title_leaderboard">Leaderboard</string>
     <string name="title_profile">Profile</string>
+<!-- LeaderboardPage-->
     <string name="sample_rank">100</string>
     <string name="sample_name">GeneralFrassky</string>
     <string name="sample_score">39928</string>
+
+
+    <!-- Profile page -->
+    <string name="welcome_back">Welcome Back,</string>
+
 </resources>
