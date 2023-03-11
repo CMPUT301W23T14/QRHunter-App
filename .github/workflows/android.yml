@@ -19,6 +19,11 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
         cache: gradle
+    - name: Access MAPS_API_KEY
+      working-directory: ./QRHunter
+      env:
+        MAPS_API_KEY: ${{ secrets.MAPS_API_KEY }}
+      run: echo MAPS_API_KEY=\"$ MAPS_API_KEY\" > ./local.properties
 
     - name: Grant execute permission for gradlew
       working-directory: ./QRHunter

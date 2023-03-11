@@ -27,9 +27,9 @@ public final class QRCodeUtil {
      * @return A human readable name
      */
     public static String generateName(String hash) {
-        return "name";
+        QRCodeName qrCodeName = new QRCodeName(hash);
+        return qrCodeName.getQRName();
     }
-
     /**
      * Generates the score of a QR Code given the hash
      *
@@ -87,6 +87,7 @@ public final class QRCodeUtil {
      * @return A visual representation
      */
     public static String generateVisualRepresentation(String hash) {
-        return "Visuals";
+        QRCodeVisual qrCodeVisual = new QRCodeVisual(hash);
+        return qrCodeVisual.getVisualRepresentation();
     }
 }
