@@ -80,7 +80,7 @@ dependencies {
 }
 
 String getMapsApiKey() {
-    def propFile = rootProject.file("./local.properties")
+    def propFile = rootProject.file("local.properties")
     def properties = new Properties()
     properties.load(new FileInputStream(propFile))
     return properties['MAPS_API_KEY']
