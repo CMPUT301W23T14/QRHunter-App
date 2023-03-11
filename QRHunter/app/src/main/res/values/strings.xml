@@ -17,4 +17,8 @@
     <string name="title_scan">Scan</string>
     <string name="title_leaderboard">Leaderboard</string>
     <string name="title_profile">Profile</string>
+
+    <string name="supporting_text">Please enter a username.</string>
+    <string name="error_supporting_text">Username already exists. Please try another username.</string>
+    <string name="username">Username</string>
 </resources>

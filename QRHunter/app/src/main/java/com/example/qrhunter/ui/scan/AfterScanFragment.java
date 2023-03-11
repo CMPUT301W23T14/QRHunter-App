@@ -17,11 +17,19 @@ public class AfterScanFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         //Get ViewModel
-        ScanViewModel scanViewModel = new ViewModelProvider(this).get(ScanViewModel.class);
+        ScanViewModel scanViewModel = new ViewModelProvider(requireActivity()).get(ScanViewModel.class);
 
         // Inflate the layout for this fragment
         binding = FragmentAfterScanBinding.inflate(inflater, container, false);
 
+        scanViewModel.getQRCodeContent().observe(requireActivity(), newQRCodeContent -> {
+            binding.qrContent.setText(newQRCodeContent);
+        });
+
+        //TODO: Add an app bar like the one in Figma
+        
         return binding.getRoot();
     }
+
+
 }

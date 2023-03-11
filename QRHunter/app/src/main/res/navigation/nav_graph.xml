@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/navigation_map">
+    app:startDestination="@id/navigation_user_initialization">
     <fragment
         android:id="@+id/navigation_leaderboard"
         android:name="com.example.qrhunter.ui.leaderboard.LeaderboardFragment"
@@ -33,4 +33,9 @@
         android:name="com.example.qrhunter.ui.scan.AfterScanFragment"
         android:label="fragment_after_scan"
         tools:layout="@layout/fragment_after_scan" />
+    <fragment
+        android:id="@+id/navigation_user_initialization"
+        android:name="com.example.qrhunter.ui.login.PlayerInitialization"
+        android:label="fragment_player_initialization"
+        tools:layout="@layout/fragment_player_initialization"/>
 </navigation>
