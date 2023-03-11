@@ -1,6 +1,8 @@
 package com.example.qrhunter.utils;
 
-import org.apache.commons.codec.digest.DigestUtils;
+import com.google.common.hash.Hashing;
+
+import java.nio.charset.StandardCharsets;
 
 /**
  * A class containing all the helper functions for QRCode.
@@ -15,7 +17,7 @@ public final class QRCodeUtil {
      * @return A String Hash
      */
     public static String generateHash(String qrCodeContent) {
-        return DigestUtils.sha256Hex(qrCodeContent);
+        return Hashing.sha256().hashString(qrCodeContent, StandardCharsets.UTF_8).toString();
     }
 
     /**
