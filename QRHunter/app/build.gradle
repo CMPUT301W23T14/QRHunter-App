@@ -17,6 +17,8 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "MAPS_API_KEY", getMapsApiKey())
     }
 
     buildTypes {
@@ -75,4 +77,11 @@ dependencies {
 
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
 
+}
+
+String getMapsApiKey() {
+    def propFile = rootProject.file("./local.properties")
+    def properties = new Properties()
+    properties.load(new FileInputStream(propFile))
+    return properties['MAPS_API_KEY']
 }
