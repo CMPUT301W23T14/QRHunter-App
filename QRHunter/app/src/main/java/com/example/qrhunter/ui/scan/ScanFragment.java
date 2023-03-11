@@ -33,6 +33,8 @@ public class ScanFragment extends Fragment {
     private FragmentScanBinding binding;
     private CodeScanner mCodeScanner;
 
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
