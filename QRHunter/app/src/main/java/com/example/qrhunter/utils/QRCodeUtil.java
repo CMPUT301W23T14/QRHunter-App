@@ -1,8 +1,14 @@
 package com.example.qrhunter.utils;
 
+import com.example.qrhunter.data.model.Location;
+import com.example.qrhunter.data.model.QRCode;
 import com.google.common.hash.Hashing;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A class containing all the helper functions for QRCode.
@@ -30,6 +36,7 @@ public final class QRCodeUtil {
         QRCodeName qrCodeName = new QRCodeName(hash);
         return qrCodeName.getQRName();
     }
+
     /**
      * Generates the score of a QR Code given the hash
      *
@@ -89,5 +96,43 @@ public final class QRCodeUtil {
     public static String generateVisualRepresentation(String hash) {
         QRCodeVisual qrCodeVisual = new QRCodeVisual(hash);
         return qrCodeVisual.getVisualRepresentation();
+    }
+
+    /**
+     * Converts A Document Snapshot object to a QR Code object. Used when getting data from Firestore
+     *
+     * @param qrCodeDoc The document reference to the QR Code object
+     * @return A QR Code object
+     */
+    public static QRCode convertDocumentToQRCode(DocumentSnapshot qrCodeDoc) {
+        String hash = qrCodeDoc.get("hash").toString();
+        Location location = new Location(qrCodeDoc.getDouble("latitude"), qrCodeDoc.getDouble("latitude"), new ArrayList<>());
+        ArrayList<String> commentIds = (ArrayList<String>) qrCodeDoc.get("commentIds");
+        ArrayList<String> playerIds = (ArrayList<String>) qrCodeDoc.get("playerIds");
+
+        QRCode qrCode = new QRCode(hash, location, commentIds, playerIds);
+
+        return qrCode;
+    }
+
+    /**
+     * Converts A QR Code object to a Hashmap. Used when adding data to Firestore
+     *
+     * @param qrCode The QR Code object to be converted
+     * @return A hashmap
+     */
+    public static Map<String, Object> convertQRCodeToHashmap(QRCode qrCode) {
+        Map<String, Object> qrCodeHashMap = new HashMap<>();
+        qrCodeHashMap.put("hash", qrCode.getHash());
+        qrCodeHashMap.put("name", qrCode.getName());
+        qrCodeHashMap.put("visualRepresentation", qrCode.getVisualRepresentation());
+        qrCodeHashMap.put("score", qrCode.getScore());
+        qrCodeHashMap.put("latitude", qrCode.getLocation().latitude);
+        qrCodeHashMap.put("longitude", qrCode.getLocation().longitude);
+        // TODO: Upload location photo to firebase storage
+        qrCodeHashMap.put("comments", qrCode.getCommentIds());
+        qrCodeHashMap.put("playerIds", qrCode.getPlayerIds());
+
+        return qrCodeHashMap;
     }
 }

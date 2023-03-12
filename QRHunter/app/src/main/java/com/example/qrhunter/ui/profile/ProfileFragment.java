@@ -33,6 +33,16 @@ public class ProfileFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentProfileBinding.inflate(inflater, container, false);
 
+        // Get recycler view
+        RecyclerView rvQRCodes = binding.qrCodeRecyclerView;
+
+        ArrayList<QRCode> scannedQRCodes = new ArrayList<>();
+
+        // Set up recycler view
+        QRCodesAdapter qrCodesAdapter = new QRCodesAdapter(scannedQRCodes);
+        rvQRCodes.setAdapter(qrCodesAdapter);
+        rvQRCodes.setLayoutManager(new LinearLayoutManager(requireContext()));
+
         // Bind player info to texts
         @SuppressLint("HardwareIds") String deviceId = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
         profileViewModel.getPlayer(deviceId).observe(getViewLifecycleOwner(), player -> {
@@ -41,19 +51,14 @@ public class ProfileFragment extends Fragment {
                 binding.phoneNumberEditText.setText(player.getPhoneNumber());
                 binding.totalScore.setText(Integer.toString(player.getTotalScore()));
                 binding.rank.setText(Integer.toString(player.getRank()));
+
+                profileViewModel.getScannedQRCodes(player).observe(getViewLifecycleOwner(), qrCodes -> {
+                    scannedQRCodes.clear();
+                    scannedQRCodes.addAll(qrCodes);
+                    qrCodesAdapter.notifyDataSetChanged();
+                });
             }
         });
-
-        // Get recycler view
-        RecyclerView rvQRCodes = binding.qrCodeRecyclerView;
-
-        // Sample qr code list, normally we would get the data from ViewModel instead
-        ArrayList<QRCode> sampleQRCodes = new ArrayList<QRCode>();
-
-        // Set up recycler view
-        QRCodesAdapter qrCodesAdapter = new QRCodesAdapter(sampleQRCodes);
-        rvQRCodes.setAdapter(qrCodesAdapter);
-        rvQRCodes.setLayoutManager(new LinearLayoutManager(requireContext()));
 
         return binding.getRoot();
     }

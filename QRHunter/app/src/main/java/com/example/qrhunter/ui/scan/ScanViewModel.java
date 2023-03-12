@@ -41,10 +41,14 @@ public class ScanViewModel extends ViewModel {
      *
      * @param playerId The player that's scanning the qr code
      */
-    public void createQRCode(String playerId) {
-        QRCode newQRCode = new QRCode(qrCodeHash.getValue(), location.getValue(), new ArrayList<>());
+    public void completeScan(String playerId) {
+        QRCode newQRCode = new QRCode(qrCodeHash.getValue(), location.getValue(), new ArrayList<>(), new ArrayList<String>() {
+            {
+                add(playerId);
+            }
+        });
 
-        qrCodeRepository.addQRCode(newQRCode, playerId);
+        qrCodeRepository.addQRCodeToPlayer(newQRCode, playerId);
     }
 
     /**

@@ -147,7 +147,7 @@ public class AfterScanFragment extends Fragment {
         binding.saveButton.setOnClickListener(view -> {
             // use the model to add the qrcode
             @SuppressLint("HardwareIds") String deviceId = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
-            scanViewModel.createQRCode(deviceId);
+            scanViewModel.completeScan(deviceId);
             // navigate to somewhere after this is done
             Navigation.findNavController(binding.getRoot()).navigate(R.id.action_navigation_after_scan_to_navigation_map);
 

@@ -1,13 +1,11 @@
 package com.example.qrhunter.data.repository;
 
 import com.example.qrhunter.data.model.Player;
+import com.example.qrhunter.utils.PlayerUtil;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.Query;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 public class PlayerRepository extends DataRepository {
@@ -60,13 +58,7 @@ public class PlayerRepository extends DataRepository {
      * @return The player that was created in the callback
      */
     public void createPlayer(Player player, RepositoryCallback<Player> repositoryCallback) {
-        Map<String, Object> playerHashMap = new HashMap<>();
-        playerHashMap.put("username", player.getUsername());
-        playerHashMap.put("phoneNumber", player.getPhoneNumber());
-        // TODO: Calculate the correct rank
-        playerHashMap.put("rank", player.getRank());
-        playerHashMap.put("totalScore", player.getTotalScore());
-        playerHashMap.put("scannedQRCodes", player.getScannedQRCodeIds());
+        Map<String, Object> playerHashMap = PlayerUtil.convertPlayerToHashmap(player);
 
         db.collection("players").document(player.getId()).set(playerHashMap).addOnCompleteListener(task -> {
             repositoryCallback.onSuccess(player);
@@ -84,28 +76,14 @@ public class PlayerRepository extends DataRepository {
 
         playerDocRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful() && task.getResult().exists()) {
-                String username = task.getResult().get("username").toString();
-                String phoneNumber = task.getResult().get("phoneNumber").toString();
-                int rank = ((Long) task.getResult().get("rank")).intValue();
-                int totalScore = ((Long) task.getResult().get("totalScore")).intValue();
-                ArrayList<String> scannedQRCodes = (ArrayList<String>) task.getResult().get("scannedQRCodes");
+                Player player = PlayerUtil.convertDocumentToPlayer(task.getResult());
 
-                Player player = new Player(task.getResult().getId().toString(), username, phoneNumber, rank, totalScore, scannedQRCodes);
                 repositoryCallback.onSuccess(player);
             }
         });
     }
 
-    public void addQRCodeToPlayer(String playerId, String qrCodeId) {
-        db.collection("players").document(playerId).get().addOnCompleteListener(task -> {
-            if (task.isSuccessful() && task.getResult().exists()) {
-                // Check whether user already scanned this qrCode before
-                if (!((ArrayList<String>) task.getResult().get("scannedQRCodes")).contains(qrCodeId)) {
-                    db.collection("players").document(playerId).update("scannedQRCodes", FieldValue.arrayUnion(qrCodeId));
-
-                    //TODO: Update player score
-                }
-            }
-        });
+    public void addScoreToPlayer(String playerId, Double score) {
+        // TODO: Update player score
     }
 }

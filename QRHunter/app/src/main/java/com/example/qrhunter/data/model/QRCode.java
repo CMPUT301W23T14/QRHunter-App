@@ -30,12 +30,16 @@ public class QRCode {
      */
     private double score;
     private Location location;
-    private ArrayList<String> commentIds;
+    private ArrayList<String> commentIds = new ArrayList<>();
+    /**
+     * List of player id who scanned this qr code
+     */
+    private ArrayList<String> playerIds = new ArrayList<>();
 
     /**
      * Constructor for a QR Code
      */
-    public QRCode(String hash, Location location, ArrayList<String> commentIds) {
+    public QRCode(String hash, Location location, ArrayList<String> commentIds, ArrayList<String> playerIds) {
         this.hash = hash;
 
         this.name = QRCodeUtil.generateName(hash);
@@ -44,8 +48,16 @@ public class QRCode {
 
         this.location = location;
         this.commentIds = commentIds;
+        this.playerIds = playerIds;
     }
 
+    public ArrayList<String> getPlayerIds() {
+        return playerIds;
+    }
+
+    public void setPlayerIds(ArrayList<String> playerIds) {
+        this.playerIds = playerIds;
+    }
 
     public String getHash() {
         return hash;
