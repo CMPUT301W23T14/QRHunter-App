@@ -107,15 +107,16 @@ public class AfterScanFragment extends Fragment {
             Navigation.findNavController(view).popBackStack();
         });
 
+        // request location
+        if (!locationPermissionGranted) {
+            requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
+        }
         // adding the geo location
         binding.addGeoLocationButton.setOnClickListener(view -> {
             if (deleteGeoLocation == false) {
                 // put add geo location on here
                 //...
-                if (!locationPermissionGranted) {
-                    requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
-                }
-                else{
+                if(locationPermissionGranted){
                     try {
                         LocationManager lm = (LocationManager) requireContext().getSystemService(Context.LOCATION_SERVICE);
                         boolean gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
