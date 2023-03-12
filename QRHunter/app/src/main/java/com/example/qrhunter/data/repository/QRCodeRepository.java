@@ -66,6 +66,22 @@ public class QRCodeRepository extends DataRepository {
     }
 
     /**
+     * Gets a qr code given the id of the qr code
+     *
+     * @param qrCodeId The id of the qr code
+     * @return A QR Code object in the callback
+     */
+    public void getQRCode(String qrCodeId, RepositoryCallback<QRCode> repositoryCallback) {
+        db.collection("qrCodes").document(qrCodeId).get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult().exists()) {
+                        QRCode result = QRCodeUtil.convertDocumentToQRCode(task.getResult());
+                        repositoryCallback.onSuccess(result);
+                    }
+                });
+    }
+
+    /**
      * Gets list of qr codes that a player has scanned
      *
      * @param player The player to be checked against
@@ -86,4 +102,20 @@ public class QRCodeRepository extends DataRepository {
                 });
     }
 
+
+    /**
+     * Get the number of the people who scanned the qr code
+     *
+     * @param qrCodeId The qr code to be checked
+     * @return An integer in the callback
+     */
+    public void getScannedBy(String qrCodeId, RepositoryCallback<Integer> repositoryCallback) {
+        db.collection("qrCodes").document(qrCodeId).get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult().exists()) {
+                        int result = ((ArrayList<String>) task.getResult().get("playerIds")).size();
+                        repositoryCallback.onSuccess(result);
+                    }
+                });
+    }
 }

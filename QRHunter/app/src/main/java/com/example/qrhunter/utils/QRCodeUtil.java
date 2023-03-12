@@ -110,7 +110,7 @@ public final class QRCodeUtil {
         ArrayList<String> commentIds = (ArrayList<String>) qrCodeDoc.get("commentIds");
         ArrayList<String> playerIds = (ArrayList<String>) qrCodeDoc.get("playerIds");
 
-        QRCode qrCode = new QRCode(hash, location, commentIds, playerIds);
+        QRCode qrCode = new QRCode(qrCodeDoc.getId(), hash, location, commentIds, playerIds);
 
         return qrCode;
     }

@@ -7,10 +7,13 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.qrhunter.R;
 import com.example.qrhunter.data.model.QRCode;
+import com.example.qrhunter.ui.profile.ProfileFragmentDirections;
 
 import java.util.ArrayList;
 
@@ -45,6 +48,12 @@ public class QRCodesAdapter extends RecyclerView.Adapter<QRCodesAdapter.ViewHold
         holder.qrCodeScoreTextView.setText(Double.toString(qrCode.getScore()));
 
         // TODO: Set the listeners for the buttons
+        holder.expandQRCodeButton.setOnClickListener(v -> {
+            NavController navController = Navigation.findNavController(v);
+
+            ProfileFragmentDirections.ActionNavigationProfileToQrCodeFragment action = ProfileFragmentDirections.actionNavigationProfileToQrCodeFragment(qrCode.getId());
+            navController.navigate(action);
+        });
     }
 
     @Override

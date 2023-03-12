@@ -148,7 +148,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
-                    android:id="@+id/lowest_score_label"
+                    android:id="@+id/scanned_by_label"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto"
@@ -170,7 +170,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/arrow_button"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/lowest_score_label" />
+                    app:layout_constraintTop_toBottomOf="@+id/scanned_by_label" />
 
                 <ImageButton
                     android:id="@+id/arrow_button"
@@ -183,7 +183,7 @@
                     android:src="@drawable/baseline_arrow_forward_ios_24"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/lowest_score_label"
+                    app:layout_constraintTop_toBottomOf="@+id/scanned_by_label"
                     app:tint="@color/primary_dark" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

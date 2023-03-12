@@ -86,4 +86,10 @@ public class PlayerRepository extends DataRepository {
     public void addScoreToPlayer(String playerId, Double score) {
         // TODO: Update player score
     }
+
+    public void minusScoreFromPlayer(String playerId, Double score) {
+        // TODO: Update player score
+    }
+
+
 }
