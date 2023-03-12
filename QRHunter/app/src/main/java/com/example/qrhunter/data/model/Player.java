@@ -1,5 +1,7 @@
 package com.example.qrhunter.data.model;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 
 /**
@@ -47,6 +49,18 @@ public class Player {
 
     public void setScannedQRCodes(ArrayList<QRCode> scannedQRCodes) {
         this.scannedQRCodes = scannedQRCodes;
+    }
+
+    public void calculateTotalScore(){
+        double currentTotalScore = 0;
+        for (int i=0; i < scannedQRCodes.size(); i++){
+            QRCode qrcode = scannedQRCodes.get(i);
+            currentTotalScore = currentTotalScore + qrcode.getScore();
+        }
+        int value = (int)currentTotalScore;
+        this.totalScore = value;
+        Log.d("TAG", String.valueOf(totalScore));
+
     }
 
     public String getId() {
