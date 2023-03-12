@@ -9,12 +9,12 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
-import com.example.qrhunter.data.repository.UserRepository;
+import com.example.qrhunter.data.repository.PlayerRepository;
 import com.example.qrhunter.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
-    UserRepository userRepository;
+    PlayerRepository playerRepository;
     private ActivityMainBinding binding;
 
     @Override
@@ -31,11 +31,11 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(binding.bottomNav, navController);
 
         // Get instance of User Repository
-        userRepository = new UserRepository();
+        playerRepository = new PlayerRepository();
 
         // Get device id and check whether the player exists or not
         @SuppressLint("HardwareIds") String deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-        userRepository.doesPlayerExist(deviceId, result -> {
+        playerRepository.doesPlayerExist(deviceId, result -> {
             if (!result) {
                 navController.navigate(R.id.playerInitFragment);
             }

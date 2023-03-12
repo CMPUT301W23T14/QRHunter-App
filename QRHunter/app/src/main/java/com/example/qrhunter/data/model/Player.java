@@ -26,6 +26,8 @@ public class Player {
         this.id = id;
         this.username = username;
         this.totalScore = 0;
+        this.rank = 0;
+        this.phoneNumber = "";
     }
 
     /**

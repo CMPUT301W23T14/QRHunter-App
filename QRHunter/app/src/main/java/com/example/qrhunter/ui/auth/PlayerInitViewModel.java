@@ -5,17 +5,14 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.qrhunter.data.model.Player;
-import com.example.qrhunter.data.repository.UserRepository;
+import com.example.qrhunter.data.repository.PlayerRepository;
 
 
-public class PlayerViewModel extends ViewModel {
-    // Global states
+public class PlayerInitViewModel extends ViewModel {
     private final MutableLiveData<Player> player = new MutableLiveData<>();
-
-    // State for user initialization
     private final MutableLiveData<String> username = new MutableLiveData<>();
     private final MutableLiveData<Boolean> validUsername = new MutableLiveData<>(false);
-    UserRepository userRepository = new UserRepository();
+    PlayerRepository playerRepository = new PlayerRepository();
 
     public LiveData<String> getUsername() {
         return username;
@@ -29,10 +26,16 @@ public class PlayerViewModel extends ViewModel {
         return player;
     }
 
+    /**
+     * Called when user changes the text in username field.
+     * Also updates the validUsername state
+     *
+     * @param newUsername The new username that user typed
+     */
     public void updateUsername(String newUsername) {
         username.postValue(newUsername);
 
-        userRepository.doesUsernameExist(newUsername, result -> {
+        playerRepository.doesUsernameExist(newUsername, result -> {
             if (result || newUsername.isEmpty()) {
                 validUsername.postValue(false);
             } else {
@@ -41,10 +44,16 @@ public class PlayerViewModel extends ViewModel {
         });
     }
 
-    public void createUser(String playerId, String username) {
+    /**
+     * Creates a player in Firestore
+     *
+     * @param playerId The player id, which is also the device ID
+     * @param username The player's username, which is unique
+     */
+    public void createPlayer(String playerId, String username) {
         Player player = new Player(playerId, username);
 
-        userRepository.createPlayer(player, result -> {
+        playerRepository.createPlayer(player, result -> {
             this.player.setValue(player);
         });
     }

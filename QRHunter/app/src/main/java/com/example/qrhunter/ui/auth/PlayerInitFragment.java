@@ -32,7 +32,7 @@ public class PlayerInitFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         //Get ViewModel, using activities' lifecycle because the state in
-        PlayerViewModel playerViewModel = new ViewModelProvider(getActivity()).get(PlayerViewModel.class);
+        PlayerInitViewModel playerInitViewModel = new ViewModelProvider(getActivity()).get(PlayerInitViewModel.class);
 
         // Inflate the layout for this fragment
         binding = FragmentPlayerInitBinding.inflate(inflater, container, false);
@@ -44,11 +44,11 @@ public class PlayerInitFragment extends Fragment {
         // Enable debounce for user name input
         Disposable suscription = RxTextView.textChanges(binding.usernameEditText).debounce(500, TimeUnit.MILLISECONDS)
                 .subscribe(newUsername -> {
-                    playerViewModel.updateUsername(newUsername.toString());
+                    playerInitViewModel.updateUsername(newUsername.toString());
                 });
 
         // Changing styles depending on whether name is valid
-        playerViewModel.getValidUsername().observe(getViewLifecycleOwner(), validUsername -> {
+        playerInitViewModel.getValidUsername().observe(getViewLifecycleOwner(), validUsername -> {
             if (validUsername) {
                 // Set button color
                 binding.nextButton.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.primary, null));
@@ -73,11 +73,11 @@ public class PlayerInitFragment extends Fragment {
         binding.nextButton.setOnClickListener(v -> {
             @SuppressLint("HardwareIds") String deviceId = Settings.Secure.getString(getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
 
-            playerViewModel.createUser(deviceId, binding.usernameEditText.getText().toString());
+            playerInitViewModel.createPlayer(deviceId, binding.usernameEditText.getText().toString());
         });
 
         // Observe the player state in PlayerViewModel, if it exists then we can navigate to the map screen
-        playerViewModel.getPlayer().observe(getViewLifecycleOwner(), player -> {
+        playerInitViewModel.getPlayer().observe(getViewLifecycleOwner(), player -> {
             if (!player.getId().isEmpty()) {
                 Navigation.findNavController(binding.getRoot()).navigate(R.id.action_playerInitFragment_to_navigation_map);
 
