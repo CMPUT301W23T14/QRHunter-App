@@ -1,11 +1,7 @@
 package com.example.qrhunter.data.model;
 
-<<<<<<< HEAD
-import com.google.firebase.firestore.DocumentId;
-import com.google.firebase.firestore.PropertyName;
-=======
+
 import android.util.Log;
->>>>>>> de16343c0498a90be12b4f731ec1c94d44f0ed1d
 
 import java.util.ArrayList;
 

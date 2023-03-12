@@ -32,7 +32,6 @@
         android:id="@+id/player_name"
         android:layout_width="205dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/user_display"
         android:ellipsize="end"
         android:fontFamily="@font/roboto_medium"
         android:maxLines="1"
