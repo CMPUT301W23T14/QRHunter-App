@@ -1,6 +1,8 @@
 package com.example.qrhunter.ui.profile;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,15 +24,25 @@ public class ProfileFragment extends Fragment {
 
     private FragmentProfileBinding binding;
 
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        //Get ViewModel
+        //Get ViewModels
         ProfileViewModel profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
 
         // Inflate the layout for this fragment
         binding = FragmentProfileBinding.inflate(inflater, container, false);
+
+        // Bind player info to texts
+        @SuppressLint("HardwareIds") String deviceId = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
+        profileViewModel.getPlayer(deviceId).observe(getViewLifecycleOwner(), player -> {
+            if (!player.getId().isEmpty()) {
+                binding.username.setText(player.getUsername());
+                binding.phoneNumberEditText.setText(player.getPhoneNumber());
+                binding.totalScore.setText(Integer.toString(player.getTotalScore()));
+                binding.rank.setText(Integer.toString(player.getRank()));
+            }
+        });
 
         // Get recycler view
         RecyclerView rvQRCodes = binding.qrCodeRecyclerView;
