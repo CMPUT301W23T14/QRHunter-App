@@ -1,0 +1,111 @@
+Index: app/src/main/java/com/example/qrhunter/MainActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.qrhunter;\r\n\r\nimport android.annotation.SuppressLint;\r\nimport android.content.Intent;\r\nimport android.content.SharedPreferences;\r\nimport android.os.Bundle;\r\nimport android.provider.Settings;\r\nimport android.text.Editable;\r\nimport android.text.TextWatcher;\r\nimport android.util.Log;\r\nimport android.view.LayoutInflater;\r\nimport android.view.View;\r\nimport android.widget.Button;\r\nimport android.widget.EditText;\r\nimport android.widget.ImageButton;\r\nimport android.widget.ImageView;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.fragment.app.Fragment;\r\nimport androidx.navigation.NavController;\r\nimport androidx.navigation.fragment.NavHostFragment;\r\nimport androidx.navigation.ui.NavigationUI;\r\n\r\nimport com.example.qrhunter.data.model.Player;\r\nimport com.example.qrhunter.data.repository.QRCodeRepository;\r\nimport com.example.qrhunter.data.repository.UserRepository;\r\nimport com.example.qrhunter.databinding.ActivityMainBinding;\r\nimport com.example.qrhunter.ui.login.PlayerInitialization;\r\nimport com.example.qrhunter.ui.profile.ProfileFragment;\r\nimport com.google.firebase.firestore.FirebaseFirestore;\r\n\r\npublic class MainActivity extends AppCompatActivity{\r\n\r\n    private ActivityMainBinding binding;\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n\r\n        super.onCreate(savedInstanceState);\r\n\r\n        binding = ActivityMainBinding.inflate(getLayoutInflater());\r\n        setContentView(binding.getRoot());\r\n        FirebaseFirestore db;\r\n        // Get a reference to the database\r\n        NavHostFragment navHostFragment =\r\n                (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);\r\n        NavController navController = navHostFragment.getNavController();\r\n        NavigationUI.setupWithNavController(binding.bottomNav, navController);\r\n\r\n    }\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/qrhunter/MainActivity.java b/app/src/main/java/com/example/qrhunter/MainActivity.java
+--- a/app/src/main/java/com/example/qrhunter/MainActivity.java	
++++ b/app/src/main/java/com/example/qrhunter/MainActivity.java	
+@@ -42,11 +42,14 @@
+         setContentView(binding.getRoot());
+         FirebaseFirestore db;
+         // Get a reference to the database
++        db = FirebaseFirestore.getInstance();
++        // Get device ID
++        String deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
++
+         NavHostFragment navHostFragment =
+                 (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+         NavController navController = navHostFragment.getNavController();
+         NavigationUI.setupWithNavController(binding.bottomNav, navController);
+-
+     }
+ 
+ }
+\ No newline at end of file
+Index: app/src/main/java/com/example/qrhunter/data/repository/UserRepository.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.qrhunter.data.repository;\r\n\r\nimport static android.content.ContentValues.TAG;\r\n\r\nimport android.util.Log;\r\n\r\nimport androidx.annotation.NonNull;\r\n\r\nimport com.example.qrhunter.data.model.Player;\r\nimport com.google.android.gms.tasks.OnCompleteListener;\r\nimport com.google.android.gms.tasks.Task;\r\nimport com.google.firebase.firestore.DocumentSnapshot;\r\nimport com.google.firebase.firestore.QueryDocumentSnapshot;\r\nimport com.google.firebase.firestore.QuerySnapshot;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.Objects;\r\nimport java.util.concurrent.atomic.AtomicBoolean;\r\n\r\npublic class UserRepository extends DataRepository {\r\n    private boolean playerExists;\r\n    private ArrayList<String> usernames = new ArrayList<>();\r\n\r\n    /**\r\n     * Checks whether a player already exists in Firestore\r\n     *\r\n     * @param id The id of a player to check against. This should be a device id\r\n     * @return True if player exist, and false otherwise\r\n     */\r\n    public boolean doesPlayerExist(String id) {\r\n        db.collection(\"users\").document(id).get().addOnSuccessListener(documentSnapshot -> {\r\n            if (documentSnapshot.exists()) {\r\n                playerExists = true;\r\n            }\r\n            else {\r\n                playerExists= false;\r\n            }\r\n        });\r\n\r\n        return playerExists;\r\n    }\r\n\r\n    /**\r\n     * Checks whether a username already exists in Firestore\r\n     *\r\n     * @param username The username to be checked against\r\n     * @return True if username already exists, false otherwise\r\n     */\r\n    public boolean doesUsernameExist(String username) {\r\n        readData(new FirebaseCallback() {\r\n            @Override\r\n            public void onCallback(ArrayList<String> list) {\r\n                if (list.contains(username)) {\r\n                    playerExists = true;\r\n                }\r\n                else {\r\n                    playerExists = false;\r\n                }\r\n            }\r\n        });\r\n        return playerExists;\r\n    }\r\n\r\n    private void readData(FirebaseCallback firebaseCallback){\r\n        db.collection(\"users\").get().addOnCompleteListener(task -> {\r\n            if (task.isSuccessful()) {\r\n                for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {\r\n                    usernames.add(document.get(\"username\").toString());\r\n                }\r\n                firebaseCallback.onCallback(usernames);\r\n            } else {\r\n                Log.d(TAG, \"Error getting documents: \", task.getException());\r\n            }\r\n        });\r\n    }\r\n\r\n    private interface FirebaseCallback {\r\n        void onCallback(ArrayList<String> list);\r\n    }\r\n\r\n    /**\r\n     * Create a player document in Firestore\r\n     *\r\n     * @param player The player to be added to Firestore\r\n     */\r\n    public void initializePlayer(Player player) {\r\n        // Check whether the user already exist\r\n        if (!doesPlayerExist(player.getId())) {\r\n            return;\r\n        }\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/qrhunter/data/repository/UserRepository.java b/app/src/main/java/com/example/qrhunter/data/repository/UserRepository.java
+--- a/app/src/main/java/com/example/qrhunter/data/repository/UserRepository.java	
++++ b/app/src/main/java/com/example/qrhunter/data/repository/UserRepository.java	
+@@ -14,12 +14,15 @@
+ import com.google.firebase.firestore.QuerySnapshot;
+ 
+ import java.util.ArrayList;
++import java.util.List;
+ import java.util.Objects;
+ import java.util.concurrent.atomic.AtomicBoolean;
+ 
+ public class UserRepository extends DataRepository {
+     private boolean playerExists;
++    private boolean usernameExists;
+     private ArrayList<String> usernames = new ArrayList<>();
++    private ArrayList<String> ids = new ArrayList<>();
+ 
+     /**
+      * Checks whether a player already exists in Firestore
+@@ -28,17 +31,32 @@
+      * @return True if player exist, and false otherwise
+      */
+     public boolean doesPlayerExist(String id) {
+-        db.collection("users").document(id).get().addOnSuccessListener(documentSnapshot -> {
+-            if (documentSnapshot.exists()) {
+-                playerExists = true;
+-            }
+-            else {
+-                playerExists= false;
++        readIDs(new FirebaseCallback() {
++            @Override
++            public void onCallback(ArrayList<String> list) {
++
++                if (list.contains(id)) {
++                    playerExists = true;
++                }
++                else {
++                    playerExists = false;
++                }
+             }
+         });
+-
+         return playerExists;
+     }
++    private void readIDs(FirebaseCallback firebaseCallback){
++        db.collection("users").get().addOnCompleteListener(task -> {
++            if (task.isSuccessful()) {
++                for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
++                    ids.add(document.getId());
++                }
++                firebaseCallback.onCallback(ids);
++            } else {
++                Log.d(TAG, "Error getting documents: ", task.getException());
++            }
++        });
++    }
+ 
+     /**
+      * Checks whether a username already exists in Firestore
+@@ -51,14 +69,14 @@
+             @Override
+             public void onCallback(ArrayList<String> list) {
+                 if (list.contains(username)) {
+-                    playerExists = true;
++                    usernameExists = true;
+                 }
+                 else {
+-                    playerExists = false;
++                    usernameExists = false;
+                 }
+             }
+         });
+-        return playerExists;
++        return usernameExists;
+     }
+ 
+     private void readData(FirebaseCallback firebaseCallback){
