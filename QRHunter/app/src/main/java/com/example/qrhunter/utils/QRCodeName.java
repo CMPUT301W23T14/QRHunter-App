@@ -45,7 +45,7 @@ public class QRCodeName {
 
         // bit 0 head
         if(bitValues.charAt(0) == '0'){
-            qrCodeName+= "cool";
+            qrCodeName+= "Ice";
         }
         else{
             qrCodeName+= "hot";
@@ -69,18 +69,18 @@ public class QRCodeName {
             qrCodeName+= "Mega";
         }
         else{
-            qrCodeName+= "Ultra";
+            qrCodeName+= "Huge";
         }
         // bit 4 head
         if(bitValues.charAt(4) == '0'){
-            qrCodeName+= "Giant";
+            qrCodeName+= "Fusc";
         }
         else{
-            qrCodeName+= "Special";
+            qrCodeName+= "Amok";
         }
         // bit 5 head
         if(bitValues.charAt(5) == '0'){
-            qrCodeName+= "Person";
+            qrCodeName+= "Human";
         }
         else{
             qrCodeName+= "Snake";
