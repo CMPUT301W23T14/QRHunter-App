@@ -47,26 +47,23 @@ public class QRCodeRepository extends DataRepository {
      * @return A QRCode document reference in the callback if qr code exist
      */
     public void getQRCode(QRCode qrCode, RepositoryCallback<DocumentSnapshot> repositoryCallback) {
-        Query qrCodesQuery;
-
-        if (qrCode.getLocation().longitude == 0 && qrCode.getLocation().latitude == 0) {
-            // If qr code does not have geolocation
-            qrCodesQuery = db.collection("qrCodes").whereEqualTo("latitude", 0)
-                    .whereEqualTo("longitude", 0)
-                    .whereEqualTo("hash", qrCode.getHash());
-        } else {
-            // If qr code have geolocation, doesn't matter where the location is
-            qrCodesQuery = db.collection("qrCodes").whereNotEqualTo("latitude", 0)
-                    .whereNotEqualTo("longitude", 0)
-                    .whereEqualTo("hash", qrCode.getHash());
-        }
+        Query qrCodesQuery = db.collection("qrCodes").whereEqualTo("hash", qrCode.getHash());
+        boolean hasLocation = (qrCode.getLocation().latitude != 0 && qrCode.getLocation().longitude != 0);
 
         qrCodesQuery.get().addOnCompleteListener(task -> {
             //If qr code doesn't exist
             if (task.isSuccessful() && task.getResult().isEmpty()) {
                 repositoryCallback.onSuccess(null);
             } else {
-                repositoryCallback.onSuccess(task.getResult().getDocuments().get(0));
+                DocumentSnapshot result = task.getResult().getDocuments().get(0);
+
+                // If qr code exist, check whether the location is the same
+                if (hasLocation && (double) result.get("latitude") != 0 && (double) result.get("longitude") != 0) {
+                    repositoryCallback.onSuccess(result);
+                } else {
+                    repositoryCallback.onSuccess(null);
+                }
+
             }
         });
     }
