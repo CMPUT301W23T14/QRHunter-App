@@ -22,6 +22,7 @@ import java.util.ArrayList;
  */
 public class QRCodesAdapter extends RecyclerView.Adapter<QRCodesAdapter.ViewHolder> {
     private ArrayList<QRCode> qrCodes;
+    private onClickListeners listeners;
 
     /**
      * Constructor for QRCodesAdapter
@@ -42,6 +43,8 @@ public class QRCodesAdapter extends RecyclerView.Adapter<QRCodesAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+
+
         QRCode qrCode = qrCodes.get(position);
 
         holder.qrCodeNameTextView.setText(qrCode.getName());
@@ -54,11 +57,24 @@ public class QRCodesAdapter extends RecyclerView.Adapter<QRCodesAdapter.ViewHold
             ProfileFragmentDirections.ActionNavigationProfileToQrCodeFragment action = ProfileFragmentDirections.actionNavigationProfileToQrCodeFragment(qrCode.getId());
             navController.navigate(action);
         });
+
+
     }
 
     @Override
     public int getItemCount() {
         return qrCodes.size();
+    }
+
+    public void setOnClickListeners(onClickListeners listeners) {
+        this.listeners = listeners;
+    }
+
+    /**
+     * Listener interface for parent fragment / activity to implement
+     */
+    public interface onClickListeners {
+        void onDeleteButtonClick(int position);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -74,7 +90,18 @@ public class QRCodesAdapter extends RecyclerView.Adapter<QRCodesAdapter.ViewHold
             qrCodeScoreTextView = itemView.findViewById(R.id.qr_code_score);
             deleteQRCodeButton = itemView.findViewById(R.id.qr_code_delete_button);
             expandQRCodeButton = itemView.findViewById(R.id.qr_code_expand_button);
+
+            deleteQRCodeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listeners != null) {
+                        listeners.onDeleteButtonClick(getAdapterPosition());
+                    }
+                }
+            });
         }
+
+
     }
 
 }

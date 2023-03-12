@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class QRCodeRepository extends DataRepository {
     /**
-     * Create a QR Code document in Firestore
+     * Create a QR Code document in Firestore and add appropriate score to player
      */
     public void addQRCodeToPlayer(QRCode qrCode, String playerId) {
         PlayerRepository playerRepository = new PlayerRepository();
@@ -33,6 +33,14 @@ public class QRCodeRepository extends DataRepository {
                 playerRepository.addScoreToPlayer(playerId, qrCode.getScore());
             }
         });
+    }
+
+    /**
+     * Remove a QR Code document in Firestore and reduce appropriate score from player
+     */
+    public void removeQRCodeFromPlayer(String qrCodeId, String playerId) {
+        db.collection("qrCodes").document(qrCodeId)
+                .update("playerIds", FieldValue.arrayRemove(playerId));
     }
 
     /**
@@ -56,6 +64,8 @@ public class QRCodeRepository extends DataRepository {
 
                 // If qr code exist, check whether the location is the same
                 if (hasLocation && (double) result.get("latitude") != 0 && (double) result.get("longitude") != 0) {
+                    repositoryCallback.onSuccess(result);
+                } else if (!hasLocation && (double) result.get("latitude") == 0 && (double) result.get("longitude") == 0) {
                     repositoryCallback.onSuccess(result);
                 } else {
                     repositoryCallback.onSuccess(null);

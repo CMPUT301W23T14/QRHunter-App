@@ -33,11 +33,30 @@ public class ProfileViewModel extends ViewModel {
         return this.player;
     }
 
+    /**
+     * Get all the qr codes the player have scanned
+     *
+     * @param player The player who scanned the qr codes
+     * @return A live data of the qr codes
+     */
     public LiveData<ArrayList<QRCode>> getScannedQRCodes(Player player) {
         qrCodeRepository.getScannedQRCodes(player, scannedQRCodes -> {
             this.scannedQRCodes.setValue(scannedQRCodes);
         });
 
         return this.scannedQRCodes;
+    }
+
+    public void removeScannedQRCode(String qrCodeId, String playerId) {
+        // Update Firestore
+        qrCodeRepository.removeQRCodeFromPlayer(qrCodeId, playerId);
+
+        // Update this.scannedQRCodes
+        ArrayList<QRCode> currentScannedQRCodes = this.scannedQRCodes.getValue();
+        currentScannedQRCodes.removeIf(qrCode -> {
+            return qrCode.getId() == qrCodeId;
+        });
+
+        this.scannedQRCodes.setValue(currentScannedQRCodes);
     }
 }

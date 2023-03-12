@@ -27,6 +27,9 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+
+        @SuppressLint("HardwareIds") String deviceId = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
+
         //Get ViewModels
         ProfileViewModel profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
 
@@ -40,11 +43,15 @@ public class ProfileFragment extends Fragment {
 
         // Set up recycler view
         QRCodesAdapter qrCodesAdapter = new QRCodesAdapter(scannedQRCodes);
+
+        qrCodesAdapter.setOnClickListeners(position -> {
+            profileViewModel.removeScannedQRCode(scannedQRCodes.get(position).getId(), deviceId);
+        });
+
         rvQRCodes.setAdapter(qrCodesAdapter);
         rvQRCodes.setLayoutManager(new LinearLayoutManager(requireContext()));
 
         // Bind player info to texts
-        @SuppressLint("HardwareIds") String deviceId = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
         profileViewModel.getPlayer(deviceId).observe(getViewLifecycleOwner(), player -> {
             if (!player.getId().isEmpty()) {
                 binding.username.setText(player.getUsername());
@@ -56,6 +63,7 @@ public class ProfileFragment extends Fragment {
                     scannedQRCodes.clear();
                     scannedQRCodes.addAll(qrCodes);
                     qrCodesAdapter.notifyDataSetChanged();
+                    binding.scannedText.setText("(" + qrCodes.size() + ")");
                 });
             }
         });
