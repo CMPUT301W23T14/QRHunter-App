@@ -2,11 +2,14 @@ package com.example.qrhunter.ui.scan;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
@@ -20,6 +23,7 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -29,13 +33,15 @@ import androidx.navigation.Navigation;
 import com.example.qrhunter.MainActivity;
 import com.example.qrhunter.R;
 import com.example.qrhunter.data.model.Comment;
-import com.example.qrhunter.data.model.Location;
 import com.example.qrhunter.data.model.QRCode;
 import com.example.qrhunter.data.repository.QRCodeRepository;
 import com.example.qrhunter.utils.QRCodeName;
 import com.example.qrhunter.utils.QRCodeUtil;
 import com.example.qrhunter.utils.QRCodeVisual;
 import com.example.qrhunter.databinding.FragmentAfterScanBinding;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.ByteArrayOutputStream;
@@ -52,15 +58,29 @@ public class AfterScanFragment extends Fragment {
     private final int MY_PERMISSIONS_REQUEST_CAMERA = 1001;
     ActivityResultLauncher<Intent> cameraActivityResultLauncher;
 
+    // for getting geolocation
+    private GoogleMap mMap;
+    private boolean locationPermissionGranted;
+
     Bitmap savedPhoto = null;
 
     // location is 0,0 until user decides to record location
     // these are temp values and have no use once the data is created
-    private int latitude = 0;
-    private int longitude = 0;
+    private double latitude = 0;
+    private double longitude = 0;
     boolean deletePhoto = false;
     boolean canSaveValue = false;
     boolean deleteGeoLocation = false;
+
+    private final ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(
+            new ActivityResultContracts.RequestPermission(),
+            result -> {
+                if (result) {
+                    locationPermissionGranted = true;
+                }
+            }
+    );
+
     //
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -89,16 +109,36 @@ public class AfterScanFragment extends Fragment {
 
         // adding the geo location
         binding.addGeoLocationButton.setOnClickListener(view -> {
-            if(deleteGeoLocation == false) {
+            if (deleteGeoLocation == false) {
                 // put add geo location on here
                 //...
+                if (!locationPermissionGranted) {
+                    requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
+                }
+                else{
+                    try {
+                        LocationManager lm = (LocationManager) requireContext().getSystemService(Context.LOCATION_SERVICE);
+                        boolean gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+                        if (gps_enabled) {
+                            Location lastKnownLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                            if (lastKnownLocation != null) {
+                                latitude = lastKnownLocation.getLatitude();
+                                longitude = lastKnownLocation.getLongitude();
 
-                // after location has been added
-                Toast.makeText(view.getContext(), "added your location!", Toast.LENGTH_SHORT).show();
-                binding.addGeoLocationButton.setImageResource(R.drawable.checkbox_location);
-                deleteGeoLocation = true;
+                                // after location has been added
+                                Toast.makeText(view.getContext(), "added your location!", Toast.LENGTH_SHORT).show();
+                                binding.addGeoLocationButton.setImageResource(R.drawable.checkbox_location);
+                                deleteGeoLocation = true;
+                            }
+                        }
+                    }catch (SecurityException e)  {
+                            Toast.makeText(view.getContext(), "Could not get your location!", Toast.LENGTH_SHORT).show();
+                    }
+                }
             }
             else{
+                latitude = 0;
+                longitude = 0;
                 // remove the geo location
                 Toast.makeText(view.getContext(), "deleted your location!", Toast.LENGTH_SHORT).show();
                 binding.addGeoLocationButton.setImageResource(R.drawable.checkbox_outline);
