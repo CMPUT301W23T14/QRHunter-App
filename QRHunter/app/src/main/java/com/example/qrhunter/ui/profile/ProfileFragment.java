@@ -43,7 +43,7 @@ public class ProfileFragment extends Fragment {
                 add(new QRCode("123", null, "SoloCrabMegaIce", 50, "", null));
                 add(new QRCode("123", null, "SoloCrabMegaIce", 60, "", null));
                 add(new QRCode("123", null, "SoloCrabMegaIce", 70, "", null));
-                add(new QRCode("123", null, "SoloCrabMegaIce", 80, "", null));
+                add(new QRCode("123", null, "SoloCrabMegaIce", 100, "", null));
             }
 
         };
@@ -58,6 +58,8 @@ public class ProfileFragment extends Fragment {
                 player.calculateTotalScore();
                 binding.totalScore.setText(Integer.toString(player.getTotalScore()));
                 binding.rank.setText(Integer.toString(player.getRank()));
+                binding.lowestScore.setText(Integer.toString(player.calculateLowestScore()));
+                binding.highestScore.setText(Integer.toString(player.calculateHighestScore()));
             }
 
         });
