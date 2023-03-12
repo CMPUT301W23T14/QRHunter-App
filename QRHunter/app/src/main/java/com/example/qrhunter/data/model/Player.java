@@ -1,7 +1,11 @@
 package com.example.qrhunter.data.model;
 
+<<<<<<< HEAD
 import com.google.firebase.firestore.DocumentId;
 import com.google.firebase.firestore.PropertyName;
+=======
+import android.util.Log;
+>>>>>>> de16343c0498a90be12b4f731ec1c94d44f0ed1d
 
 import java.util.ArrayList;
 
@@ -30,6 +34,8 @@ public class Player {
         this.id = id;
         this.username = username;
         this.totalScore = 0;
+        this.rank = 0;
+        this.phoneNumber = "";
     }
     /**
      * Constructors for Players that already exist in Firestore
@@ -49,6 +55,18 @@ public class Player {
 
     public void setScannedQRCodes(ArrayList<QRCode> scannedQRCodes) {
         this.scannedQRCodes = scannedQRCodes;
+    }
+
+    public void calculateTotalScore(){
+        double currentTotalScore = 0;
+        for (int i=0; i < scannedQRCodes.size(); i++){
+            QRCode qrcode = scannedQRCodes.get(i);
+            currentTotalScore = currentTotalScore + qrcode.getScore();
+        }
+        int value = (int)currentTotalScore;
+        this.totalScore = value;
+        Log.d("TAG", String.valueOf(totalScore));
+
     }
 
     public String getId() {

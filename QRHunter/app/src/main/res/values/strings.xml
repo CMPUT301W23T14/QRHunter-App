@@ -27,4 +27,8 @@
     <!-- Profile page -->
     <string name="welcome_back">Welcome Back,</string>
 
+    <!-- Player Init page -->
+    <string name="welcome">Welcome!</string>
+    <string name="username_text_hint">Username</string>
+    <string name="username_helper_text">Username</string>
 </resources>

@@ -9,6 +9,9 @@ public class Location {
     public double latitude;
     public double longitude;
 
+    /**
+     * This is an array in case we want to add more than one photo in the future
+     */
     public ArrayList<String> photos;
 
     public Location(double latitude, double longitude, ArrayList<String> photos) {

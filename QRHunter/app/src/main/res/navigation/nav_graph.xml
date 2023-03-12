@@ -37,9 +37,17 @@
         android:id="@+id/navigation_after_scan"
         android:name="com.example.qrhunter.ui.scan.AfterScanFragment"
         android:label="fragment_after_scan"
-        tools:layout="@layout/fragment_after_scan" >
+        tools:layout="@layout/fragment_after_scan">
         <action
             android:id="@+id/action_navigation_after_scan_to_navigation_map"
+            app:destination="@id/navigation_map" />
+    </fragment>
+    <fragment
+        android:id="@+id/playerInitFragment"
+        android:name="com.example.qrhunter.ui.auth.PlayerInitFragment"
+        android:label="PlayerInitFragment">
+        <action
+            android:id="@+id/action_playerInitFragment_to_navigation_map"
             app:destination="@id/navigation_map" />
     </fragment>
 </navigation>
