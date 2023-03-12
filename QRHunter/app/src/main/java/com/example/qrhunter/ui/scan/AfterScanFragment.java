@@ -63,7 +63,7 @@ public class AfterScanFragment extends Fragment {
         }
 
         // Bind data to ui
-        String hashValue = scanViewModel.getQRCodeHash().toString();
+        String hashValue = scanViewModel.getQRCodeHash().getValue();
 
         binding.QRVisual.setText(QRCodeUtil.generateVisualRepresentation(hashValue));
         binding.QRName.setText(QRCodeUtil.generateName(hashValue));
