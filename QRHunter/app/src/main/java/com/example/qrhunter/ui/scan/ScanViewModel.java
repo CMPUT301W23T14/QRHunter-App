@@ -78,6 +78,8 @@ public class ScanViewModel extends ViewModel {
     }
 
     public void setPhotoLocation(Bitmap photo) {
+        // Clears photo location if provided with null bitmap
+        //  otherwise adds the photo to the location
         Location currentLocation = this.location.getValue();
         if (photo == null) {
             currentLocation.photos = new ArrayList<>();
