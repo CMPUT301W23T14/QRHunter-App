@@ -17,7 +17,7 @@ public class Player {
     private String phoneNumber;
     private int rank;
     private int totalScore;
-    private ArrayList<QRCode> scannedQRCodes;
+    private ArrayList<String> scannedQRCodeIds;
 
     /**
      * Constructor for new Players
@@ -28,25 +28,27 @@ public class Player {
         this.totalScore = 0;
         this.rank = 0;
         this.phoneNumber = "";
+        this.scannedQRCodeIds = new ArrayList<>();
     }
 
     /**
      * Constructors for Players that already exist in Firestore
      */
-    public Player(String id, String username, String phoneNumber, int rank, int totalScore) {
+    public Player(String id, String username, String phoneNumber, int rank, int totalScore, ArrayList<String> setScannedQRCodeIds) {
         this.id = id;
         this.username = username;
         this.phoneNumber = phoneNumber;
         this.rank = rank;
         this.totalScore = totalScore;
+        this.scannedQRCodeIds = setScannedQRCodeIds;
     }
 
-    public ArrayList<QRCode> getScannedQRCodes() {
-        return scannedQRCodes;
+    public ArrayList<String> getScannedQRCodeIds() {
+        return scannedQRCodeIds;
     }
 
-    public void setScannedQRCodes(ArrayList<QRCode> scannedQRCodes) {
-        this.scannedQRCodes = scannedQRCodes;
+    public void setScannedQRCodeIds(ArrayList<String> scannedQRCodeIds) {
+        this.scannedQRCodeIds = scannedQRCodeIds;
     }
 
     public String getId() {

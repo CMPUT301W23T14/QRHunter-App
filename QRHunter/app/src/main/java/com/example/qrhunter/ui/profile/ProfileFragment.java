@@ -48,18 +48,7 @@ public class ProfileFragment extends Fragment {
         RecyclerView rvQRCodes = binding.qrCodeRecyclerView;
 
         // Sample qr code list, normally we would get the data from ViewModel instead
-        ArrayList<QRCode> sampleQRCodes = new ArrayList<QRCode>() {
-            {
-                add(new QRCode("123", null, "SoloCrabMegaIce", 22.2, "", null));
-                add(new QRCode("123", null, "SoloCrabMegaIce", 22.2, "", null));
-                add(new QRCode("123", null, "SoloCrabMegaIce", 22.2, "", null));
-                add(new QRCode("123", null, "SoloCrabMegaIce", 22.2, "", null));
-                add(new QRCode("123", null, "SoloCrabMegaIce", 22.2, "", null));
-                add(new QRCode("123", null, "SoloCrabMegaIce", 22.2, "", null));
-                add(new QRCode("123", null, "SoloCrabMegaIce", 22.2, "", null));
-                add(new QRCode("123", null, "SoloCrabMegaIce", 22.2, "", null));
-            }
-        };
+        ArrayList<QRCode> sampleQRCodes = new ArrayList<QRCode>();
 
         // Set up recycler view
         QRCodesAdapter qrCodesAdapter = new QRCodesAdapter(sampleQRCodes);

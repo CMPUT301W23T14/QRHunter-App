@@ -3,8 +3,10 @@ package com.example.qrhunter.data.repository;
 import com.example.qrhunter.data.model.Player;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.Query;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -64,6 +66,7 @@ public class PlayerRepository extends DataRepository {
         // TODO: Calculate the correct rank
         playerHashMap.put("rank", player.getRank());
         playerHashMap.put("totalScore", player.getTotalScore());
+        playerHashMap.put("scannedQRCodes", player.getScannedQRCodeIds());
 
         db.collection("players").document(player.getId()).set(playerHashMap).addOnCompleteListener(task -> {
             repositoryCallback.onSuccess(player);
@@ -85,9 +88,23 @@ public class PlayerRepository extends DataRepository {
                 String phoneNumber = task.getResult().get("phoneNumber").toString();
                 int rank = ((Long) task.getResult().get("rank")).intValue();
                 int totalScore = ((Long) task.getResult().get("totalScore")).intValue();
+                ArrayList<String> scannedQRCodes = (ArrayList<String>) task.getResult().get("scannedQRCodes");
 
-                Player player = new Player(task.getResult().getId().toString(), username, phoneNumber, rank, totalScore);
+                Player player = new Player(task.getResult().getId().toString(), username, phoneNumber, rank, totalScore, scannedQRCodes);
                 repositoryCallback.onSuccess(player);
+            }
+        });
+    }
+
+    public void addQRCodeToPlayer(String playerId, String qrCodeId) {
+        db.collection("players").document(playerId).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful() && task.getResult().exists()) {
+                // Check whether user already scanned this qrCode before
+                if (!((ArrayList<String>) task.getResult().get("scannedQRCodes")).contains(qrCodeId)) {
+                    db.collection("players").document(playerId).update("scannedQRCodes", FieldValue.arrayUnion(qrCodeId));
+
+                    //TODO: Update player score
+                }
             }
         });
     }
