@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'com.google.gms.google-services'
     id 'androidx.navigation.safeargs'
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
 
 android {
@@ -16,6 +17,8 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "MAPS_API_KEY", getMapsApiKey())
     }
 
     buildTypes {
@@ -40,7 +43,7 @@ android {
 
 dependencies {
     // zxing for QR code
-    // implementation 'com.google.zxing:core:3.4.1'
+//    implementation 'com.google.zxing:core:3.4.1'
     implementation 'com.github.yuriy-budiyev:code-scanner:2.3.2'
 
     implementation 'androidx.appcompat:appcompat:1.6.1'
@@ -52,6 +55,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
     implementation 'com.google.firebase:firebase-crashlytics-buildtools:2.8.1'
+    implementation 'com.google.android.gms:play-services-location:21.0.1'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
@@ -70,5 +74,16 @@ dependencies {
     // Add the dependency for the Firebase SDK for Google Analytics
     implementation 'com.google.firebase:firebase-firestore'
 
-    implementation 'commons-codec:commons-codec:1.13'
+    implementation 'com.google.android.gms:play-services-maps:18.1.0'
+
+    implementation("com.google.guava:guava:31.1-android")
+
+
+}
+
+String getMapsApiKey() {
+    def propFile = rootProject.file("local.properties")
+    def properties = new Properties()
+    properties.load(new FileInputStream(propFile))
+    return properties['MAPS_API_KEY']
 }

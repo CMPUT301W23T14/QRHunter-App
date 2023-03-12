@@ -14,10 +14,10 @@ public class QRCodeVisual {
     private String squareFace = ". _____ .\n" + " |  _  | \n" + " |_____| \n" ;
 
     private String bigBody = "  |   |  \n" + "  |   |  \n" + "  |___|  \n";
-    private String smallBody = "    |   \n" + "     |     \n" + "    |    \n";
+    private String smallBody = "    |   \n" + "     |    \n" + "    |    \n";
 
     private String legs = "   / \\  \n" + "  /    \\  \n";
-    private String noLegs = "     \\  \n" + "     &-- \n";
+    private String noLegs = "     \\   \n" + "      &--   \n";
 
     private String ears = "@";
     private String noEars = "";
@@ -80,18 +80,18 @@ public class QRCodeVisual {
         // bit 4 eyes
         if(bitValues.charAt(2) == '0'){
             visualRepresentation = visualRepresentation.substring(0, 12) + horizontalEyes +
-                    visualRepresentation.substring(13, 16) + horizontalEyes + visualRepresentation.substring(17);
+                    visualRepresentation.substring(12, 17) + horizontalEyes + visualRepresentation.substring(17);
         }
         else{
             visualRepresentation = visualRepresentation.substring(0, 12) + happyEyes +
-                    visualRepresentation.substring(13, 16) + happyEyes + visualRepresentation.substring(17);
+                    visualRepresentation.substring(12, 17) + happyEyes + visualRepresentation.substring(17);
 
         }
 
         // bit 5 arm
         if(bitValues.charAt(3) == '0'){
             // bit 1 body
-            if (bitValues.charAt(1) == '0') {
+            if (bitValues.charAt(4) == '0') {
                 visualRepresentation += bigBody.substring(0, 1) + rightArm +
                         bigBody.substring(2, 7) + leftArm + bigBody.substring(8);
             }
