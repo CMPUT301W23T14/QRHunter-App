@@ -73,8 +73,6 @@ dependencies {
     // Add the dependency for the Firebase SDK for Google Analytics
     implementation 'com.google.firebase:firebase-firestore'
 
-    implementation 'commons-codec:commons-codec:1.13'
-
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
 
     /**
@@ -83,6 +81,9 @@ dependencies {
      * Author: Jake Wharton
      */
     implementation 'com.jakewharton.rxbinding4:rxbinding-material:4.0.0'
+
+    implementation("com.google.guava:guava:31.1-android")
+
 
 }
 
