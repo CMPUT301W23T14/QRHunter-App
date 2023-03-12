@@ -1,47 +1,28 @@
 package com.example.qrhunter.utils;
 
-public class QRCodeName {
+public class QRCodeName extends QRCodeVisualize{
     /**
      * generates the name for qrcode
      */
-    private final String hashValue;
-    private String bitValues;
+    private final String bitValues;
 
-    private String qrCodeName;
+    private String qrCodeName = "";
+    QRCodeVisualize qrCodeVisualize;
 
     /**
      * Constructor for new QRCodeName
      */
     public QRCodeName(String hashValue){
-        this.hashValue = hashValue;
-        strToBinary(this.hashValue);
+        super(hashValue);
+        qrCodeVisualize = new QRCodeVisualize(hashValue);
+        this.bitValues = qrCodeVisualize.getBitValues();
         createQRName();
-    }
-
-    /**
-     * turns the string into binary values for generating the name
-     */
-    private void strToBinary(String s)
-    {
-        StringBuilder binary = new StringBuilder();
-
-        for (char c : s.toCharArray()) {
-            String binaryChar = "1";
-            int intChar = (int) c;
-            if (intChar % 2 == 0) {
-                binaryChar = "0" ; // Pad with leading zeros to ensure 8 bits
-            }
-            binary.append(binaryChar);
-        }
-
-        bitValues = binary.toString();
     }
 
     /**
      * generate a name based on the hashValue
      */
     public void createQRName(){
-        qrCodeName = "";
 
         // bit 0 head
         if(bitValues.charAt(0) == '0'){
