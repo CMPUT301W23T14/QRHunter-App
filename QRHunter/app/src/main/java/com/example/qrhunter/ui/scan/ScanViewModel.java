@@ -18,6 +18,7 @@ import java.util.ArrayList;
 public class ScanViewModel extends ViewModel {
     private final MutableLiveData<String> qrCodeContent = new MutableLiveData<>();
     private final MutableLiveData<String> qrCodeHash = new MutableLiveData<>();
+    private final MutableLiveData<Location> location = new MutableLiveData<>(new Location(0, 0, new ArrayList<>()));
     private QRCodeRepository qrCodeRepository = new QRCodeRepository();
 
     public LiveData<String> getQRCodeContent() {
@@ -38,11 +39,8 @@ public class ScanViewModel extends ViewModel {
     /**
      * Called when user has reviewed the QR Code details and wants to add to account
      */
-    public void createQRCode(String hashValue, Bitmap savedPhoto, double latitude, double longitude) {
-        ArrayList<String> photos = new ArrayList<String>();
-        photos.add(BitMapToString(savedPhoto));
-        Location location = new Location(latitude, longitude, photos);
-        QRCode newQRCode = new QRCode(hashValue, location, null);
+    public void createQRCode() {
+        QRCode newQRCode = new QRCode(qrCodeHash.getValue(), location.getValue(), null);
 
         // add qrcode to database
         // QRCodeRepository.addQRCode(newQRCode);
@@ -63,5 +61,38 @@ public class ScanViewModel extends ViewModel {
         return this.qrCodeHash;
     }
 
+    /**
+     * Clears the qr code in state
+     */
+    public void clearQRCode() {
+        qrCodeContent.setValue("");
+        qrCodeHash.setValue("");
+    }
+
+    public void setGeolocation(double latitude, double longitude) {
+        Location currentLocation = this.location.getValue();
+        currentLocation.latitude = latitude;
+        currentLocation.longitude = longitude;
+
+        location.setValue(currentLocation);
+    }
+
+    public void addPhotoLocation(Bitmap photo) {
+        Location currentLocation = this.location.getValue();
+        currentLocation.photos.add(BitMapToString(photo));
+
+        location.setValue(currentLocation);
+    }
+
+    public void clearPhotoLocation() {
+        Location currentLocation = this.location.getValue();
+        currentLocation.photos = new ArrayList<>();
+
+        location.setValue(currentLocation);
+    }
+
+    public LiveData<Location> getLocation() {
+        return location;
+    }
 
 }
