@@ -38,7 +38,7 @@ public class ScanViewModel extends ViewModel {
     /**
      * Called when user has reviewed the QR Code details and wants to add to account
      */
-    public void createQRCode(String hashValue, Bitmap savedPhoto, int latitude, int longitude) {
+    public void createQRCode(String hashValue, Bitmap savedPhoto, double latitude, double longitude) {
         ArrayList<String> photos = new ArrayList<String>();
         photos.add(BitMapToString(savedPhoto));
         Location location = new Location(latitude, longitude, photos);
