@@ -17,9 +17,8 @@ import java.util.ArrayList;
 
 public class ScanViewModel extends ViewModel {
     private final MutableLiveData<String> qrCodeContent = new MutableLiveData<>();
-    private QRCodeRepository qrCodeRepository = new QRCodeRepository();
     private final MutableLiveData<String> qrCodeHash = new MutableLiveData<>();
-
+    private QRCodeRepository qrCodeRepository = new QRCodeRepository();
 
     public LiveData<String> getQRCodeContent() {
         return qrCodeContent;
@@ -52,15 +51,15 @@ public class ScanViewModel extends ViewModel {
     /**
      * turns the bitmap to string for storing purpose
      */
-    public String BitMapToString(Bitmap bitmap){
-        ByteArrayOutputStream baos =new  ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG,100, baos);
-        byte [] b=baos.toByteArray();
-        String temp= Base64.encodeToString(b, Base64.DEFAULT);
+    public String BitMapToString(Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] b = baos.toByteArray();
+        String temp = Base64.encodeToString(b, Base64.DEFAULT);
         return temp;
     }
 
-    public MutableLiveData<String> getQRCodeHash(){
+    public LiveData<String> getQRCodeHash() {
         return this.qrCodeHash;
     }
 
