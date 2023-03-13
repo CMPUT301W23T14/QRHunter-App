@@ -111,7 +111,7 @@ public class AfterScanFragment extends Fragment {
                             Bitmap savedPhoto = (Bitmap) bundle.get("data");
                             savedPhoto = Bitmap.createScaledBitmap(savedPhoto, 640, 480, true);
                             Bitmap finalPhoto = Bitmap.createScaledBitmap(savedPhoto, 640, 480, true);
-                            scanViewModel.addPhotoLocation(finalPhoto);
+                            scanViewModel.setPhotoLocation(finalPhoto);
 
                             binding.locationImage.setVisibility(View.VISIBLE);
                             binding.addPhotoLocationButton.setImageResource(R.drawable.remove_icon);
@@ -134,7 +134,7 @@ public class AfterScanFragment extends Fragment {
 
             // we delete the picture
             if (!scanViewModel.getLocation().getValue().photos.isEmpty()) {
-                scanViewModel.clearPhotoLocation();
+                scanViewModel.setPhotoLocation(null);
                 binding.addPhotoLocationButton.setImageResource(R.drawable.add_icon);
                 binding.locationImage.setVisibility(View.GONE);
             } else {
