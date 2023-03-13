@@ -4,13 +4,14 @@ package com.example.qrhunter.data.model;
  * Model class for a player
  * TODO: Update the attributes as needed add validation to the setters
  */
+
 public class Player {
     /**
      * The unique id of a player. It is generated using the device id.
      * It is also the document id for the collection "players" in Firestore
      */
+
     private final String id;
-    // The rest of the attributes are public
     private String username;
     private String phoneNumber;
     private int rank;
@@ -26,7 +27,6 @@ public class Player {
         this.rank = 0;
         this.phoneNumber = "";
     }
-
     /**
      * Constructors for Players that already exist in Firestore
      */
