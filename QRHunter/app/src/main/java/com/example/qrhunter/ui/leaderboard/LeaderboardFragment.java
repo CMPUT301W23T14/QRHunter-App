@@ -70,7 +70,7 @@ public class LeaderboardFragment extends Fragment {
 
         listView.setOnItemClickListener((parent, view, position, id) -> {
 //            Toast.makeText(getContext(), "ID of clicked " + dataList.get(position).getId(), Toast.LENGTH_SHORT).show();
-            Navigation.findNavController(binding.getRoot()).navigate(R.id.action_navigation_leaderboard_to_navigation_profile);
+//            Navigation.findNavController(binding.getRoot()).navigate(R.id.action_navigation_leaderboard_to_navigation_profile);
         });
 
 
