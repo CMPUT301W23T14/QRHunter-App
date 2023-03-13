@@ -17,6 +17,7 @@ public class QRCodeRepository extends DataRepository {
      */
     public void addQRCodeToPlayer(QRCode qrCode, String playerId) {
         PlayerRepository playerRepository = new PlayerRepository();
+
         // Check whether qr code exists.
         doesQRCodeExist(qrCode, documentSnapshot -> {
             if (documentSnapshot == null) {
@@ -39,8 +40,20 @@ public class QRCodeRepository extends DataRepository {
      * Remove a QR Code document in Firestore and reduce appropriate score from player
      */
     public void removeQRCodeFromPlayer(String qrCodeId, String playerId) {
+        PlayerRepository playerRepository = new PlayerRepository();
+
+        // Update qr code document
         db.collection("qrCodes").document(qrCodeId)
                 .update("playerIds", FieldValue.arrayRemove(playerId));
+
+        // update player document (reduce score).
+        db.collection("qrCodes").document(qrCodeId).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                double scoreChange = task.getResult().getDouble("score");
+                playerRepository.addScoreToPlayer(playerId, -(scoreChange));
+            }
+        });
+
     }
 
     /**

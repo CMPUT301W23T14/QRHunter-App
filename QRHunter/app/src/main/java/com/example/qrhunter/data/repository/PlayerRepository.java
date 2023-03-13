@@ -4,6 +4,7 @@ import com.example.qrhunter.data.model.Player;
 import com.example.qrhunter.utils.PlayerUtil;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.Query;
 
 import java.util.Map;
@@ -84,11 +85,7 @@ public class PlayerRepository extends DataRepository {
     }
 
     public void addScoreToPlayer(String playerId, Double score) {
-        // TODO: Update player score
-    }
-
-    public void minusScoreFromPlayer(String playerId, Double score) {
-        // TODO: Update player score
+        db.collection("players").document(playerId).update("totalScore", FieldValue.increment(score));
     }
 
 

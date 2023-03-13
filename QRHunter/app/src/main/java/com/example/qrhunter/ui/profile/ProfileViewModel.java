@@ -48,13 +48,23 @@ public class ProfileViewModel extends ViewModel {
     }
 
     public void removeScannedQRCode(String qrCodeId, String playerId) {
-        // Update Firestore
+        // Update Firestore (reduce score and remove from qr code's playerIds)
         qrCodeRepository.removeQRCodeFromPlayer(qrCodeId, playerId);
+
 
         // Update this.scannedQRCodes
         ArrayList<QRCode> currentScannedQRCodes = this.scannedQRCodes.getValue();
         currentScannedQRCodes.removeIf(qrCode -> {
-            return qrCode.getId() == qrCodeId;
+            if (qrCode.getId() == qrCodeId) {
+                // Update total score as well
+                Player currentPlayer = this.player.getValue();
+                currentPlayer.setTotalScore(currentPlayer.getTotalScore() - qrCode.getScore());
+                this.player.setValue(currentPlayer);
+
+                return true;
+            }
+
+            return false;
         });
 
         this.scannedQRCodes.setValue(currentScannedQRCodes);
