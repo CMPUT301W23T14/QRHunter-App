@@ -67,7 +67,7 @@ public class LeaderboardFragment extends Fragment {
         });
 
 
-
+        // when user clicks on a item in listview (implementation for part 4)4444
         listView.setOnItemClickListener((parent, view, position, id) -> {
 //            Toast.makeText(getContext(), "ID of clicked " + dataList.get(position).getId(), Toast.LENGTH_SHORT).show();
 //            Navigation.findNavController(binding.getRoot()).navigate(R.id.action_navigation_leaderboard_to_navigation_profile);

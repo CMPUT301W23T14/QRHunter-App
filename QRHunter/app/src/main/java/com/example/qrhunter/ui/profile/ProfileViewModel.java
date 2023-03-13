@@ -46,7 +46,12 @@ public class ProfileViewModel extends ViewModel {
 
         return this.scannedQRCodes;
     }
-
+    /**
+     * Removes a QR code from the list of scanned QR codes for the given player and updates the player's score accordingly.
+     *
+     * @param qrCodeId The ID of the QR code to remove.
+     * @param playerId The ID of the player who scanned the QR code.
+     */
     public void removeScannedQRCode(String qrCodeId, String playerId) {
         // Update Firestore (reduce score and remove from qr code's playerIds)
         qrCodeRepository.removeQRCodeFromPlayer(qrCodeId, playerId);

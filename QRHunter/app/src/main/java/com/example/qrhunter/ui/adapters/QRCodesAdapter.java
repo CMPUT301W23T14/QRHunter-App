@@ -49,23 +49,26 @@ public class QRCodesAdapter extends RecyclerView.Adapter<QRCodesAdapter.ViewHold
 
         holder.qrCodeNameTextView.setText(qrCode.getName());
         holder.qrCodeScoreTextView.setText(Double.toString(qrCode.getScore()));
-
         // TODO: Set the listeners for the buttons
         holder.expandQRCodeButton.setOnClickListener(v -> {
             NavController navController = Navigation.findNavController(v);
-
             ProfileFragmentDirections.ActionNavigationProfileToQrCodeFragment action = ProfileFragmentDirections.actionNavigationProfileToQrCodeFragment(qrCode.getId());
             navController.navigate(action);
         });
-
-
     }
-
+    /**
+     * Returns the total number of items in the data set held by the adapter.
+     * @return the total number of items in the data set held by the adapter
+     */
     @Override
     public int getItemCount() {
         return qrCodes.size();
     }
 
+    /**
+     * Setter for onClickListeners interface.
+     * @param listeners onClickListeners implementation from parent fragment / activity
+     */
     public void setOnClickListeners(onClickListeners listeners) {
         this.listeners = listeners;
     }
@@ -76,7 +79,9 @@ public class QRCodesAdapter extends RecyclerView.Adapter<QRCodesAdapter.ViewHold
     public interface onClickListeners {
         void onDeleteButtonClick(int position);
     }
-
+    /**
+     * ViewHolder class for QrCodeListAdapter.
+     */
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView qrCodeNameTextView;
         public TextView qrCodeScoreTextView;

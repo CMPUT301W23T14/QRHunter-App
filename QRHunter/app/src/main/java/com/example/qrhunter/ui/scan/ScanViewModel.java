@@ -61,7 +61,11 @@ public class ScanViewModel extends ViewModel {
         String temp = Base64.encodeToString(b, Base64.DEFAULT);
         return temp;
     }
-
+    /**
+     * Returns a LiveData object containing the QR code hash value.
+     *
+     * @return A LiveData object containing the QR code hash value.
+     */
     public LiveData<String> getQRCodeHash() {
         return this.qrCodeHash;
     }
@@ -73,7 +77,12 @@ public class ScanViewModel extends ViewModel {
         qrCodeContent.setValue("");
         qrCodeHash.setValue("");
     }
-
+    /**
+     * Sets the geolocation coordinates for the current location.
+     *
+     * @param latitude The latitude coordinate for the current location.
+     * @param longitude The longitude coordinate for the current location.
+     */
     public void setGeolocation(double latitude, double longitude) {
         Location currentLocation = this.location.getValue();
         currentLocation.latitude = latitude;
@@ -81,7 +90,11 @@ public class ScanViewModel extends ViewModel {
 
         location.setValue(currentLocation);
     }
-
+    /**
+     * Sets the photo location for the current location.
+     *
+     * @param photo The Bitmap photo to add to the current location. If null, clears the photo location.
+     */
     public void setPhotoLocation(Bitmap photo) {
         // Clears photo location if provided with null bitmap
         //  otherwise adds the photo to the location
@@ -95,6 +108,11 @@ public class ScanViewModel extends ViewModel {
         location.setValue(currentLocation);
     }
 
+    /**
+     * Returns the LiveData object containing the current location.
+     *
+     * @return The LiveData object containing the current location.
+     */
     public LiveData<Location> getLocation() {
         return location;
     }
