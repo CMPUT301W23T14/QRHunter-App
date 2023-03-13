@@ -22,6 +22,7 @@ public class ProfileViewModel extends ViewModel {
      * Gets a player object
      *
      * @param playerId The id of the player
+     * @return A live data object of the player retrieved
      */
     public LiveData<Player> getPlayer(String playerId) {
         playerRepository.getPlayer(playerId, result -> {
