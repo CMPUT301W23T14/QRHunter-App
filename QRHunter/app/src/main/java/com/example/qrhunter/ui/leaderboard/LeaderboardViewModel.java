@@ -21,4 +21,10 @@ public class LeaderboardViewModel extends ViewModel {
         return players;
     }
 
+    public LiveData<List<Player>> updatePlayers() {
+        playerRepository = new PlayerRepository();
+        players = playerRepository.getUsers();
+        return players;
+    }
+
 }
