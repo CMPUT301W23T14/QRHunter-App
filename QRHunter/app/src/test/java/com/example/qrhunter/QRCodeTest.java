@@ -12,6 +12,9 @@ import org.junit.jupiter.api.Test;
 
 public class QRCodeTest {
 
+    /**
+     * Tests the QRCode constructor by creating a new QRCode object and checking that its properties are set correctly.
+     */
     @Test
     public void testConstructor() {
         String id = "1234";
@@ -34,6 +37,9 @@ public class QRCodeTest {
         assertEquals(playerIds, qrCode.getPlayerIds());
     }
 
+    /**
+     * Tests the setter methods of the QRCode class by setting each property to a new value and checking that it has been updated correctly.
+     */
     @Test
     public void testSetters() {
         ArrayList<String> photos = new ArrayList<>();
