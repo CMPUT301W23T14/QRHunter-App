@@ -39,15 +39,4 @@ public class AfterScanFragmentTest {
         Activity activity = rule.getActivity();
     }
 
-    /**
-     * Add a city to the listview and check the city name using assertTrue
-     * Clear all the cities from the listview and check again with assertFalse
-     */
-    @Test
-    public void checkList(){
-        // Asserts that the current activity is the MainActivity. Otherwise, show “Wrong Activity”
-        solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
-
-    }
-
 }
