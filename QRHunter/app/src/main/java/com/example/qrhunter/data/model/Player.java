@@ -2,7 +2,6 @@ package com.example.qrhunter.data.model;
 
 /**
  * Model class for a player
- * TODO: Update the attributes as needed add validation to the setters
  */
 
 public class Player {
@@ -27,6 +26,7 @@ public class Player {
         this.rank = 0;
         this.phoneNumber = "";
     }
+
     /**
      * Constructors for Players that already exist in Firestore
      */

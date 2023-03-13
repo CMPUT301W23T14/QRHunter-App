@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Utility class containing helper methods related to Players
+ */
 public final class PlayerUtil {
 
     /**
