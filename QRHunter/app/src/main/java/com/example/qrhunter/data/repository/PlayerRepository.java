@@ -4,9 +4,11 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.qrhunter.data.model.Player;
+import com.example.qrhunter.utils.PlayerUtil;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -67,12 +69,7 @@ public class PlayerRepository extends DataRepository {
      * @return The player that was created in the callback
      */
     public void createPlayer(Player player, RepositoryCallback<Player> repositoryCallback) {
-        Map<String, Object> playerHashMap = new HashMap<>();
-        playerHashMap.put("username", player.getUsername());
-        playerHashMap.put("phoneNumber", player.getPhoneNumber());
-        // TODO: Calculate the correct rank
-        playerHashMap.put("rank", player.getRank());
-        playerHashMap.put("totalScore", player.getTotalScore());
+        Map<String, Object> playerHashMap = PlayerUtil.convertPlayerToHashmap(player);
 
         db.collection("players").document(player.getId()).set(playerHashMap).addOnCompleteListener(task -> {
             repositoryCallback.onSuccess(player);
@@ -90,16 +87,18 @@ public class PlayerRepository extends DataRepository {
 
         playerDocRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful() && task.getResult().exists()) {
-                String username = task.getResult().get("username").toString();
-                String phoneNumber = task.getResult().get("phoneNumber").toString();
-                int rank = ((Long) task.getResult().get("rank")).intValue();
-                int totalScore = ((Long) task.getResult().get("totalScore")).intValue();
+                Player player = PlayerUtil.convertDocumentToPlayer(task.getResult());
 
-                Player player = new Player(task.getResult().getId().toString(), username, phoneNumber, rank, totalScore);
                 repositoryCallback.onSuccess(player);
             }
         });
     }
+
+    public void addScoreToPlayer(String playerId, Double score) {
+        db.collection("players").document(playerId).update("totalScore", FieldValue.increment(score));
+    }
+
+
 
     /**
      * Gets a list of players from firestore

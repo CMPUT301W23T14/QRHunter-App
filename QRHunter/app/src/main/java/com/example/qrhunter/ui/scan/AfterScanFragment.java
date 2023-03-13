@@ -1,6 +1,7 @@
 package com.example.qrhunter.ui.scan;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,6 +77,7 @@ public class AfterScanFragment extends Fragment {
         });
 
         binding.addGeoLocationButton.setOnClickListener(view -> {
+
             if (binding.addGeoLocationButton.isChecked() && locationPermissionGranted) {
                 try {
                     LocationManager lm = (LocationManager) requireContext().getSystemService(Context.LOCATION_SERVICE);
@@ -82,6 +85,7 @@ public class AfterScanFragment extends Fragment {
                     if (gps_enabled) {
                         Location lastKnownLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                         if (lastKnownLocation != null) {
+                            System.out.println(binding.addGeoLocationButton.isChecked());
                             scanViewModel.setGeolocation(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
                         }
                     }
@@ -142,7 +146,8 @@ public class AfterScanFragment extends Fragment {
 
         binding.saveButton.setOnClickListener(view -> {
             // use the model to add the qrcode
-            scanViewModel.createQRCode();
+            @SuppressLint("HardwareIds") String deviceId = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
+            scanViewModel.completeScan(deviceId);
             // navigate to somewhere after this is done
             Navigation.findNavController(binding.getRoot()).navigate(R.id.action_navigation_after_scan_to_navigation_map);
 

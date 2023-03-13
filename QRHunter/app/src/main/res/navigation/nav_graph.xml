@@ -18,7 +18,12 @@
         android:id="@+id/navigation_profile"
         android:name="com.example.qrhunter.ui.profile.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile">
+        <action
+            android:id="@+id/action_navigation_profile_to_qrCodeFragment"
+            app:destination="@id/qrCodeFragment"
+            app:enterAnim="@anim/nav_default_pop_enter_anim" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_map"
         android:name="com.example.qrhunter.ui.map.MapFragment"
@@ -49,5 +54,13 @@
         <action
             android:id="@+id/action_playerInitFragment_to_navigation_map"
             app:destination="@id/navigation_map" />
+    </fragment>
+    <fragment
+        android:id="@+id/qrCodeFragment"
+        android:name="com.example.qrhunter.ui.qrcode.QrCodeFragment"
+        android:label="QrCodeFragment">
+        <argument
+            android:name="qrCodeId"
+            app:argType="string" />
     </fragment>
 </navigation>
