@@ -56,6 +56,8 @@ public class ProfileFragment extends Fragment {
             if (!player.getId().isEmpty()) {
                 binding.username.setText(player.getUsername());
                 binding.phoneNumberEditText.setText(player.getPhoneNumber());
+                player.setScannedQRCodes(sampleQRCodes);
+                player.calculateTotalScore();
                 binding.totalScore.setText(Integer.toString(player.getTotalScore()));
                 binding.rank.setText(Integer.toString(player.getRank()));
 
@@ -66,6 +68,7 @@ public class ProfileFragment extends Fragment {
                     binding.scannedText.setText("(" + qrCodes.size() + ")");
                 });
             }
+
         });
 
         return binding.getRoot();

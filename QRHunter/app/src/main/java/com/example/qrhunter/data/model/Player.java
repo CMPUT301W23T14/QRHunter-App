@@ -39,6 +39,61 @@ public class Player {
     }
 
 
+    public void setScannedQRCodes(ArrayList<QRCode> scannedQRCodes) {
+        this.scannedQRCodes = scannedQRCodes;
+    }
+
+    public void calculateTotalScore(){
+        double currentTotalScore = 0;
+        for (int i=0; i < scannedQRCodes.size(); i++){
+            QRCode qrcode = scannedQRCodes.get(i);
+            currentTotalScore = currentTotalScore + qrcode.getScore();
+        }
+        int value = (int)currentTotalScore;
+        this.totalScore = value;
+        Log.d("TAG", "Total Score: " + String.valueOf(totalScore));
+
+    }
+
+    public int calculateLowestScore(){
+        double currentLowestScore = 0;
+        for (int i=0; i < scannedQRCodes.size(); i++){
+            QRCode qrcode = scannedQRCodes.get(i);
+            if (i == 0){
+                Log.d("TAG", "i=0 " + String.valueOf(currentLowestScore));
+                currentLowestScore= qrcode.getScore();
+            }
+            else {
+                if (qrcode.getScore() < currentLowestScore);{
+                    Log.d("TAG", "lower val: " + String.valueOf(currentLowestScore));
+                    currentLowestScore = qrcode.getScore();
+                }
+            }
+
+        }
+        int value = (int)currentLowestScore;
+        return value;
+    }
+
+    public int calculateHighestScore(){
+        double currentHighestScore = 0;
+        for (int i=0; i < scannedQRCodes.size(); i++){
+            QRCode qrcode = scannedQRCodes.get(i);
+            if (i == 0){
+                currentHighestScore= qrcode.getScore();
+            }
+            else {
+                if (qrcode.getScore() > currentHighestScore);{
+                    currentHighestScore = qrcode.getScore();
+                }
+            }
+
+        }
+        int value = (int)currentHighestScore;
+        return value;
+
+    }
+
     public String getId() {
         return id;
     }
