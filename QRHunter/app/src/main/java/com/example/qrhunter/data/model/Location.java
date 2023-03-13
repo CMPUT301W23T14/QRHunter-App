@@ -19,4 +19,8 @@ public class Location {
         this.longitude = longitude;
         this.photos = photos;
     }
+
+    public ArrayList<String> getPhotos() {
+        return photos;
+    }
 }
