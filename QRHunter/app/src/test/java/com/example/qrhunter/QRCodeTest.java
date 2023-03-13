@@ -62,6 +62,7 @@ public class QRCodeTest {
         qrCode.setCommentIds(newCommentIds);
         assertEquals(newCommentIds, qrCode.getCommentIds());
 
+        // test another
         ArrayList<String> newPlayerIds = new ArrayList<>();
         newPlayerIds.add("player1");
         qrCode.setPlayerIds(newPlayerIds);
