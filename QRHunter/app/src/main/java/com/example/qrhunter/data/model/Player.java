@@ -1,9 +1,5 @@
 package com.example.qrhunter.data.model;
 
-import android.util.Log;
-
-import java.util.ArrayList;
-
 /**
  * Model class for a player
  * TODO: Update the attributes as needed add validation to the setters
@@ -18,8 +14,7 @@ public class Player {
     private String username;
     private String phoneNumber;
     private int rank;
-    private int totalScore;
-    private ArrayList<QRCode> scannedQRCodes;
+    private double totalScore;
 
     /**
      * Constructor for new Players
@@ -43,25 +38,6 @@ public class Player {
         this.totalScore = totalScore;
     }
 
-    public ArrayList<QRCode> getScannedQRCodes() {
-        return scannedQRCodes;
-    }
-
-    public void setScannedQRCodes(ArrayList<QRCode> scannedQRCodes) {
-        this.scannedQRCodes = scannedQRCodes;
-    }
-
-    public void calculateTotalScore(){
-        double currentTotalScore = 0;
-        for (int i=0; i < scannedQRCodes.size(); i++){
-            QRCode qrcode = scannedQRCodes.get(i);
-            currentTotalScore = currentTotalScore + qrcode.getScore();
-        }
-        int value = (int)currentTotalScore;
-        this.totalScore = value;
-        Log.d("TAG", String.valueOf(totalScore));
-
-    }
 
     public String getId() {
         return id;
@@ -91,11 +67,11 @@ public class Player {
         this.rank = rank;
     }
 
-    public int getTotalScore() {
+    public double getTotalScore() {
         return totalScore;
     }
 
-    public void setTotalScore(int totalScore) {
+    public void setTotalScore(double totalScore) {
         this.totalScore = totalScore;
     }
 }
