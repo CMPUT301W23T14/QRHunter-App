@@ -1,4 +1,4 @@
-package com.example.qrhunter;
+package com.example.qrhunter.ui.scan;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.MutableLiveData;
@@ -9,10 +9,10 @@ import com.example.qrhunter.ui.scan.ScanViewModel;
 
 
 import android.graphics.Bitmap;
-import android.support.test.filters.LargeTest;
-import android.support.test.runner.AndroidJUnit4;
 
 import androidx.lifecycle.Observer;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.filters.LargeTest;
 
 import com.example.qrhunter.data.model.Location;
 import com.example.qrhunter.data.repository.QRCodeRepository;
@@ -43,7 +43,7 @@ import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class ScanViewModelTest {
+public class ScanViewModelTest{
 
 
     @Rule
