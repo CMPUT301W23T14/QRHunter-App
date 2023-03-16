@@ -13,6 +13,9 @@ import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -38,6 +41,9 @@ public class LeaderboardFragment extends Fragment {
 
     private String deviceId;
 
+    private ImageView refreshButton;
+
+    private SearchView searchView;
     @SuppressLint("HardwareIds")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,29 +54,32 @@ public class LeaderboardFragment extends Fragment {
         deviceId = Settings.Secure.getString(requireActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
 
         binding = FragmentLeaderboardBinding.inflate(inflater, container, false);
-        listView = binding.leaderboardRecyclerView;
+        listView = binding.leaderboardListView;
+        refreshButton = binding.leaderboardRefreshButton;
 
         getList();
-        SwipeRefreshLayout swipeRefreshLayout = binding.swipeRefreshLayout;
-        // when user refreshes the layout
-        swipeRefreshLayout.setOnRefreshListener(() -> {
+        // gets the updated list and plays an animation
+        refreshButton.setOnClickListener(v -> {
             if (leaderboardAdapter != null) {
                 leaderboardViewModel.updatePlayers().observe(getViewLifecycleOwner(), players -> {
                     dataList = new ArrayList<>(players);
                     leaderboardAdapter = new LeaderboardAdapter(getContext(), dataList, deviceId);
                     listView.setAdapter(leaderboardAdapter);
-                    Toast.makeText(getContext(), "Refreshed", Toast.LENGTH_SHORT).show();
                     leaderboardAdapter.notifyDataSetChanged();
                 });
+                RotateAnimation rotateAnimation = new RotateAnimation(
+                        0, 360,  // From and to angles (in degrees)
+                        Animation.RELATIVE_TO_SELF, 0.5f,  // Pivot point X
+                        Animation.RELATIVE_TO_SELF, 0.5f   // Pivot point Y
+                );
+                rotateAnimation.setDuration(500); // Duration in milliseconds
+                refreshButton.startAnimation(rotateAnimation);
+                Toast.makeText(getContext(), "Leaderboard Updated", Toast.LENGTH_SHORT).show();
             }
-            swipeRefreshLayout.setRefreshing(false);
         });
 
-
-
+        // TODO: navigate to profile fragment
         listView.setOnItemClickListener((parent, view, position, id) -> {
-//            Toast.makeText(getContext(), "ID of clicked " + dataList.get(position).getId(), Toast.LENGTH_SHORT).show();
-//            Navigation.findNavController(binding.getRoot()).navigate(R.id.action_navigation_leaderboard_to_navigation_profile);
         });
 
 
@@ -85,7 +94,6 @@ public class LeaderboardFragment extends Fragment {
                 dataList = new ArrayList<>(players);
                 leaderboardAdapter = new LeaderboardAdapter(getContext(), dataList, deviceId);
                 listView.setAdapter(leaderboardAdapter);
-                Toast.makeText(getContext(), "Refreshed", Toast.LENGTH_SHORT).show();
                 leaderboardAdapter.notifyDataSetChanged();
             });
         }
