@@ -12,7 +12,7 @@
 
     <TextView
         android:id="@+id/player_rank"
-        android:layout_width="35dp"
+        android:layout_width="40dp"
         android:layout_height="wrap_content"
         android:text="@string/sample_rank"
         android:layout_marginStart="15dp"
