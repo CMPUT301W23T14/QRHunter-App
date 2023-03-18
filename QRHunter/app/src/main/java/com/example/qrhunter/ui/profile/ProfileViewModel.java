@@ -10,6 +10,7 @@ import com.example.qrhunter.data.repository.PlayerRepository;
 import com.example.qrhunter.data.repository.QRCodeRepository;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class ProfileViewModel extends ViewModel {
     private final MutableLiveData<Player> player = new MutableLiveData<>();
@@ -22,6 +23,7 @@ public class ProfileViewModel extends ViewModel {
      * Gets a player object
      *
      * @param playerId The id of the player
+     * @return A live data object of the player retrieved
      */
     public LiveData<Player> getPlayer(String playerId) {
         playerRepository.getPlayer(playerId, result -> {
@@ -55,7 +57,7 @@ public class ProfileViewModel extends ViewModel {
         // Update this.scannedQRCodes
         ArrayList<QRCode> currentScannedQRCodes = this.scannedQRCodes.getValue();
         currentScannedQRCodes.removeIf(qrCode -> {
-            if (qrCode.getId() == qrCodeId) {
+            if (Objects.equals(qrCode.getId(), qrCodeId)) {
                 // Update total score as well
                 Player currentPlayer = this.player.getValue();
                 currentPlayer.setTotalScore(currentPlayer.getTotalScore() - qrCode.getScore());

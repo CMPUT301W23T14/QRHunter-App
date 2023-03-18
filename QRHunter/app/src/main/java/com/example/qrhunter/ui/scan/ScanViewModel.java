@@ -52,7 +52,10 @@ public class ScanViewModel extends ViewModel {
     }
 
     /**
-     * turns the bitmap to string for storing purpose
+     * Turns the bitmap of a photo to string for storing purpose
+     *
+     * @param bitmap The bitmap of a photo
+     * @return The converted string
      */
     public String BitMapToString(Bitmap bitmap) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -88,8 +91,7 @@ public class ScanViewModel extends ViewModel {
         Location currentLocation = this.location.getValue();
         if (photo == null) {
             currentLocation.photos = new ArrayList<>();
-        }
-        else{
+        } else {
             currentLocation.photos.add(BitMapToString(photo));
         }
         location.setValue(currentLocation);

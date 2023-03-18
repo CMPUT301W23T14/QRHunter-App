@@ -1,9 +1,6 @@
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/swipe_refresh_layout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+
     <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
@@ -24,7 +21,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <android.widget.SearchView
-            android:id="@+id/search_user"
+            android:id="@+id/leaderboard_search_user"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -40,7 +37,7 @@
             app:iconifiedByDefault="false"
             app:layout_constraintTop_toBottomOf="@+id/leaderboard_text_view" />
         <ListView
-            android:id="@+id/leaderboard_recycler_view"
+            android:id="@+id/leaderboard_list_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="8dp"
@@ -51,9 +48,17 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/search_user" />
+            app:layout_constraintTop_toBottomOf="@id/leaderboard_search_user" />
 
-
+        <ImageView
+            android:id="@+id/leaderboard_refresh_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:src="@drawable/baseline_refresh_24"
+            app:layout_constraintBottom_toTopOf="@+id/leaderboard_search_user"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

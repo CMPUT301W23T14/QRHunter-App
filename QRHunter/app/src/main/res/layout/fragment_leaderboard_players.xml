@@ -47,9 +47,11 @@
         app:layout_constraintEnd_toStartOf="@id/player_score"
         app:layout_constraintStart_toEndOf="@id/player_rank"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_default="wrap"
+        app:layout_constrainedWidth="true"
         app:layout_constraintWidth_max="0dp"
         app:layout_constraintHorizontal_bias="0" />
+<!--            app:layout_constraintWidth_default="wrap"
+-->
 
     <TextView
         android:id="@+id/player_score"

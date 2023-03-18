@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 /**
  * Model class for a QRCode
- * TODO: Update the attributes as needed
  */
 public class QRCode {
     /**

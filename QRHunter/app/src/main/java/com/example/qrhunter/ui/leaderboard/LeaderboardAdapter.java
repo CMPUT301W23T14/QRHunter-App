@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -58,7 +59,12 @@ public class LeaderboardAdapter extends ArrayAdapter<Player> {
 //            ColorDrawable colorDrawable = (ColorDrawable) drawable;
             ColorDrawable newDrawable = new ColorDrawable(Color.parseColor("#FFF26F"));
             view.setBackground(newDrawable);
+        }else {
+            // Reset background color for non-selected items
+            Drawable drawable = ResourcesCompat.getDrawable(getContext().getResources(), R.drawable.user_display, null);
+            view.setBackground(drawable);
         }
+
         return view;
     }
 }

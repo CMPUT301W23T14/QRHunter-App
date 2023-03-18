@@ -3,23 +3,23 @@ package com.example.qrhunter.utils;
 import java.util.Hashtable;
 
 /**
- * generates the visual representation of the qrCode
+ * Class that generates the visual representation of the qrCode
  */
-public class QRCodeVisual extends QRCodeVisualize{
+public class QRCodeVisual extends QRCodeConstants {
 
-    // for the qrcode visual representation
-    private String visualRepresentation = "";
     private final String bitValues;
     private final Hashtable<String, String> qrCodeVisual = new Hashtable<String, String>();
-    QRCodeVisualize qrCodeVisualize;
+    QRCodeConstants qrCodeConstants;
+    // for the qrcode visual representation
+    private String visualRepresentation = "";
 
     // Constants for the visual representation
 
-    public QRCodeVisual(String hashValue){
+    public QRCodeVisual(String hashValue) {
         super(hashValue);
-        qrCodeVisualize = new QRCodeVisualize(hashValue);
+        qrCodeConstants = new QRCodeConstants(hashValue);
         qrCodeVisual.put("roundFace", ". _____ .\n" + " /  _  \\ \n" + " \\_____/ \n");
-        qrCodeVisual.put("squareFace", ". _____ .\n" + " |  _  | \n" + " |_____| \n" );
+        qrCodeVisual.put("squareFace", ". _____ .\n" + " |  _  | \n" + " |_____| \n");
         qrCodeVisual.put("bigBody", "  |   |  \n" + "  |   |  \n" + "  |___|  \n");
         qrCodeVisual.put("smallBody", "    |   \n" + "     |    \n" + "    |    \n");
         qrCodeVisual.put("legs", "   / \\  \n" + "  /    \\  \n");
@@ -32,75 +32,69 @@ public class QRCodeVisual extends QRCodeVisualize{
         qrCodeVisual.put("leftArm", "\\");
         qrCodeVisual.put("No_arms", "");
 
-        this.bitValues = qrCodeVisualize.getBitValues();
+        this.bitValues = qrCodeConstants.getBitValues();
         this.bitValues.toCharArray();
-        qrVisual();
+        generateVisuals();
     }
 
     /**
      * transforms the string into a visual representation based on the hashValue
      */
-    public void qrVisual(){
+    public void generateVisuals() {
         // bit 0 head
-        if(bitValues.charAt(0) == '0'){
+        if (bitValues.charAt(0) == '0') {
             visualRepresentation += qrCodeVisual.get("roundFace");
-        }
-        else{
+        } else {
             visualRepresentation += qrCodeVisual.get("squareFace");
         }
         // bit 3 ears
-        if(bitValues.charAt(1) == '0'){
+        if (bitValues.charAt(1) == '0') {
             visualRepresentation = visualRepresentation.substring(0, 10) + qrCodeVisual.get("ears") +
                     visualRepresentation.substring(11, 18) + qrCodeVisual.get("ears") + visualRepresentation.substring(19);
         }
 
         // bit 4 eyes
-        if(bitValues.charAt(2) == '0'){
+        if (bitValues.charAt(2) == '0') {
             visualRepresentation = visualRepresentation.substring(0, 12) + qrCodeVisual.get("horizontalEyes") +
                     visualRepresentation.substring(12, 17) + qrCodeVisual.get("horizontalEyes") + visualRepresentation.substring(17);
-        }
-        else{
+        } else {
             visualRepresentation = visualRepresentation.substring(0, 12) + qrCodeVisual.get("happyEyes") +
                     visualRepresentation.substring(12, 17) + qrCodeVisual.get("happyEyes") + visualRepresentation.substring(17);
 
         }
 
         // bit 5 arm
-        if(bitValues.charAt(3) == '0'){
+        if (bitValues.charAt(3) == '0') {
             // bit 1 body
             if (bitValues.charAt(4) == '0') {
                 visualRepresentation += qrCodeVisual.get("bigBody").substring(0, 1) + qrCodeVisual.get("rightArm") +
                         qrCodeVisual.get("bigBody").substring(2, 7) + qrCodeVisual.get("leftArm") + qrCodeVisual.get("bigBody").substring(8);
-            }
-            else {
+            } else {
                 visualRepresentation += qrCodeVisual.get("smallBody").substring(0, 3) + qrCodeVisual.get("rightArm") +
                         qrCodeVisual.get("smallBody").substring(4, 5) + qrCodeVisual.get("leftArm") + qrCodeVisual.get("smallBody").substring(6, 11) +
-                        qrCodeVisual.get("rightArm") + qrCodeVisual.get("smallBody").substring(12, 17)+ qrCodeVisual.get("leftArm") + qrCodeVisual.get("smallBody").substring(18);
+                        qrCodeVisual.get("rightArm") + qrCodeVisual.get("smallBody").substring(12, 17) + qrCodeVisual.get("leftArm") + qrCodeVisual.get("smallBody").substring(18);
             }
-        }
-        else{
+        } else {
             // bit 1 body
-            if(bitValues.charAt(4) == '0'){
+            if (bitValues.charAt(4) == '0') {
                 visualRepresentation += qrCodeVisual.get("bigBody");
-            }
-            else{
+            } else {
                 visualRepresentation += qrCodeVisual.get("smallBody");
             }
         }
 
         // bit 2 legs
-        if(bitValues.charAt(5) == '0'){
+        if (bitValues.charAt(5) == '0') {
             visualRepresentation += qrCodeVisual.get("legs");
-        }
-        else{
+        } else {
             visualRepresentation += qrCodeVisual.get("noLegs");
         }
     }
 
     /**
-     * returns a string of visual representation based on the hashValue
+     * @return A string of visual representation based on the hashValue
      */
-    public String getVisualRepresentation(){
+    public String getVisualRepresentation() {
         return this.visualRepresentation;
     }
 }
