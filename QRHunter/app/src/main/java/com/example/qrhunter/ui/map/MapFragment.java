@@ -118,6 +118,14 @@ public class MapFragment extends Fragment {
         } catch (SecurityException e)  {
             Log.e("Exception: %s", e.getMessage());
         }
+        map.setOnMyLocationButtonClickListener(() -> {
+            if (map != null) {
+                map.clear();
+                updateLocationUI();
+                getDeviceLocation();
+            }
+            return false;
+        });
     }
     /**
      * Gets the current location of the device, and positions the map's camera.
