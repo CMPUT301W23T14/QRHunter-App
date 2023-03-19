@@ -110,12 +110,12 @@ public class AfterScanFragment extends Fragment {
                             Bundle bundle = data.getExtras();
                             Bitmap savedPhoto = (Bitmap) bundle.get("data");
                             savedPhoto = Bitmap.createScaledBitmap(savedPhoto, 640, 480, true);
-                            Bitmap finalPhoto = Bitmap.createScaledBitmap(savedPhoto, 640, 480, true);
-                            scanViewModel.setPhotoLocation(finalPhoto);
+                            //Bitmap finalPhoto = Bitmap.createScaledBitmap(savedPhoto, 640, 480, true);
+                            scanViewModel.setPhotoLocation(savedPhoto);
 
                             binding.locationImage.setVisibility(View.VISIBLE);
                             binding.addPhotoLocationButton.setImageResource(R.drawable.remove_icon);
-                            binding.locationImage.setImageBitmap(finalPhoto);
+                            binding.locationImage.setImageBitmap(savedPhoto);
 
                         }
                     }
