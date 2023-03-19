@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.Manifest;
 import android.content.Context;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -13,6 +14,9 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,15 +24,26 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.qrhunter.R;
+import com.example.qrhunter.data.model.Player;
+import com.example.qrhunter.data.model.QRCode;
 import com.example.qrhunter.databinding.FragmentLeaderboardBinding;
 import com.example.qrhunter.databinding.FragmentMapBinding;
 import com.example.qrhunter.ui.leaderboard.LeaderboardViewModel;
 
+import com.example.qrhunter.ui.profile.ProfileFragmentDirections;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.example.qrhunter.ui.profile.ProfileFragmentDirections;
+
+import java.util.ArrayList;
+import java.util.Objects;
 
 
 public class MapFragment extends Fragment {
@@ -39,6 +54,8 @@ public class MapFragment extends Fragment {
     private static final int DEFAULT_ZOOM = 15;
     private boolean locationPermissionGranted;
     private Location lastKnownLocation;
+    private ArrayList<QRCode> dataList;
+    private MapViewModel mapViewModel;
     /*
     Asks for location permissions and updates map view to current location if permission is granted
     Website: Stackoverflow
@@ -65,12 +82,11 @@ public class MapFragment extends Fragment {
                 updateLocationUI();
             }
     );
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         //Get ViewModel
-        MapViewModel mapViewModel = new ViewModelProvider(this).get(MapViewModel.class);
+        mapViewModel = new ViewModelProvider(this).get(MapViewModel.class);
         // Inflate the layout for this fragment
         binding = FragmentMapBinding.inflate(inflater, container, false);
         if (!locationPermissionGranted) {
@@ -80,6 +96,15 @@ public class MapFragment extends Fragment {
             getDeviceLocation();
         }
         return binding.getRoot();
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (map != null) {
+            map.clear();
+            updateLocationUI();
+            getDeviceLocation();
+        }
     }
     /**
      * Enables or disables location button based on permissions granted
@@ -126,6 +151,7 @@ public class MapFragment extends Fragment {
                         map.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                 new LatLng(lastKnownLocation.getLatitude(),
                                         lastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                        getNearbyCodes();
                     } else {
                         map.moveCamera(CameraUpdateFactory
                                 .newLatLngZoom(defaultLocation, DEFAULT_ZOOM));
@@ -135,5 +161,24 @@ public class MapFragment extends Fragment {
         } catch (SecurityException e)  {
             Log.e("Exception: %s", e.getMessage(), e);
         }
+    }
+    private void getNearbyCodes() {
+        Circle circle = map.addCircle(new CircleOptions().center(new LatLng(lastKnownLocation.getLatitude(),
+                lastKnownLocation.getLongitude())).radius(400).strokeWidth(0).fillColor(0x2298A1FD));
+        mapViewModel.getQRCodes().observe(getViewLifecycleOwner(), qrCodes -> {
+            dataList = new ArrayList<>(qrCodes);
+            for (int i = 0; i < dataList.size(); i++) {
+                Location targetLocation = new Location("");
+                QRCode qrCode = dataList.get(i);
+                targetLocation.setLatitude(qrCode.getLocation().getLatitude());
+                targetLocation.setLongitude(qrCode.getLocation().getLongitude());
+                if (targetLocation.distanceTo(lastKnownLocation) < 400) {
+                    map.addMarker(new MarkerOptions()
+                            .position(new LatLng(targetLocation.getLatitude(), targetLocation.getLongitude()))
+                            .title("Name: " + qrCode.getName())
+                            .snippet("Score: " + qrCode.getScore()));
+                }
+            }
+        });
     }
 }
