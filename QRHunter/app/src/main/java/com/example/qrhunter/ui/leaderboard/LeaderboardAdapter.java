@@ -49,14 +49,28 @@ public class LeaderboardAdapter extends ArrayAdapter<Player> {
         TextView player_name = view.findViewById(R.id.player_name);
         TextView player_score = view.findViewById(R.id.player_score);
         TextView player_rank = view.findViewById(R.id.player_rank);
-//        player_score.setText(Integer.toString(player.getTotalScore()));
         player_score.setText(Integer.toString((int) Math.round(player.getTotalScore())));
         player_name.setText(player.getUsername());
-//        player_rank.setText(Integer.toString(player.getRank()));
-        player_rank.setText(String.valueOf(player.getRank()));
+        if (player.getRank() == 1) {
+            Drawable drawable = ResourcesCompat.getDrawable(getContext().getResources(), R.drawable.placement_first, null);
+            player_rank.setBackground(drawable);
+            player_rank.setText("");
+        } else if (player.getRank() == 2) {
+            Drawable drawable = ResourcesCompat.getDrawable(getContext().getResources(), R.drawable.placement_second, null);
+            player_rank.setBackground(drawable);
+            player_rank.setText("");
+
+        } else if (player.getRank() == 3) {
+            Drawable drawable = ResourcesCompat.getDrawable(getContext().getResources(), R.drawable.placement_third, null);
+            player_rank.setBackground(drawable);
+            player_rank.setText("");
+
+        } else {
+            player_rank.setText(String.valueOf(player.getRank()));
+            player_rank.setBackground(null);
+        }
         if (Objects.equals(player.getId(), player_id)) {
             Drawable drawable = ResourcesCompat.getDrawable(getContext().getResources(), R.drawable.user_display, null);
-//            ColorDrawable colorDrawable = (ColorDrawable) drawable;
             ColorDrawable newDrawable = new ColorDrawable(Color.parseColor("#FFF26F"));
             view.setBackground(newDrawable);
         }else {
