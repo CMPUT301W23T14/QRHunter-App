@@ -157,6 +157,10 @@ public class QRCodeRepository extends DataRepository {
                     }
                 });
     }
+    /**
+     * Gets a list of QRCodes from firestore
+     * @return LiveData of a list of QRCode objects
+     */
     public LiveData<List<QRCode>> getQRCodeList() {
         MutableLiveData<List<QRCode>> QRCodesLiveData = new MutableLiveData<>();
         CollectionReference QRCodesRef = db.collection("qrCodes");

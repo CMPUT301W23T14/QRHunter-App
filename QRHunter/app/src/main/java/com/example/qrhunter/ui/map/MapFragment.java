@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.Manifest;
 import android.content.Context;
-import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -14,9 +13,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,13 +20,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.qrhunter.R;
-import com.example.qrhunter.data.model.Player;
 import com.example.qrhunter.data.model.QRCode;
-import com.example.qrhunter.databinding.FragmentLeaderboardBinding;
 import com.example.qrhunter.databinding.FragmentMapBinding;
-import com.example.qrhunter.ui.leaderboard.LeaderboardViewModel;
 
-import com.example.qrhunter.ui.profile.ProfileFragmentDirections;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -38,12 +30,9 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.example.qrhunter.ui.profile.ProfileFragmentDirections;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 
 public class MapFragment extends Fragment {
@@ -162,8 +151,20 @@ public class MapFragment extends Fragment {
             Log.e("Exception: %s", e.getMessage(), e);
         }
     }
+    /**
+     * Get nearby QR codes
+     * Create markers that display info window with name and score when clicked
+     * Create circle displaying search range
+     */
+    /*
+    Website: Google Developer Documentation
+    URL: https://developers.google.com/maps/documentation/android-sdk/marker
+    Website: Stackoverflow
+    URL: https://stackoverflow.com/questions/17983865/making-a-location-object-in-android-with-latitude-and-longitude-values
+    Author: https://stackoverflow.com/users/770467/androiderson
+    */
     private void getNearbyCodes() {
-        Circle circle = map.addCircle(new CircleOptions().center(new LatLng(lastKnownLocation.getLatitude(),
+        map.addCircle(new CircleOptions().center(new LatLng(lastKnownLocation.getLatitude(),
                 lastKnownLocation.getLongitude())).radius(400).strokeWidth(0).fillColor(0x2298A1FD));
         mapViewModel.getQRCodes().observe(getViewLifecycleOwner(), qrCodes -> {
             dataList = new ArrayList<>(qrCodes);
