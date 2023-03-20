@@ -36,6 +36,9 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+// From: GeeksforGeeks
+// URL: https://www.geeksforgeeks.org/how-to-compress-image-in-android-before-uploading-it-to-firebase-storage/
+// Author: prajithshetty7
 
 /**
  * screen segment after scan

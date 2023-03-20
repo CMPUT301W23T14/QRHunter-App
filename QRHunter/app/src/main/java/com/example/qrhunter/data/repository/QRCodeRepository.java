@@ -56,17 +56,16 @@ public class QRCodeRepository extends DataRepository {
     public void removeQRCodeFromPlayer(String qrCodeId, String playerId) {
         PlayerRepository playerRepository = new PlayerRepository();
         // Update qr code document
-        //
         db.collection("qrCodes").document(qrCodeId)
                 .update("playerIds", FieldValue.arrayRemove(playerId));
-        //StorageReference storageReference;
-        //storageReference = FirebaseStorage.getInstance().getReference().child("photos").child(playerId).child(name);
-        //storageReference.delete();
 
+        // Delete photo from storage
         db.collection("qrCodes").document(qrCodeId).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                double scoreChange = task.getResult().getDouble("score");
-                playerRepository.addScoreToPlayer(playerId, -(scoreChange));
+                String name = task.getResult().getString("name");
+                StorageReference storageReference;
+                storageReference = FirebaseStorage.getInstance().getReference().child("photos").child(playerId).child(name);
+                storageReference.delete();
             }
         });
         // update player document (reduce score).
