@@ -42,7 +42,6 @@
         android:gravity="center_vertical"
         android:maxLines="1"
         android:text="@string/sample_name"
-        android:textAlignment="textStart"
         android:textAllCaps="false"
         android:textColor="@color/primary_dark"
         android:textSize="20sp"
