@@ -42,7 +42,7 @@ public class ProfileFragment extends Fragment {
         ArrayList<QRCode> scannedQRCodes = new ArrayList<>();
 
         // Set up recycler view
-        QRCodesAdapter qrCodesAdapter = new QRCodesAdapter(scannedQRCodes);
+        QRCodesAdapter qrCodesAdapter = new QRCodesAdapter(scannedQRCodes, false);
 
         qrCodesAdapter.setOnClickListeners(position -> {
             profileViewModel.removeScannedQRCode(scannedQRCodes.get(position).getId(), deviceId);

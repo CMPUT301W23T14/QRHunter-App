@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="20dp"
     android:background="@drawable/user_display"
+    android:clickable="true"
     android:fontFamily="@font/roboto_medium"
     android:orientation="horizontal"
     android:paddingLeft="8dp"

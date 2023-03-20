@@ -52,8 +52,7 @@ public class ProfileViewModel extends ViewModel {
     public void removeScannedQRCode(String qrCodeId, String playerId) {
         // Update Firestore (reduce score and remove from qr code's playerIds)
         qrCodeRepository.removeQRCodeFromPlayer(qrCodeId, playerId);
-
-
+        
         // Update this.scannedQRCodes
         ArrayList<QRCode> currentScannedQRCodes = this.scannedQRCodes.getValue();
         currentScannedQRCodes.removeIf(qrCode -> {
