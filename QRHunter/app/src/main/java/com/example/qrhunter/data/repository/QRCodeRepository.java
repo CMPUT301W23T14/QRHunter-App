@@ -1,14 +1,21 @@
 package com.example.qrhunter.data.repository;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
+import com.example.qrhunter.data.model.Location;
 import com.example.qrhunter.data.model.Player;
 import com.example.qrhunter.data.model.QRCode;
 import com.example.qrhunter.utils.QRCodeUtil;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -149,5 +156,27 @@ public class QRCodeRepository extends DataRepository {
                         repositoryCallback.onSuccess(result);
                     }
                 });
+    }
+    /**
+     * Gets a list of QRCodes from firestore
+     * @return LiveData of a list of QRCode objects
+     */
+    public LiveData<List<QRCode>> getQRCodeList() {
+        MutableLiveData<List<QRCode>> QRCodesLiveData = new MutableLiveData<>();
+        CollectionReference QRCodesRef = db.collection("qrCodes");
+        QRCodesRef.get().addOnSuccessListener(queryDocumentSnapshots -> {
+            List <QRCode> QRCodes = new ArrayList<>();
+            for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                String id = document.getId();
+                String hash = document.getString("hash");
+                Location location = new Location(document.getDouble("latitude"), document.getDouble("longitude"), null);
+                ArrayList<String> comments = (ArrayList<String>) document.get("comments");
+                ArrayList<String> playerIds = (ArrayList<String>) document.get("playerIds");
+                QRCode QRCode = new QRCode(id, hash, location, comments, playerIds);
+                QRCodes.add(QRCode);
+            }
+            QRCodesLiveData.setValue(QRCodes);
+        });
+        return QRCodesLiveData;
     }
 }

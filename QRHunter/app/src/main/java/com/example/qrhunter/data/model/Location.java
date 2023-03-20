@@ -19,4 +19,12 @@ public class Location {
         this.longitude = longitude;
         this.photos = photos;
     }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
 }
