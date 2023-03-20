@@ -10,6 +10,7 @@ import com.example.qrhunter.data.repository.PlayerRepository;
 import com.example.qrhunter.data.repository.QRCodeRepository;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class ProfileViewModel extends ViewModel {
     private final MutableLiveData<Player> player = new MutableLiveData<>();

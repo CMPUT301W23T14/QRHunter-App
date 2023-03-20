@@ -115,5 +115,6 @@ public class QRCode {
     public void setCommentIds(ArrayList<String> commentIds) {
         this.commentIds = commentIds;
     }
+
 }
 

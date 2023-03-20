@@ -12,6 +12,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,10 @@ import com.example.qrhunter.R;
 import com.example.qrhunter.databinding.FragmentAfterScanBinding;
 import com.example.qrhunter.utils.QRCodeUtil;
 
+import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * screen segment after scan
@@ -40,6 +45,7 @@ public class AfterScanFragment extends Fragment {
     ActivityResultLauncher<Intent> cameraActivityResultLauncher;
     private FragmentAfterScanBinding binding;
     private boolean locationPermissionGranted;
+    private Bitmap savedPhoto;
     private final ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(
             new ActivityResultContracts.RequestPermission(),
             result -> {
@@ -108,7 +114,7 @@ public class AfterScanFragment extends Fragment {
                             // There are no request codes
                             Intent data = result.getData();
                             Bundle bundle = data.getExtras();
-                            Bitmap savedPhoto = (Bitmap) bundle.get("data");
+                            savedPhoto = (Bitmap) bundle.get("data");
                             savedPhoto = Bitmap.createScaledBitmap(savedPhoto, 640, 480, true);
                             //Bitmap finalPhoto = Bitmap.createScaledBitmap(savedPhoto, 640, 480, true);
                             scanViewModel.setPhotoLocation(savedPhoto);
@@ -147,7 +153,17 @@ public class AfterScanFragment extends Fragment {
         binding.saveButton.setOnClickListener(view -> {
             // use the model to add the qrcode
             @SuppressLint("HardwareIds") String deviceId = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
-            scanViewModel.completeScan(deviceId);
+
+            if (savedPhoto != null) {
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                savedPhoto.compress(Bitmap.CompressFormat.JPEG, 25, baos);
+                byte[] b = baos.toByteArray();
+                scanViewModel.completeScan(deviceId, b);
+            }
+            else {
+                scanViewModel.completeScan(deviceId, null);
+            }
+
             // navigate to somewhere after this is done
             Navigation.findNavController(binding.getRoot()).navigate(R.id.action_navigation_after_scan_to_navigation_map);
 

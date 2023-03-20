@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.qrhunter.data.model.Location;
 import com.example.qrhunter.data.model.QRCode;
+import com.example.qrhunter.data.repository.PlayerRepository;
 import com.example.qrhunter.data.repository.QRCodeRepository;
 import com.example.qrhunter.utils.QRCodeUtil;
 
@@ -20,6 +21,7 @@ public class ScanViewModel extends ViewModel {
     private final MutableLiveData<String> qrCodeHash = new MutableLiveData<>();
     private final MutableLiveData<Location> location = new MutableLiveData<>(new Location(0, 0, new ArrayList<>()));
     private QRCodeRepository qrCodeRepository = new QRCodeRepository();
+    private PlayerRepository playerRepository = new PlayerRepository();
 
     public LiveData<String> getQRCodeContent() {
         return qrCodeContent;
@@ -41,7 +43,7 @@ public class ScanViewModel extends ViewModel {
      *
      * @param playerId The player that's scanning the qr code
      */
-    public void completeScan(String playerId) {
+    public void completeScan(String playerId, byte[] photo) {
         QRCode newQRCode = new QRCode("", qrCodeHash.getValue(), location.getValue(), new ArrayList<>(), new ArrayList<String>() {
             {
                 add(playerId);
@@ -49,6 +51,7 @@ public class ScanViewModel extends ViewModel {
         });
 
         qrCodeRepository.addQRCodeToPlayer(newQRCode, playerId);
+        playerRepository.addPhoto(newQRCode,playerId, photo);
     }
 
     /**
@@ -100,5 +103,6 @@ public class ScanViewModel extends ViewModel {
     public LiveData<Location> getLocation() {
         return location;
     }
+
 
 }

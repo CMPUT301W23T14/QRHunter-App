@@ -1,5 +1,7 @@
 package com.example.qrhunter.data.repository;
 
+import android.util.Log;
+
 import com.example.qrhunter.data.model.Player;
 import com.example.qrhunter.data.model.QRCode;
 import com.example.qrhunter.utils.QRCodeUtil;
@@ -7,6 +9,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.Source;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -50,11 +55,20 @@ public class QRCodeRepository extends DataRepository {
      */
     public void removeQRCodeFromPlayer(String qrCodeId, String playerId) {
         PlayerRepository playerRepository = new PlayerRepository();
-
         // Update qr code document
+        //
         db.collection("qrCodes").document(qrCodeId)
                 .update("playerIds", FieldValue.arrayRemove(playerId));
+        //StorageReference storageReference;
+        //storageReference = FirebaseStorage.getInstance().getReference().child("photos").child(playerId).child(name);
+        //storageReference.delete();
 
+        db.collection("qrCodes").document(qrCodeId).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                double scoreChange = task.getResult().getDouble("score");
+                playerRepository.addScoreToPlayer(playerId, -(scoreChange));
+            }
+        });
         // update player document (reduce score).
         db.collection("qrCodes").document(qrCodeId).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {

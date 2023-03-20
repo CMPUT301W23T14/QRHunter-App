@@ -1,9 +1,13 @@
 package com.example.qrhunter.data.repository;
 
+import android.util.Log;
+import android.widget.Toast;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.qrhunter.data.model.Player;
+import com.example.qrhunter.data.model.QRCode;
 import com.example.qrhunter.utils.PlayerUtil;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -11,12 +15,18 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.Source;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * A repository class for containing any data access and business logic related to Players
@@ -106,6 +116,10 @@ public class PlayerRepository extends DataRepository {
         db.collection("players").document(playerId).update("totalScore", FieldValue.increment(score));
     }
 
+    public void addPhotoToPlayer(byte[] photo, String playerId){
+        db.collection("players").document(playerId).update("photo", photo);
+    }
+
 
     /**
      * Gets a list of players from firestore
@@ -133,6 +147,21 @@ public class PlayerRepository extends DataRepository {
             usersLiveData.setValue(users);
         });
         return usersLiveData;
+    }
+
+    public void addPhoto(QRCode qrCode, String playerId, byte[] photo){
+        String name = qrCode.getName();
+        Log.d("TAG", "addPhoto: " + qrCode.getId());
+        StorageReference storageReference;
+        if (photo != null){
+            storageReference = FirebaseStorage.getInstance().getReference().child("photos").child(playerId);
+            storageReference.child(name).putBytes(photo).addOnSuccessListener(taskSnapshot -> {
+                Log.d("TAG", "onSuccess: photo uploaded");
+            }).addOnFailureListener(e -> {
+                Log.d("TAG", "onFailure: " + e.getMessage());
+            });
+        }
+
     }
 
 }
