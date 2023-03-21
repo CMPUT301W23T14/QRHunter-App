@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.qrhunter.R;
 import com.example.qrhunter.data.model.QRCode;
+import com.example.qrhunter.ui.other_profile.OtherProfileFragmentDirections;
 import com.example.qrhunter.ui.profile.ProfileFragmentDirections;
 
 import java.util.ArrayList;
@@ -22,15 +23,18 @@ import java.util.ArrayList;
  */
 public class QRCodesAdapter extends RecyclerView.Adapter<QRCodesAdapter.ViewHolder> {
     private ArrayList<QRCode> qrCodes;
+    private boolean isOtherPlayer;
     private onClickListeners listeners;
 
     /**
      * Constructor for QRCodesAdapter
      *
-     * @param qrCodes The data for this should be retrieved from a ViewModel class
+     * @param qrCodes       The data for this should be retrieved from a ViewModel class
+     * @param isOtherPlayer Whether the qr codes displayed would be qr codes scanned by other player
      */
-    public QRCodesAdapter(ArrayList<QRCode> qrCodes) {
+    public QRCodesAdapter(ArrayList<QRCode> qrCodes, boolean isOtherPlayer) {
         this.qrCodes = qrCodes;
+        this.isOtherPlayer = isOtherPlayer;
     }
 
     @NonNull
@@ -43,21 +47,29 @@ public class QRCodesAdapter extends RecyclerView.Adapter<QRCodesAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
-
         QRCode qrCode = qrCodes.get(position);
 
         holder.qrCodeNameTextView.setText(qrCode.getName());
         holder.qrCodeScoreTextView.setText(Double.toString(qrCode.getScore()));
 
-        // TODO: Set the listeners for the buttons
+        // If it's other player's qr code, don't let show the delete button
+        holder.deleteQRCodeButton.setVisibility(View.INVISIBLE);
+
         holder.expandQRCodeButton.setOnClickListener(v -> {
             NavController navController = Navigation.findNavController(v);
 
-            ProfileFragmentDirections.ActionNavigationProfileToQrCodeFragment action = ProfileFragmentDirections.actionNavigationProfileToQrCodeFragment(qrCode.getId());
-            navController.navigate(action);
-        });
+            if (isOtherPlayer) {
+                OtherProfileFragmentDirections.ActionOtherProfileFragmentToQrCodeFragment action =
+                        OtherProfileFragmentDirections.actionOtherProfileFragmentToQrCodeFragment(qrCode.getId());
+                navController.navigate(action);
+            } else {
+                ProfileFragmentDirections.ActionNavigationProfileToQrCodeFragment action =
+                        ProfileFragmentDirections.actionNavigationProfileToQrCodeFragment(qrCode.getId());
+                navController.navigate(action);
+            }
 
+
+        });
 
     }
 

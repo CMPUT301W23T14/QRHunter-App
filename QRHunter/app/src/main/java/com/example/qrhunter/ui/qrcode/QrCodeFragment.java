@@ -26,8 +26,11 @@ public class QrCodeFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentQrCodeBinding.inflate(inflater, container, false);
 
+        // Get qr code id from destination argument
+        String qrCodeId = QrCodeFragmentArgs.fromBundle(getArguments()).getQrCodeId();
+
         // Bind data to ui
-        qrCodeViewModel.getQRCode(QrCodeFragmentArgs.fromBundle(getArguments()).getQrCodeId())
+        qrCodeViewModel.getQRCode(qrCodeId)
                 .observe(getViewLifecycleOwner(), qrCode -> {
                     if (qrCode != null) {
                         binding.QRName.setText(qrCode.getName());

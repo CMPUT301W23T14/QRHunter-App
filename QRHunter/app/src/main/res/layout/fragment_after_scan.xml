@@ -20,7 +20,7 @@
             android:backgroundTint="@color/white"
             android:textColorHighlight="@color/white"
             android:textColorLink="#000000"
-            app:layout_constraintEnd_toStartOf="@+id/QRCodeDetailsText"
+            app:layout_constraintEnd_toStartOf="@+id/otherPlayerActionBarLabel"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -70,7 +70,7 @@
             android:textColorLink="#000000"
             android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/QRCodeDetailsText" />
+            app:layout_constraintTop_toBottomOf="@+id/otherPlayerActionBarLabel" />
 
         <TextView
             android:id="@+id/showRecordGeoLocationText"
@@ -99,7 +99,7 @@
             app:layout_constraintTop_toBottomOf="@+id/showRecordGeoLocationText" />
 
         <TextView
-            android:id="@+id/QRCodeDetailsText"
+            android:id="@+id/otherPlayerActionBarLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -164,7 +164,7 @@
             android:backgroundTint="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.897"
-            app:layout_constraintStart_toEndOf="@+id/QRCodeDetailsText"
+            app:layout_constraintStart_toEndOf="@+id/otherPlayerActionBarLabel"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/check_mark" />
 

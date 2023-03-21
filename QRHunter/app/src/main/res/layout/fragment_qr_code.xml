@@ -37,7 +37,6 @@
                 app:srcCompat="@drawable/arrow_back" />
 
             <TextView
-                android:id="@+id/QRCodeDetailsText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto"
