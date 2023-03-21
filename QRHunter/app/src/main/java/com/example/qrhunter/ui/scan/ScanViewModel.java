@@ -14,6 +14,10 @@ import com.example.qrhunter.utils.QRCodeUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.zip.GZIPOutputStream;
+import java.util.zip.*;
 
 public class ScanViewModel extends ViewModel {
     private final MutableLiveData<String> qrCodeContent = new MutableLiveData<>();
@@ -62,7 +66,31 @@ public class ScanViewModel extends ViewModel {
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
         byte[] b = baos.toByteArray();
         String temp = Base64.encodeToString(b, Base64.DEFAULT);
-        return temp;
+        String CompressedString = String.valueOf(temp);
+        try{
+            CompressedString = compress(CompressedString);
+        } catch (IOException e) {
+            CompressedString = String.valueOf(temp);
+        }
+        return CompressedString;
+    }
+
+    /**
+     * compress the string
+     *
+     * @param str bitmap string to convert
+     * @return The converted string
+     */
+    public static String compress(String str) throws IOException{
+        if (str == null || str.length() == 0) {
+            return str;
+        }
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        GZIPOutputStream gzip = new GZIPOutputStream(out);
+        gzip.write(str.getBytes());
+        gzip.close();
+        return out.toString();
     }
 
     public LiveData<String> getQRCodeHash() {
