@@ -37,6 +37,9 @@ public class QrCodeFragment extends Fragment {
                         binding.QRCodeScoretext.setText(Double.toString(qrCode.getScore()));
                         binding.QRVisual.setText(qrCode.getVisualRepresentation());
 
+                        // set the address
+                        binding.QRCodeAddresstext.setText(qrCodeViewModel.getAddress(qrCode, getContext()));
+
                         qrCodeViewModel.getScannedBy(qrCode).observe(getViewLifecycleOwner(), amountScannedBy -> {
                             if (amountScannedBy > 0) {
                                 binding.scannedByText.setText(amountScannedBy.toString() + " players");

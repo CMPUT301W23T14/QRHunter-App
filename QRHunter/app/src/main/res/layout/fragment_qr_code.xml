@@ -114,13 +114,27 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:fontFamily="@font/roboto_medium"
-            android:text="0 points"
+            android:text="address"
             android:textColor="@color/primary"
             android:textColorLink="@color/primary"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/QR_name" />
+
+        <TextView
+            android:id="@+id/QRCodeAddresstext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/roboto"
+            android:text="0 points"
+            android:textColor="@color/black"
+            android:textColorLink="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/QRCodeScoretext" />
 
         <TextView
             android:id="@+id/QR_Visual"
@@ -135,7 +149,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.355"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/QRCodeScoretext" />
+            app:layout_constraintTop_toBottomOf="@+id/QRCodeAddresstext" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
