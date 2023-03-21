@@ -49,6 +49,11 @@ public class QrCodeViewModel extends ViewModel {
         String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
         String city = addresses.get(0).getLocality();
         String postalCode = addresses.get(0).getPostalCode();
-        return String.format("%s, %s, %s",address, city, postalCode);
+        if(city == null && postalCode == null) {
+            return String.format("%s", address);
+        }
+        else{
+            return String.format("%s, %s, %s", address, city, postalCode);
+        }
     }
 }
