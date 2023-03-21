@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.qrhunter.data.model.QRCode;
 import com.example.qrhunter.databinding.FragmentProfileBinding;
 import com.example.qrhunter.ui.adapters.QRCodesAdapter;
+import com.example.qrhunter.utils.PlayerUtil;
+import com.example.qrhunter.utils.QRCodeUtil;
 
 import java.util.ArrayList;
 
@@ -64,8 +66,12 @@ public class ProfileFragment extends Fragment {
                     scannedQRCodes.addAll(qrCodes);
                     qrCodesAdapter.notifyDataSetChanged();
                     binding.scannedText.setText("(" + qrCodes.size() + ")");
+
                 });
             }
+            binding.highestScore.setText(Double.toString(PlayerUtil.calculateTotalScore(player.getUsername())));
+            binding.highestScore.setText(Double.toString(PlayerUtil.calculateLowestScore(player.getUsername())));
+            binding.highestScore.setText(Double.toString(PlayerUtil.calculateHighestScore(player.getUsername())));
 
         });
 
