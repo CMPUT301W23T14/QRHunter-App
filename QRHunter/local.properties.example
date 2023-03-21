@@ -1,0 +1,3 @@
+## Example of what your local.properties should look like
+sdk.dir=/Applications/Android Studio.app/sdk
+MAPS_API_KEY= 
