@@ -36,7 +36,7 @@ The recommended [**single-activity architecture**](https://www.youtube.com/watch
 Anything related to the UI of the project goes under `ui` package in the app. This package include adapters, Fragments and ViewModels. Each screen (the Fragment and its ViewModel) in the app goes under the `ui` package. *Example: A profile page would be a `profile` folder containing `ProfileFragment.java` and `ProfileViewModel.java`.*
 
 ### Domain Layer
-The [recommended convention](https://developer.android.com/topic/architecture/domain-layer#conventions) for the Domain Layer is not followed. Instead of a single class that is responsible for a single action, we have a `utils` package that contains a utility class for their respective model class. *Example: `QRCode.java` would have a `QRCodeUtils.java`*. These utility classes holds a collection of static methods that are reused and unrelated to the UI and application data, such as: `generateQRCodeHash()`
+The [recommended convention](https://developer.android.com/topic/architecture/domain-layer#conventions) for the Domain Layer is not followed. Instead of a single class that is responsible for a single action, we have a `utils` package that contains utility classes for each of their respective model class. *Example: `QRCode.java` would have a `QRCodeUtils.java`*. These utility classes holds a collection of static methods that are reused and unrelated to the UI and application data, such as: `generateQRCodeHash()`
 
 ### Data Layer  
 Following Android's official recommendation, application data in the database is exposed to the UI using **repository classes** so that any UI component such as Activities, Fragments and ViewModels would never interact with the Data Source. 
