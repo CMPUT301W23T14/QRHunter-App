@@ -55,116 +55,70 @@ public final class PlayerUtil {
 
         return playerHashMap;
     }
-
     /**
-     * Calculate the total score given the list of qr codes
+     * Get the highest score amongst a list of qr codes
      *
-     * @param user The reference to the user to obtain scores from
-     * @return The sum of the scores
+     * @param qrCodes The arraylist that holds the player's qrCodes
+     * @return The highest score
      */
-    public static double calculateTotalScore(String user) {
-        final double[] currentTotalScore = {0};
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("players")
-                .whereEqualTo("username", user)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d("TAG", document.getId() + " => " + document.getData());
-                                Double i = (Double) document.getDouble("totalScore");
-                                currentTotalScore[0] += i;
-                                Log.d("TAG", String.valueOf(currentTotalScore[0]));
-                            }
-                        } else {
-                            Log.d("TAG", "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
+    public static double calculateTotalScore(ArrayList<QRCode> qrCodes) {
+        double currentTotalScore = 0;
+        for (int i = 0; i < qrCodes.size(); i++) {
+            QRCode qrcode = qrCodes.get(i);
+            currentTotalScore = currentTotalScore + qrcode.getScore();
+        }
 
-
-        return currentTotalScore[0];
+        return currentTotalScore;
     }
 
     /**
      * Get the lowest score amongst a list of qr codes
      *
-     * @param user The user to get the lowest score for the user
+     * @param qrCodes The list of qr codes
      * @return The lowest score
      */
-    public static double calculateLowestScore(String user) {
-        final double[] currentLowestScore = {0};
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("players")
-                .whereEqualTo("username", user)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d("TAG", document.getId() + " => " + document.getData());
-                                Double i = (Double) document.getDouble("totalScore");
-                                if (currentLowestScore[0] == 0){
-                                    currentLowestScore[0] = i;
-                                }
-                                else {
-                                    if (i < currentLowestScore[0]){
-                                        currentLowestScore[0] = i;
-                                    }
-                                }
+    public static double calculateLowestScore(ArrayList<QRCode> qrCodes) {
+        double currentLowestScore = 0;
+        for (int i = 0; i < qrCodes.size(); i++) {
+            QRCode qrcode = qrCodes.get(i);
+            if (i == 0) {
+                Log.d("TAG", "i=0 " + String.valueOf(currentLowestScore));
+                currentLowestScore = qrcode.getScore();
+            } else {
+                if (qrcode.getScore() < currentLowestScore) ;
+                {
+                    Log.d("TAG", "lower val: " + String.valueOf(currentLowestScore));
+                    currentLowestScore = qrcode.getScore();
+                }
+            }
+        }
 
-                                Log.d("TAG", String.valueOf(currentLowestScore[0]));
-                            }
-                        } else {
-                            Log.d("TAG", "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
-
-
-        return currentLowestScore[0];
+        return currentLowestScore;
     }
 
     /**
      * Get the highest score amongst a list of qr codes
      *
-     * @param user The user to get the highest score from
+     * @param qrCodes The list of qr codes
      * @return The highest score
      */
-    public static double calculateHighestScore(String user) {
-        final double[] currentHighestScore = {0};
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("players")
-                .whereEqualTo("username", user)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d("TAG", document.getId() + " => " + document.getData());
-                                Double i = (Double) document.getDouble("totalScore");
-                                if (currentHighestScore[0] == 0){
-                                    currentHighestScore[0] = i;
-                                }
-                                else {
-                                    if (i > currentHighestScore[0]){
-                                        currentHighestScore[0] = i;
-                                    }
-                                }
+    public static double calculateHighestScore(ArrayList<QRCode> qrCodes) {
+        double currentHighestScore = 0;
+        for (int i = 0; i < qrCodes.size(); i++) {
+            QRCode qrcode = qrCodes.get(i);
+            if (i == 0) {
+                currentHighestScore = qrcode.getScore();
+            } else {
+                if (qrcode.getScore() > currentHighestScore) ;
+                {
+                    currentHighestScore = qrcode.getScore();
+                }
+            }
 
-                                Log.d("TAG", String.valueOf(currentHighestScore[0]));
-                            }
-                        } else {
-                            Log.d("TAG", "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
-
-
-        return currentHighestScore[0];
+        }
+        return currentHighestScore;
     }
+
+
+
 }

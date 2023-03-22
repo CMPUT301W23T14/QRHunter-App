@@ -3,6 +3,7 @@ package com.example.qrhunter.ui.profile;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,18 +63,27 @@ public class ProfileFragment extends Fragment {
                 binding.rank.setText(Integer.toString(player.getRank()));
 
                 profileViewModel.getScannedQRCodes(player).observe(getViewLifecycleOwner(), qrCodes -> {
-                    scannedQRCodes.clear();
+                scannedQRCodes.clear();
                     scannedQRCodes.addAll(qrCodes);
                     qrCodesAdapter.notifyDataSetChanged();
                     binding.scannedText.setText("(" + qrCodes.size() + ")");
 
                 });
             }
-            binding.highestScore.setText(Double.toString(PlayerUtil.calculateTotalScore(player.getUsername())));
-            binding.highestScore.setText(Double.toString(PlayerUtil.calculateLowestScore(player.getUsername())));
-            binding.highestScore.setText(Double.toString(PlayerUtil.calculateHighestScore(player.getUsername())));
+            profileViewModel.getHighestScore().observe(getViewLifecycleOwner(), highScore -> {
+                binding.highestScore.setText(Double.toString(highScore));
+            });
+
+            profileViewModel.getLowestScore().observe(getViewLifecycleOwner(), lowScore -> {
+                binding.highestScore.setText(Double.toString(lowScore));
+            });
+
 
         });
+
+
+
+
 
         return binding.getRoot();
     }
