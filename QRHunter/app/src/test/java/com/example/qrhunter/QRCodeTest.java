@@ -6,9 +6,9 @@ import com.example.qrhunter.data.model.Location;
 import com.example.qrhunter.data.model.QRCode;
 import com.example.qrhunter.utils.QRCodeUtil;
 
-import java.util.ArrayList;
-
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
 
 public class QRCodeTest {
 
@@ -54,8 +54,7 @@ public class QRCodeTest {
     public void testSetters() {
         // Create qrCode and ArrayList for qrCode
         ArrayList<String> photos = new ArrayList<>();
-        photos.add("1224");
-        QRCode qrCode = new QRCode("1234", "abcdefg", new Location(37.7749, -122.4194, photos), new ArrayList<>(), new ArrayList<>());
+        QRCode qrCode = new QRCode("1234", "abcdefg", new Location(37.7749, -122.4194), new ArrayList<>(), new ArrayList<>());
 
         // test setId and see if expected result
         qrCode.setId("5678");

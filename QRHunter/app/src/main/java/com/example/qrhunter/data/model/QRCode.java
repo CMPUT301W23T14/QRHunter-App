@@ -29,7 +29,11 @@ public class QRCode {
      * The score of the QR Code calculated from the hash
      */
     private double score;
-    private Location location;
+    private ArrayList<Location> locations = new ArrayList<>();
+    /**
+     * A list of reference to the photos uploaded to Firebase storage
+     */
+    private ArrayList<String> photos = new ArrayList<>();
     private ArrayList<String> commentIds = new ArrayList<>();
     /**
      * List of player id who scanned this qr code
@@ -39,7 +43,7 @@ public class QRCode {
     /**
      * Constructor for a QR Code
      */
-    public QRCode(String id, String hash, Location location, ArrayList<String> commentIds, ArrayList<String> playerIds) {
+    public QRCode(String id, String hash, ArrayList<Location> locations, ArrayList<String> photos, ArrayList<String> commentIds, ArrayList<String> playerIds) {
         this.id = id;
         this.hash = hash;
 
@@ -47,9 +51,20 @@ public class QRCode {
         this.visualRepresentation = QRCodeUtil.generateVisualRepresentation(hash);
         this.score = QRCodeUtil.generateScore(hash);
 
-        this.location = location;
+        this.locations = locations;
+        this.photos = photos;
         this.commentIds = commentIds;
         this.playerIds = playerIds;
+    }
+    public QRCode() {
+    }
+
+    public ArrayList<String> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(ArrayList<String> photos) {
+        this.photos = photos;
     }
 
     public String getId() {
@@ -100,12 +115,16 @@ public class QRCode {
         this.score = score;
     }
 
-    public Location getLocation() {
-        return location;
+    public ArrayList<Location> getLocations() {
+        return locations;
     }
 
-    public void setLocation(Location location) {
-        this.location = location;
+    public void setLocations(ArrayList<Location> locations) {
+        this.locations = locations;
+    }
+
+    public void setLocation(ArrayList<Location> locations) {
+        this.locations = locations;
     }
 
     public ArrayList<String> getCommentIds() {
@@ -115,5 +134,7 @@ public class QRCode {
     public void setCommentIds(ArrayList<String> commentIds) {
         this.commentIds = commentIds;
     }
+
+
 }
 
