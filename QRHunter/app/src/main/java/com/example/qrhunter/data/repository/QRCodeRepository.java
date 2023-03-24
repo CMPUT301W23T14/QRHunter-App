@@ -44,12 +44,14 @@ public class QRCodeRepository extends DataRepository {
                         .update("playerIds", FieldValue.arrayUnion(playerId));
 
                 // Update location
-                db.collection("qrCodes").document(existingQRCode.getId())
-                        .update("locations", FieldValue.arrayUnion(qrCode.getLocations().get(0)));
+                if (!qrCode.getLocations().isEmpty())
+                    db.collection("qrCodes").document(existingQRCode.getId())
+                            .update("locations", FieldValue.arrayUnion(qrCode.getLocations().get(0)));
 
                 // Update photos
-                db.collection("qrCodes").document(existingQRCode.getId())
-                        .update("photos", FieldValue.arrayUnion(qrCode.getPhotos().get(0)));
+                if (!qrCode.getPhotos().isEmpty())
+                    db.collection("qrCodes").document(existingQRCode.getId())
+                            .update("photos", FieldValue.arrayUnion(qrCode.getPhotos().get(0)));
 
                 //TODO: Also update location in qr code document
                 playerRepository.addScoreToPlayer(playerId, qrCode.getScore());

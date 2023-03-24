@@ -51,7 +51,7 @@ public class ScanViewModel extends ViewModel {
             locations.add(location.getValue());
         }
         if (this.photo.getValue() != null) {
-            photos.add(photos.toString());
+            photos.add(BitMapToString(photo.getValue()));
         }
 
 
@@ -92,8 +92,9 @@ public class ScanViewModel extends ViewModel {
 
     public void setGeolocation(double latitude, double longitude) {
         Location currentLocation = this.location.getValue();
-        currentLocation.latitude = latitude;
-        currentLocation.longitude = longitude;
+        // Rounding to one decimal places
+        currentLocation.latitude = Math.round(latitude * 100.0) / 10.0;
+        currentLocation.longitude = Math.round(longitude * 100.0) / 10.0;
 
         location.setValue(currentLocation);
     }
