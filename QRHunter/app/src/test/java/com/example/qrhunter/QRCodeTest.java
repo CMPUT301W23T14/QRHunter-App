@@ -22,12 +22,14 @@ public class QRCodeTest {
         String hash = "abcdefg";
         ArrayList<String> photos = new ArrayList<>();
         photos.add("1224");
-        Location location = new Location(37.7749, -122.4194, photos);
+        ArrayList<Location> locations = new ArrayList<>();
+        Location location = new Location(37.7749, -122.4194);
+        locations.add(location);
         ArrayList<String> commentIds = new ArrayList<>();
         ArrayList<String> playerIds = new ArrayList<>();
 
         // Create a new QRcode with assigned values
-        QRCode qrCode = new QRCode(id, hash, location, commentIds, playerIds);
+        QRCode qrCode = new QRCode(id, hash, locations, photos, commentIds, playerIds);
 
         // Test getId
         assertEquals(id, qrCode.getId());
@@ -39,8 +41,8 @@ public class QRCodeTest {
         assertEquals(QRCodeUtil.generateVisualRepresentation(hash), qrCode.getVisualRepresentation());
         // Test getScore
         assertEquals(QRCodeUtil.generateScore(hash), qrCode.getScore(), 0.001);
-        // Test getLocation
-        assertEquals(location, qrCode.getLocation());
+        // Test getLocations
+        assertEquals(locations, qrCode.getLocations());
         // Test getCommentIds
         assertEquals(commentIds, qrCode.getCommentIds());
         // Test getPlayerIds
@@ -54,7 +56,7 @@ public class QRCodeTest {
     public void testSetters() {
         // Create qrCode and ArrayList for qrCode
         ArrayList<String> photos = new ArrayList<>();
-        QRCode qrCode = new QRCode("1234", "abcdefg", new Location(37.7749, -122.4194), new ArrayList<>(), new ArrayList<>());
+        QRCode qrCode = new QRCode("1234", "abcdefg", new ArrayList<Location>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
 
         // test setId and see if expected result
         qrCode.setId("5678");
@@ -77,7 +79,7 @@ public class QRCodeTest {
         assertEquals(10.0, qrCode.getScore(), 0.001);
 
         // test setLocation and see if expected result
-        qrCode.setLocation(new Location(37.7749, -122.4194, photos));
+        qrCode.setLocations(new ArrayList<>());
 
         ArrayList<String> newCommentIds = new ArrayList<>();
         newCommentIds.add("comment1");
