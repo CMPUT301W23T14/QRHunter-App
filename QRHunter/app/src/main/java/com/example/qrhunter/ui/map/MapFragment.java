@@ -1,33 +1,29 @@
 package com.example.qrhunter.ui.map;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.Manifest;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.example.qrhunter.R;
 import com.example.qrhunter.data.model.QRCode;
 import com.example.qrhunter.databinding.FragmentMapBinding;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -36,11 +32,11 @@ import java.util.ArrayList;
 
 
 public class MapFragment extends Fragment {
-    private FragmentMapBinding binding;
-    private GoogleMap map;
+    private static final int DEFAULT_ZOOM = 15;
     // Default location (Sydney, Australia) and default zoom to use when location permission is not granted
     private final LatLng defaultLocation = new LatLng(-33.8523341, 151.2106085);
-    private static final int DEFAULT_ZOOM = 15;
+    private FragmentMapBinding binding;
+    private GoogleMap map;
     private boolean locationPermissionGranted;
     private Location lastKnownLocation;
     private ArrayList<QRCode> dataList;
@@ -56,7 +52,7 @@ public class MapFragment extends Fragment {
             result -> {
                 if (result) {
                     locationPermissionGranted = true;
-                    SupportMapFragment supportMapFragment=(SupportMapFragment)
+                    SupportMapFragment supportMapFragment = (SupportMapFragment)
                             getChildFragmentManager().findFragmentById(R.id.google_map);
                     assert supportMapFragment != null;
                     supportMapFragment.getMapAsync(new OnMapReadyCallback() {
@@ -71,6 +67,7 @@ public class MapFragment extends Fragment {
                 updateLocationUI();
             }
     );
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
@@ -86,6 +83,7 @@ public class MapFragment extends Fragment {
         }
         return binding.getRoot();
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -95,6 +93,7 @@ public class MapFragment extends Fragment {
             getDeviceLocation();
         }
     }
+
     /**
      * Enables or disables location button based on permissions granted
      */
@@ -115,7 +114,7 @@ public class MapFragment extends Fragment {
                 map.getUiSettings().setMyLocationButtonEnabled(false);
                 lastKnownLocation = null;
             }
-        } catch (SecurityException e)  {
+        } catch (SecurityException e) {
             Log.e("Exception: %s", e.getMessage());
         }
         map.setOnMyLocationButtonClickListener(() -> {
@@ -127,6 +126,7 @@ public class MapFragment extends Fragment {
             return false;
         });
     }
+
     /**
      * Gets the current location of the device, and positions the map's camera.
      */
@@ -142,7 +142,7 @@ public class MapFragment extends Fragment {
             if (locationPermissionGranted) {
                 LocationManager lm = (LocationManager) requireContext().getSystemService(Context.LOCATION_SERVICE);
                 boolean gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
-                if(gps_enabled) {
+                if (gps_enabled) {
                     lastKnownLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                     if (lastKnownLocation != null) {
                         map.moveCamera(CameraUpdateFactory.newLatLngZoom(
@@ -155,10 +155,11 @@ public class MapFragment extends Fragment {
                     }
                 }
             }
-        } catch (SecurityException e)  {
+        } catch (SecurityException e) {
             Log.e("Exception: %s", e.getMessage(), e);
         }
     }
+
     /**
      * Get nearby QR codes
      * Create markers that display info window with name and score when clicked
@@ -179,14 +180,18 @@ public class MapFragment extends Fragment {
             for (int i = 0; i < dataList.size(); i++) {
                 Location targetLocation = new Location("");
                 QRCode qrCode = dataList.get(i);
-                targetLocation.setLatitude(qrCode.getLocation().getLatitude());
-                targetLocation.setLongitude(qrCode.getLocation().getLongitude());
-                if (targetLocation.distanceTo(lastKnownLocation) < 400) {
-                    map.addMarker(new MarkerOptions()
-                            .position(new LatLng(targetLocation.getLatitude(), targetLocation.getLongitude()))
-                            .title("Name: " + qrCode.getName())
-                            .snippet("Score: " + qrCode.getScore()));
+                // A QRcode may have multiple locations, so we need to add all of them as markers
+                for (com.example.qrhunter.data.model.Location location : qrCode.getLocations()) {
+                    targetLocation.setLatitude(location.getLatitude());
+                    targetLocation.setLongitude(location.getLongitude());
+                    if (targetLocation.distanceTo(lastKnownLocation) < 400) {
+                        map.addMarker(new MarkerOptions()
+                                .position(new LatLng(targetLocation.getLatitude(), targetLocation.getLongitude()))
+                                .title("Name: " + qrCode.getName())
+                                .snippet("Score: " + qrCode.getScore()));
+                    }
                 }
+
             }
         });
     }

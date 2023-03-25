@@ -53,7 +53,10 @@ public class QRCodesAdapter extends RecyclerView.Adapter<QRCodesAdapter.ViewHold
         holder.qrCodeScoreTextView.setText(Double.toString(qrCode.getScore()));
 
         // If it's other player's qr code, don't let show the delete button
-        holder.deleteQRCodeButton.setVisibility(View.INVISIBLE);
+        if (isOtherPlayer) {
+            holder.deleteQRCodeButton.setVisibility(View.INVISIBLE);
+        }
+
 
         holder.expandQRCodeButton.setOnClickListener(v -> {
             NavController navController = Navigation.findNavController(v);
