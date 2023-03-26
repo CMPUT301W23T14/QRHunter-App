@@ -9,8 +9,11 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.qrhunter.data.model.Location;
 import com.example.qrhunter.data.model.QRCode;
+import com.example.qrhunter.data.repository.PlayerRepository;
 import com.example.qrhunter.data.repository.QRCodeRepository;
 import com.example.qrhunter.utils.QRCodeUtil;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -21,6 +24,7 @@ public class ScanViewModel extends ViewModel {
     private final MutableLiveData<Location> location = new MutableLiveData<>(new Location(0, 0));
     private final MutableLiveData<Bitmap> photo = new MutableLiveData<>(null);
     private QRCodeRepository qrCodeRepository = new QRCodeRepository();
+    private PlayerRepository playerRepository = new PlayerRepository();
 
     public LiveData<String> getQRCodeContent() {
         return qrCodeContent;
@@ -42,26 +46,26 @@ public class ScanViewModel extends ViewModel {
      *
      * @param playerId The player that's scanning the qr code
      */
-    public void completeScan(String playerId) {
+    public void completeScan(String playerId, byte[] savedPhoto) {
         ArrayList<Location> locations = new ArrayList<>();
         ArrayList<String> photos = new ArrayList<>();
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference ref = db.collection("qrCodes").document();
+        String qrCodeId = ref.getId();
 
         // Don't add to location array if the location.latitude and location.longitude are 0
         if (location.getValue().getLatitude() != 0 || location.getValue().getLongitude() != 0) {
             locations.add(location.getValue());
         }
-        if (this.photo.getValue() != null) {
-            photos.add(BitMapToString(photo.getValue()));
-        }
 
-
-        QRCode newQRCode = new QRCode("", qrCodeHash.getValue(), locations, photos, new ArrayList<>(), new ArrayList<String>() {
+        QRCode newQRCode = new QRCode(qrCodeId, qrCodeHash.getValue(), locations, photos, new ArrayList<>(), new ArrayList<String>() {
             {
                 add(playerId);
             }
         });
 
-        qrCodeRepository.addQRCodeToPlayer(newQRCode, playerId);
+        qrCodeRepository.addQRCodeToPlayer(newQRCode, playerId, savedPhoto);
     }
 
     /**

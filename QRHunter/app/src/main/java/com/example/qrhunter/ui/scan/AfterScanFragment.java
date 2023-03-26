@@ -31,6 +31,8 @@ import com.example.qrhunter.R;
 import com.example.qrhunter.databinding.FragmentAfterScanBinding;
 import com.example.qrhunter.utils.QRCodeUtil;
 
+import java.io.ByteArrayOutputStream;
+
 
 /**
  * screen segment after scan
@@ -38,6 +40,7 @@ import com.example.qrhunter.utils.QRCodeUtil;
 public class AfterScanFragment extends Fragment {
     private final int MY_PERMISSIONS_REQUEST_CAMERA = 1001;
     ActivityResultLauncher<Intent> cameraActivityResultLauncher;
+    private Bitmap savedPhoto;
     private FragmentAfterScanBinding binding;
     private boolean locationPermissionGranted;
     private final ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(
@@ -108,14 +111,13 @@ public class AfterScanFragment extends Fragment {
                             // There are no request codes
                             Intent data = result.getData();
                             Bundle bundle = data.getExtras();
-                            Bitmap savedPhoto = (Bitmap) bundle.get("data");
+                            savedPhoto = (Bitmap) bundle.get("data");
                             savedPhoto = Bitmap.createScaledBitmap(savedPhoto, 640, 480, true);
-                            Bitmap finalPhoto = Bitmap.createScaledBitmap(savedPhoto, 640, 480, true);
-                            scanViewModel.setPhoto(finalPhoto);
+                            scanViewModel.setPhoto(savedPhoto);
 
                             binding.locationImage.setVisibility(View.VISIBLE);
                             binding.addPhotoLocationButton.setImageResource(R.drawable.remove_icon);
-                            binding.locationImage.setImageBitmap(finalPhoto);
+                            binding.locationImage.setImageBitmap(savedPhoto);
 
                         }
                     }
@@ -147,7 +149,16 @@ public class AfterScanFragment extends Fragment {
         binding.saveButton.setOnClickListener(view -> {
             // use the model to add the qrcode
             @SuppressLint("HardwareIds") String deviceId = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
-            scanViewModel.completeScan(deviceId);
+            if (savedPhoto == null){
+                scanViewModel.completeScan(deviceId, null);
+            }
+            else {
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                savedPhoto.compress(Bitmap.CompressFormat.PNG, 25, stream);
+                byte[] byteArray = stream.toByteArray();
+                scanViewModel.completeScan(deviceId, byteArray);
+            }
+
             // navigate to somewhere after this is done
             Navigation.findNavController(binding.getRoot()).navigate(R.id.action_navigation_after_scan_to_navigation_map);
 

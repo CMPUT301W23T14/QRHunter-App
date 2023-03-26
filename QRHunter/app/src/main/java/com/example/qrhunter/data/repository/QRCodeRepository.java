@@ -1,5 +1,8 @@
 package com.example.qrhunter.data.repository;
 
+import android.graphics.Bitmap;
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -26,32 +29,48 @@ public class QRCodeRepository extends DataRepository {
      * @param playerId The id of the player
      * @param qrCode   The id of the qrCode
      */
-    public void addQRCodeToPlayer(QRCode qrCode, String playerId) {
+    public void addQRCodeToPlayer(QRCode qrCode, String playerId, byte[] savedPhoto) {
         PlayerRepository playerRepository = new PlayerRepository();
 
         // Check whether qr code exists.
         doesQRCodeExist(qrCode, existingQRCode -> {
             if (existingQRCode == null) {
                 // If qr code doesn't exist, add a new document to Firestore
-                Map<String, Object> qrCodeHashMap = QRCodeUtil.convertQRCodeToHashmap(qrCode);
+                ArrayList<String> photos = new ArrayList<>();
+                String qrCodeId = qrCode.getId();
+                String photoPath = "photos/" + qrCodeId + "/" + playerId + ".jpg";
+                photos.add(photoPath);
+                qrCode.setPhotos(photos);
 
-                db.collection("qrCodes").add(qrCodeHashMap).addOnCompleteListener(task -> {
+                Map<String, Object> qrCodeHashMap = QRCodeUtil.convertQRCodeToHashmap(qrCode);
+                db.collection("qrCodes").document(qrCodeId).set(qrCodeHashMap).addOnCompleteListener(task -> {
                     playerRepository.addScoreToPlayer(playerId, qrCode.getScore());
                 });
+
+                playerRepository.uploadPhoto(savedPhoto, qrCodeId, playerId);
             } else {
+                //qrCode.setId(existingQRCode.getId());
+                String photoPath = "photos/" + existingQRCode.getId() + "/" + playerId + ".jpg";
+                ArrayList<String> existingPhotos = qrCode.getPhotos();
+                existingPhotos.add(photoPath);
+                qrCode.setPhotos(existingPhotos);
+                playerRepository.uploadPhoto(savedPhoto, existingQRCode.getId(), playerId);
+
                 //Update player count
                 db.collection("qrCodes").document(existingQRCode.getId())
                         .update("playerIds", FieldValue.arrayUnion(playerId));
 
                 // Update location
-                if (!qrCode.getLocations().isEmpty())
+                if (!qrCode.getLocations().isEmpty()){
                     db.collection("qrCodes").document(existingQRCode.getId())
                             .update("locations", FieldValue.arrayUnion(qrCode.getLocations().get(0)));
+                }
 
                 // Update photos
-                if (!qrCode.getPhotos().isEmpty())
+                if (!qrCode.getPhotos().isEmpty()) {
                     db.collection("qrCodes").document(existingQRCode.getId())
                             .update("photos", FieldValue.arrayUnion(qrCode.getPhotos().get(0)));
+                }
 
                 //TODO: Also update location in qr code document
                 playerRepository.addScoreToPlayer(playerId, qrCode.getScore());
