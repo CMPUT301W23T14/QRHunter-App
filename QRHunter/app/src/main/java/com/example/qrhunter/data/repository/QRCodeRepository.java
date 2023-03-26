@@ -41,7 +41,6 @@ public class QRCodeRepository extends DataRepository {
                 String photoPath;
                 ArrayList<String> photos = new ArrayList<>();
                 String qrCodeId = qrCode.getId();
-                Log.d("================================", "savedPhoto: "+savedPhoto);
                 if (savedPhoto == null) {
                     photoPath = null;
                 }
