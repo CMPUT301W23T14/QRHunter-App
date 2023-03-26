@@ -112,7 +112,7 @@ public class AfterScanFragment extends Fragment {
                             Intent data = result.getData();
                             Bundle bundle = data.getExtras();
                             savedPhoto = (Bitmap) bundle.get("data");
-                            savedPhoto = Bitmap.createScaledBitmap(savedPhoto, 640, 480, true);
+                            savedPhoto = Bitmap.createScaledBitmap(savedPhoto, 480, 640, true);
                             scanViewModel.setPhoto(savedPhoto);
 
                             binding.locationImage.setVisibility(View.VISIBLE);
@@ -153,6 +153,7 @@ public class AfterScanFragment extends Fragment {
                 scanViewModel.completeScan(deviceId, null);
             }
             else {
+                // convert the bitmap to a byte array
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 savedPhoto.compress(Bitmap.CompressFormat.PNG, 25, stream);
                 byte[] byteArray = stream.toByteArray();
