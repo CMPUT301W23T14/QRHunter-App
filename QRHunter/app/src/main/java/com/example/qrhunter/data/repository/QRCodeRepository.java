@@ -38,11 +38,19 @@ public class QRCodeRepository extends DataRepository {
         doesQRCodeExist(qrCode, existingQRCode -> {
             if (existingQRCode == null) {
                 // If qr code doesn't exist, add a new document to Firestore
+                String photoPath;
                 ArrayList<String> photos = new ArrayList<>();
                 String qrCodeId = qrCode.getId();
-                String photoPath = "photos/" + qrCodeId + "/" + playerId + ".png";
-                photos.add(photoPath);
-                qrCode.setPhotos(photos);
+                Log.d("================================", "savedPhoto: "+savedPhoto);
+                if (savedPhoto == null) {
+                    photoPath = null;
+                }
+                else {
+                    photoPath = "photos/" + qrCodeId + "/" + playerId + ".png";
+                    photos.add(photoPath);
+                    qrCode.setPhotos(photos);
+                }
+
 
                 Map<String, Object> qrCodeHashMap = QRCodeUtil.convertQRCodeToHashmap(qrCode);
                 db.collection("qrCodes").document(qrCodeId).set(qrCodeHashMap).addOnCompleteListener(task -> {
@@ -52,10 +60,17 @@ public class QRCodeRepository extends DataRepository {
                 playerRepository.uploadPhoto(savedPhoto, qrCodeId, playerId);
             } else {
                 // If qr code exists, update the existing document in Firestore
-                String photoPath = "photos/" + existingQRCode.getId() + "/" + playerId + ".png";
+                String photoPath;
                 ArrayList<String> existingPhotos = qrCode.getPhotos();
-                existingPhotos.add(photoPath);
-                qrCode.setPhotos(existingPhotos);
+                if (savedPhoto == null) {
+                    photoPath = null;
+                }
+                else {
+                    photoPath = "photos/" + existingQRCode.getId() + "/" + playerId + ".png";
+                    existingPhotos.add(photoPath);
+                    qrCode.setPhotos(existingPhotos);
+                }
+
                 playerRepository.uploadPhoto(savedPhoto, existingQRCode.getId(), playerId);
 
                 //Update player count
@@ -88,28 +103,37 @@ public class QRCodeRepository extends DataRepository {
      */
     public void removeQRCodeFromPlayer(String qrCodeId, String playerId) {
         PlayerRepository playerRepository = new PlayerRepository();
+
         String photoPath = "photos/" + qrCodeId + "/" + playerId + ".png";
-        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
-        StorageReference deleteReference = storageReference.child("photos").child(qrCodeId).child(playerId);
-
-        deleteReference.delete().addOnSuccessListener(aVoid -> {
-            Log.d("QRCodeRepository", "Photo deleted successfully");
-        }).addOnFailureListener(e -> {
-            Log.d("QRCodeRepository", "Photo deletion failed");
-        });
-
 
         // Update qr code document, remove player id. photo path and location.
         db.collection("qrCodes").document(qrCodeId)
                 .update("playerIds", FieldValue.arrayRemove(playerId));
 
-        db.collection("qrCodes").document(qrCodeId)
-                .update("photos", FieldValue.arrayRemove(photoPath));
 
         getQRCode(qrCodeId, qrCode1 -> {
-            db.collection("qrCodes").document(qrCodeId)
-                    .update("locations", FieldValue.arrayRemove(qrCode1.getLocations().get(0)));
+            if (!qrCode1.getLocations().isEmpty()) {
+                db.collection("qrCodes").document(qrCodeId)
+                        .update("locations", FieldValue.arrayRemove(qrCode1.getLocations().get(0)));
+            }
+            if (!qrCode1.getPhotos().isEmpty()) {
+                StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+                StorageReference deleteReference = storageReference.child("photos").child(qrCodeId).child(playerId);
+
+                deleteReference.delete().addOnSuccessListener(aVoid -> {
+                    Log.d("QRCodeRepository", "Photo deleted successfully");
+                }).addOnFailureListener(e -> {
+                    Log.d("QRCodeRepository", "Photo deletion failed");
+                });
+                db.collection("qrCodes").document(qrCodeId)
+                        .update("photos", FieldValue.arrayRemove(photoPath)).addOnSuccessListener(task -> {
+                            Log.d("QRCodeRepository", "Photo path removed successfully");
+                        }).addOnFailureListener(e -> {
+                            Log.d("QRCodeRepository", "Photo path removal failed");
+                        });
+            }
         });
+
 
         // update player document (reduce score).
         db.collection("qrCodes").document(qrCodeId).get().addOnCompleteListener(task -> {
