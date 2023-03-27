@@ -46,13 +46,10 @@ public class ScanViewModel extends ViewModel {
      *
      * @param playerId The player that's scanning the qr code
      */
-    public void completeScan(String playerId, byte[] savedPhoto) {
+    public void completeScan(String qrCodeId, String playerId, byte[] savedPhoto) {
         ArrayList<Location> locations = new ArrayList<>();
         ArrayList<String> photos = new ArrayList<>();
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference ref = db.collection("qrCodes").document();
-        String qrCodeId = ref.getId();
 
         // Don't add to location array if the location.latitude and location.longitude are 0
         if (location.getValue().getLatitude() != 0 || location.getValue().getLongitude() != 0) {

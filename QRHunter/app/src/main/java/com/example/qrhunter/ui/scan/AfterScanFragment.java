@@ -7,6 +7,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -30,6 +36,8 @@ import androidx.navigation.Navigation;
 import com.example.qrhunter.R;
 import com.example.qrhunter.databinding.FragmentAfterScanBinding;
 import com.example.qrhunter.utils.QRCodeUtil;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.ByteArrayOutputStream;
 
@@ -115,6 +123,30 @@ public class AfterScanFragment extends Fragment {
                             savedPhoto = Bitmap.createScaledBitmap(savedPhoto, 480, 640, true);
                             scanViewModel.setPhoto(savedPhoto);
 
+                            // display rounded corners
+                            // From java2s.com
+                            // URL: http://www.java2s.com/example/android/graphics/get-rounded-corner-bitmap.html
+
+                            Bitmap output = Bitmap.createBitmap(savedPhoto.getWidth(),
+                                    savedPhoto.getHeight(), Bitmap.Config.ARGB_8888);
+                            Canvas canvas = new Canvas(output);
+
+                            final int color = 0xff424242;
+                            final Paint paint = new Paint();
+                            final Rect rect = new Rect(0, 0, savedPhoto.getWidth(), savedPhoto.getHeight());
+                            final RectF rectF = new RectF(rect);
+                            final float roundPx = 25;
+
+                            paint.setAntiAlias(true);
+                            canvas.drawARGB(0, 0, 0, 0);
+                            paint.setColor(color);
+                            canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+
+                            paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+                            canvas.drawBitmap(savedPhoto, rect, rect, paint);
+
+                            savedPhoto = output;
+
                             binding.locationImage.setVisibility(View.VISIBLE);
                             binding.addPhotoLocationButton.setImageResource(R.drawable.remove_icon);
                             binding.locationImage.setImageBitmap(savedPhoto);
@@ -149,15 +181,18 @@ public class AfterScanFragment extends Fragment {
         binding.saveButton.setOnClickListener(view -> {
             // use the model to add the qrcode
             @SuppressLint("HardwareIds") String deviceId = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            DocumentReference ref = db.collection("qrCodes").document();
+            String qrCodeId = ref.getId();
             if (savedPhoto == null){
-                scanViewModel.completeScan(deviceId, null);
+                scanViewModel.completeScan(qrCodeId, deviceId, null);
             }
             else {
                 // convert the bitmap to a byte array
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 savedPhoto.compress(Bitmap.CompressFormat.PNG, 25, stream);
                 byte[] byteArray = stream.toByteArray();
-                scanViewModel.completeScan(deviceId, byteArray);
+                scanViewModel.completeScan(qrCodeId, deviceId, byteArray);
             }
 
             // navigate to somewhere after this is done

@@ -45,7 +45,7 @@ public class QRCodeRepository extends DataRepository {
                     photoPath = null;
                 }
                 else {
-                    photoPath = "photos/" + qrCodeId + "/" + playerId + ".png";
+                    photoPath = "photos/" + qrCodeId + "/" + playerId + ".jpg";
                     photos.add(photoPath);
                     qrCode.setPhotos(photos);
                 }
@@ -65,7 +65,7 @@ public class QRCodeRepository extends DataRepository {
                     photoPath = null;
                 }
                 else {
-                    photoPath = "photos/" + existingQRCode.getId() + "/" + playerId + ".png";
+                    photoPath = "photos/" + existingQRCode.getId() + "/" + playerId + ".jpg";
                     existingPhotos.add(photoPath);
                     qrCode.setPhotos(existingPhotos);
                 }
@@ -103,7 +103,7 @@ public class QRCodeRepository extends DataRepository {
     public void removeQRCodeFromPlayer(String qrCodeId, String playerId) {
         PlayerRepository playerRepository = new PlayerRepository();
 
-        String photoPath = "photos/" + qrCodeId + "/" + playerId + ".png";
+        String photoPath = "photos/" + qrCodeId + "/" + playerId + ".jpg";
 
         // Update qr code document, remove player id. photo path and location.
         db.collection("qrCodes").document(qrCodeId)
