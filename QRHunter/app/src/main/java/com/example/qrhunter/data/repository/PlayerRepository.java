@@ -11,6 +11,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -134,5 +136,14 @@ public class PlayerRepository extends DataRepository {
         });
         return usersLiveData;
     }
+
+    public void uploadPhoto(byte[] savedPhoto, String qrCodeId, String playerId) {
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+        if (savedPhoto != null){
+            storageReference.child("photos").child(qrCodeId).child(playerId).putBytes(savedPhoto);
+        }
+
+    }
+
 
 }
