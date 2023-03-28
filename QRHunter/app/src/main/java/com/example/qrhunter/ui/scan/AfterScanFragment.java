@@ -7,6 +7,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -30,6 +36,10 @@ import androidx.navigation.Navigation;
 import com.example.qrhunter.R;
 import com.example.qrhunter.databinding.FragmentAfterScanBinding;
 import com.example.qrhunter.utils.QRCodeUtil;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.io.ByteArrayOutputStream;
 
 
 /**
@@ -38,6 +48,7 @@ import com.example.qrhunter.utils.QRCodeUtil;
 public class AfterScanFragment extends Fragment {
     private final int MY_PERMISSIONS_REQUEST_CAMERA = 1001;
     ActivityResultLauncher<Intent> cameraActivityResultLauncher;
+    private Bitmap savedPhoto;
     private FragmentAfterScanBinding binding;
     private boolean locationPermissionGranted;
     private final ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(
@@ -108,14 +119,37 @@ public class AfterScanFragment extends Fragment {
                             // There are no request codes
                             Intent data = result.getData();
                             Bundle bundle = data.getExtras();
-                            Bitmap savedPhoto = (Bitmap) bundle.get("data");
-                            savedPhoto = Bitmap.createScaledBitmap(savedPhoto, 640, 480, true);
-                            Bitmap finalPhoto = Bitmap.createScaledBitmap(savedPhoto, 640, 480, true);
-                            scanViewModel.setPhotoLocation(finalPhoto);
+                            savedPhoto = (Bitmap) bundle.get("data");
+                            savedPhoto = Bitmap.createScaledBitmap(savedPhoto, 480, 640, true);
+                            scanViewModel.setPhoto(savedPhoto);
+
+                            // display rounded corners
+                            // From java2s.com
+                            // URL: http://www.java2s.com/example/android/graphics/get-rounded-corner-bitmap.html
+
+                            Bitmap output = Bitmap.createBitmap(savedPhoto.getWidth(),
+                                    savedPhoto.getHeight(), Bitmap.Config.ARGB_8888);
+                            Canvas canvas = new Canvas(output);
+
+                            final int color = 0xff424242;
+                            final Paint paint = new Paint();
+                            final Rect rect = new Rect(0, 0, savedPhoto.getWidth(), savedPhoto.getHeight());
+                            final RectF rectF = new RectF(rect);
+                            final float roundPx = 25;
+
+                            paint.setAntiAlias(true);
+                            canvas.drawARGB(0, 0, 0, 0);
+                            paint.setColor(color);
+                            canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+
+                            paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+                            canvas.drawBitmap(savedPhoto, rect, rect, paint);
+
+                            savedPhoto = output;
 
                             binding.locationImage.setVisibility(View.VISIBLE);
                             binding.addPhotoLocationButton.setImageResource(R.drawable.remove_icon);
-                            binding.locationImage.setImageBitmap(finalPhoto);
+                            binding.locationImage.setImageBitmap(savedPhoto);
 
                         }
                     }
@@ -133,8 +167,8 @@ public class AfterScanFragment extends Fragment {
             }
 
             // we delete the picture
-            if (!scanViewModel.getLocation().getValue().photos.isEmpty()) {
-                scanViewModel.setPhotoLocation(null);
+            if (scanViewModel.getPhoto().getValue() != null) {
+                scanViewModel.setPhoto(null);
                 binding.addPhotoLocationButton.setImageResource(R.drawable.add_icon);
                 binding.locationImage.setVisibility(View.GONE);
             } else {
@@ -147,7 +181,20 @@ public class AfterScanFragment extends Fragment {
         binding.saveButton.setOnClickListener(view -> {
             // use the model to add the qrcode
             @SuppressLint("HardwareIds") String deviceId = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
-            scanViewModel.completeScan(deviceId);
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            DocumentReference ref = db.collection("qrCodes").document();
+            String qrCodeId = ref.getId();
+            if (savedPhoto == null){
+                scanViewModel.completeScan(qrCodeId, deviceId, null);
+            }
+            else {
+                // convert the bitmap to a byte array
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                savedPhoto.compress(Bitmap.CompressFormat.PNG, 25, stream);
+                byte[] byteArray = stream.toByteArray();
+                scanViewModel.completeScan(qrCodeId, deviceId, byteArray);
+            }
+
             // navigate to somewhere after this is done
             Navigation.findNavController(binding.getRoot()).navigate(R.id.action_navigation_after_scan_to_navigation_map);
 

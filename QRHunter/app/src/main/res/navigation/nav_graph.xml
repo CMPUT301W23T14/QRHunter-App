@@ -8,10 +8,17 @@
         android:id="@+id/navigation_leaderboard"
         android:name="com.example.qrhunter.ui.leaderboard.LeaderboardFragment"
         android:label="fragment_leaderboard"
-        tools:layout="@layout/fragment_leaderboard" >
+        tools:layout="@layout/fragment_leaderboard">
+        <action
+            android:id="@+id/action_navigation_leaderboard_to_otherProfileFragment"
+            app:destination="@id/otherProfileFragment"
+            app:launchSingleTop="false"
+            app:popUpToInclusive="false" />
         <action
             android:id="@+id/action_navigation_leaderboard_to_navigation_profile"
-            app:destination="@id/navigation_profile" />
+            app:destination="@id/navigation_profile"
+            app:popUpTo="@id/navigation_leaderboard"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -62,5 +69,16 @@
         <argument
             android:name="qrCodeId"
             app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/otherProfileFragment"
+        android:name="com.example.qrhunter.ui.other_profile.OtherProfileFragment"
+        android:label="OtherProfileFragment">
+        <argument
+            android:name="playerId"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_otherProfileFragment_to_qrCodeFragment"
+            app:destination="@id/qrCodeFragment" />
     </fragment>
 </navigation>

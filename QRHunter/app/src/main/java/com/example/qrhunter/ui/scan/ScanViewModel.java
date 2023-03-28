@@ -9,8 +9,11 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.qrhunter.data.model.Location;
 import com.example.qrhunter.data.model.QRCode;
+import com.example.qrhunter.data.repository.PlayerRepository;
 import com.example.qrhunter.data.repository.QRCodeRepository;
 import com.example.qrhunter.utils.QRCodeUtil;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -18,8 +21,10 @@ import java.util.ArrayList;
 public class ScanViewModel extends ViewModel {
     private final MutableLiveData<String> qrCodeContent = new MutableLiveData<>();
     private final MutableLiveData<String> qrCodeHash = new MutableLiveData<>();
-    private final MutableLiveData<Location> location = new MutableLiveData<>(new Location(0, 0, new ArrayList<>()));
+    private final MutableLiveData<Location> location = new MutableLiveData<>(new Location(0, 0));
+    private final MutableLiveData<Bitmap> photo = new MutableLiveData<>(null);
     private QRCodeRepository qrCodeRepository = new QRCodeRepository();
+    private PlayerRepository playerRepository = new PlayerRepository();
 
     public LiveData<String> getQRCodeContent() {
         return qrCodeContent;
@@ -41,18 +46,30 @@ public class ScanViewModel extends ViewModel {
      *
      * @param playerId The player that's scanning the qr code
      */
-    public void completeScan(String playerId) {
-        QRCode newQRCode = new QRCode("", qrCodeHash.getValue(), location.getValue(), new ArrayList<>(), new ArrayList<String>() {
+    public void completeScan(String qrCodeId, String playerId, byte[] savedPhoto) {
+        ArrayList<Location> locations = new ArrayList<>();
+        ArrayList<String> photos = new ArrayList<>();
+
+
+        // Don't add to location array if the location.latitude and location.longitude are 0
+        if (location.getValue().getLatitude() != 0 || location.getValue().getLongitude() != 0) {
+            locations.add(location.getValue());
+        }
+
+        QRCode newQRCode = new QRCode(qrCodeId, qrCodeHash.getValue(), locations, photos, new ArrayList<>(), new ArrayList<String>() {
             {
                 add(playerId);
             }
         });
 
-        qrCodeRepository.addQRCodeToPlayer(newQRCode, playerId);
+        qrCodeRepository.addQRCodeToPlayer(newQRCode, playerId, savedPhoto);
     }
 
     /**
-     * turns the bitmap to string for storing purpose
+     * Turns the bitmap of a photo to string for storing purpose
+     *
+     * @param bitmap The bitmap of a photo
+     * @return The converted string
      */
     public String BitMapToString(Bitmap bitmap) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -76,27 +93,23 @@ public class ScanViewModel extends ViewModel {
 
     public void setGeolocation(double latitude, double longitude) {
         Location currentLocation = this.location.getValue();
-        currentLocation.latitude = latitude;
-        currentLocation.longitude = longitude;
+        // Rounding to one decimal places
+        currentLocation.latitude = Math.round(latitude * 100.0) / 10.0;
+        currentLocation.longitude = Math.round(longitude * 100.0) / 10.0;
 
-        location.setValue(currentLocation);
-    }
-
-    public void setPhotoLocation(Bitmap photo) {
-        // Clears photo location if provided with null bitmap
-        //  otherwise adds the photo to the location
-        Location currentLocation = this.location.getValue();
-        if (photo == null) {
-            currentLocation.photos = new ArrayList<>();
-        }
-        else{
-            currentLocation.photos.add(BitMapToString(photo));
-        }
         location.setValue(currentLocation);
     }
 
     public LiveData<Location> getLocation() {
         return location;
+    }
+
+    public LiveData<Bitmap> getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(Bitmap photo) {
+        this.photo.setValue(photo);
     }
 
 }

@@ -32,6 +32,7 @@ public class Player {
         this.rank = 0;
         this.phoneNumber = "";
     }
+
     /**
      * Constructors for Players that already exist in Firestore.
      * @param id The unique ID of the player.
