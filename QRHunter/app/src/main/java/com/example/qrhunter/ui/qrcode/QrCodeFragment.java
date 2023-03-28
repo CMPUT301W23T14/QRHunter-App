@@ -58,6 +58,7 @@ public class QrCodeFragment extends Fragment {
                         binding.QRName.setText(qrCode.getName());
                         binding.QRCodeScoretext.setText(Double.toString(qrCode.getScore()));
                         binding.QRVisual.setText(qrCode.getVisualRepresentation());
+                        binding.QRCodeAddresstext.setText(qrCodeViewModel.getAddress(qrCode, getContext()));
 
                         // Get and bind the amount of players who scanned the code
                         qrCodeViewModel.getScannedBy(qrCode).observe(getViewLifecycleOwner(), amountScannedBy -> {
@@ -65,7 +66,6 @@ public class QrCodeFragment extends Fragment {
                                 binding.scannedByText.setText(amountScannedBy.toString() + " players");
                             }
                         });
-
                         // Get and bind the comments
                         qrCodeViewModel.getComments(qrCode).observe(getViewLifecycleOwner(), newComments -> {
                             comments.clear();
