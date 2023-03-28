@@ -3,7 +3,7 @@ package com.example.qrhunter.utils;
 import java.util.Hashtable;
 
 /**
- * generates the visual representation of the qrCode
+ * A class that generates the visual representation of the QR code.
  */
 public class QRCodeVisual extends QRCodeVisualize{
 

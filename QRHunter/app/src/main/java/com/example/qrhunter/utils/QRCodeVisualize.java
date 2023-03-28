@@ -1,5 +1,9 @@
 package com.example.qrhunter.utils;
 
+/**
+ * A class that assists in creating the visualization of the QR code by calculating the bit values of the QR
+ * code that was recently scanned.
+ */
 public class QRCodeVisualize {
     private final String hashValue;
     private String bitValues;

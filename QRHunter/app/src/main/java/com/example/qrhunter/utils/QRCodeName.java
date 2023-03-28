@@ -1,5 +1,8 @@
 package com.example.qrhunter.utils;
 
+/**
+ * A class which creates a name for QR codes using their hash value.
+ */
 public class QRCodeName extends QRCodeVisualize{
     /**
      * generates the name for qrcode

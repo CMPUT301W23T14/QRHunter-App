@@ -10,6 +10,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * A utility class that contains methods for converting Player objects to and from Firestore documents.
+ * This class also calculates the highest and lowest QR codes of a player.
+ */
 public final class PlayerUtil {
 
     /**
