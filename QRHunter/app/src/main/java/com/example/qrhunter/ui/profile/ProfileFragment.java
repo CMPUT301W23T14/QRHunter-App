@@ -70,14 +70,15 @@ public class ProfileFragment extends Fragment {
 
                 });
             }
-            // Display highest score
-            profileViewModel.getHighestScore().observe(getViewLifecycleOwner(), highScore -> {
-                binding.highestScore.setText(Double.toString(highScore));
+                // Display highest score
+                profileViewModel.getHighestScore().observe(getViewLifecycleOwner(), highScore -> {
+                    binding.highestScore.setText(Double.toString(highScore));
+                });
+                // Display lowest score
+                profileViewModel.getLowestScore().observe(getViewLifecycleOwner(), lowScore -> {
+                    binding.lowestScore.setText(Double.toString(lowScore));
             });
-            // Display lowest score
-            profileViewModel.getLowestScore().observe(getViewLifecycleOwner(), lowScore -> {
-                binding.lowestScore.setText(Double.toString(lowScore));
-            });
+
 
 
 

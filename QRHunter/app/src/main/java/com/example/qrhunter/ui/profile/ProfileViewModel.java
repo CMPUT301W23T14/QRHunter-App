@@ -15,8 +15,8 @@ import java.util.Objects;
 
 public class ProfileViewModel extends ViewModel {
     private final MutableLiveData<Player> player = new MutableLiveData<>();
-    private final MutableLiveData<Double> highScore = new MutableLiveData<>();
-    private final MutableLiveData<Double> lowScore = new MutableLiveData<>();
+    private final MutableLiveData<Double> highScore = new MutableLiveData<>(0.0);
+    private final MutableLiveData<Double> lowScore = new MutableLiveData<>(0.0);
 
 
     private final MutableLiveData<ArrayList<QRCode>> scannedQRCodes = new MutableLiveData<>(new ArrayList<>());
@@ -54,8 +54,10 @@ public class ProfileViewModel extends ViewModel {
         });
 
 
+
         return this.scannedQRCodes;
     }
+
 
     public LiveData<Double> getHighestScore(){
         return this.highScore;
