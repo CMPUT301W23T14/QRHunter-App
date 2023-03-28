@@ -1,6 +1,5 @@
 package com.example.qrhunter.data.repository;
 
-import android.graphics.Bitmap;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -245,13 +244,19 @@ public class QRCodeRepository extends DataRepository {
     public LiveData<List<QRCode>> getQRCodeList() {
         MutableLiveData<List<QRCode>> QRCodesLiveData = new MutableLiveData<>();
         CollectionReference QRCodesRef = db.collection("qrCodes");
-        QRCodesRef.get().addOnSuccessListener(queryDocumentSnapshots -> {
+        QRCodesRef.addSnapshotListener((queryDocumentSnapshots, error) -> {
             List<QRCode> QRCodes = new ArrayList<>();
+            assert queryDocumentSnapshots != null;
             for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                 QRCodes.add(QRCodeUtil.convertDocumentToQRCode(document));
             }
             QRCodesLiveData.setValue(QRCodes);
         });
         return QRCodesLiveData;
+    }
+
+    public void addCommentId(String qrCodeId, String commentId) {
+        db.collection("qrCodes").document(qrCodeId)
+                .update("commentIds", FieldValue.arrayUnion(commentId));
     }
 }

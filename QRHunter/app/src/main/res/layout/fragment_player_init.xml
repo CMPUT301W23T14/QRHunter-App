@@ -36,7 +36,8 @@
         android:hint="@string/username_text_hint"
         app:boxStrokeWidth="2dp"
         app:boxStrokeWidthFocused="3dp"
-        app:counterEnabled="false"
+        app:counterEnabled="true"
+        app:counterMaxLength="30"
         app:errorEnabled="true"
         app:errorIconDrawable="@drawable/baseline_error_outline_24"
         app:helperTextEnabled="true"
@@ -47,7 +48,8 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/username_edit_text"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:maxLength="30" />
 
     </com.google.android.material.textfield.TextInputLayout>
 

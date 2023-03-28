@@ -43,7 +43,7 @@ import java.io.ByteArrayOutputStream;
 
 
 /**
- * screen segment after scan
+ * Responsible for displaying UI elements and handling user interactions after scanning a QR Code.
  */
 public class AfterScanFragment extends Fragment {
     private final int MY_PERMISSIONS_REQUEST_CAMERA = 1001;
@@ -120,7 +120,7 @@ public class AfterScanFragment extends Fragment {
                             Intent data = result.getData();
                             Bundle bundle = data.getExtras();
                             savedPhoto = (Bitmap) bundle.get("data");
-                            savedPhoto = Bitmap.createScaledBitmap(savedPhoto, 480, 640, true);
+                            savedPhoto = Bitmap.createScaledBitmap(savedPhoto, 500, 500, true);
                             scanViewModel.setPhoto(savedPhoto);
 
                             // display rounded corners
@@ -184,10 +184,9 @@ public class AfterScanFragment extends Fragment {
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             DocumentReference ref = db.collection("qrCodes").document();
             String qrCodeId = ref.getId();
-            if (savedPhoto == null){
+            if (savedPhoto == null) {
                 scanViewModel.completeScan(qrCodeId, deviceId, null);
-            }
-            else {
+            } else {
                 // convert the bitmap to a byte array
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 savedPhoto.compress(Bitmap.CompressFormat.PNG, 25, stream);

@@ -6,6 +6,11 @@ import java.util.ArrayList;
 
 /**
  * Model class for a QRCode
+ * The QRCode class represents a QR code. It contains information about the code's
+ * unique ID, the hash calculated from its contents, a name and visual representation generated from the hash, the
+ * score calculated from the hash, the location of the code, and a list of player IDs who have scanned the code. This
+ * class is used to create new QRCode objects, set and retrieve their properties, and store them in a Firestore
+ * database.
  */
 public class QRCode {
     /**
@@ -42,6 +47,11 @@ public class QRCode {
 
     /**
      * Constructor for a QR Code
+     * @param id The unique ID of the QR code in Firestore.
+     * @param hash The hash calculated from the QR code or barcode contents.
+     * @param locations The location(s) of the QR code.
+     * @param commentIds A list of comment IDs associated with the QR code.
+     * @param playerIds A list of player IDs who have scanned the QR code.
      */
     public QRCode(String id, String hash, ArrayList<Location> locations, ArrayList<String> photos, ArrayList<String> commentIds, ArrayList<String> playerIds) {
         this.id = id;
@@ -58,67 +68,130 @@ public class QRCode {
     }
     public QRCode() {
     }
-
+    /**
+     * Getter for the list of photos associated with the QR code.
+     * @return The list of photos associated with the QR code.
+     */
     public ArrayList<String> getPhotos() {
         return photos;
     }
 
+    /**
+     * Setter for the list of photos associated with the QR code.
+     * @param photos The list of photos to associate with the QR code.
+     */
     public void setPhotos(ArrayList<String> photos) {
         this.photos = photos;
     }
 
+    /**
+     * Returns the unique ID of this QR code document in Firestore.
+     * @return the unique ID of this QR code document in Firestore.
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * Sets the unique ID of this QR code document in Firestore.
+     * @param id the new unique ID to set for this QR code document.
+     */
     public void setId(String id) {
         this.id = id;
     }
 
+    /**
+     * Returns the list of player IDs who have scanned this QR code.
+     * @return the list of player IDs who have scanned this QR code.
+     */
     public ArrayList<String> getPlayerIds() {
         return playerIds;
     }
 
+    /**
+     * Sets the list of player IDs who have scanned this QR code.
+     * @param playerIds the new list of player IDs to set for this QR code.
+     */
     public void setPlayerIds(ArrayList<String> playerIds) {
         this.playerIds = playerIds;
     }
 
+    /**
+     * Returns the hash calculated from the contents of this QR code.
+     * @return the hash calculated from the contents of this QR code.
+     */
     public String getHash() {
         return hash;
     }
 
+    /**
+     * Sets the hash calculated from the contents of this QR code.
+     * @param hash the new hash value to set for this QR code.
+     */
     public void setHash(String hash) {
         this.hash = hash;
     }
 
+    /**
+     * Returns the name generated from the hash of this QR code.
+     * @return the name generated from the hash of this QR code.
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Sets the name generated from the hash of this QR code.
+     * @param name the new name to set for this QR code.
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Returns the visual representation generated from the hash of this QR code.
+     * @return the visual representation generated from the hash of this QR code.
+     */
     public String getVisualRepresentation() {
         return visualRepresentation;
     }
 
+    /**
+     * Sets the visual representation generated from the hash of this QR code.
+     * @param visualRepresentation the new visual representation to set for this QR code.
+     */
     public void setVisualRepresentation(String visualRepresentation) {
         this.visualRepresentation = visualRepresentation;
     }
 
+    /**
+     * Returns the score calculated from the hash of this QR code.
+     * @return the score calculated from the hash of this QR code.
+     */
     public double getScore() {
         return score;
     }
 
+    /**
+     * Sets the score calculated from the hash of this QR code.
+     * @param score the new score to set for this QR code.
+     */
     public void setScore(double score) {
         this.score = score;
     }
 
+    /**
+     * Returns the list of locations associated with this QR code.
+     * @return the list of locations associated with this QR code.
+     */
     public ArrayList<Location> getLocations() {
         return locations;
     }
 
+    /**
+     * Sets the list of locations associated with this QR code.
+     * @param locations the new list of locations to set for this QR code.
+     */
     public void setLocations(ArrayList<Location> locations) {
         this.locations = locations;
     }
@@ -127,14 +200,21 @@ public class QRCode {
         this.locations = locations;
     }
 
+    /**
+     * Returns the list of comment(s) associated with this QR code.
+     * @return the list of comment(s) associated with this QR code.
+     */
     public ArrayList<String> getCommentIds() {
         return commentIds;
     }
 
+    /**
+     * List of comment(s) to be set
+     * @param commentIds the list of comment(s) to be set
+     */
     public void setCommentIds(ArrayList<String> commentIds) {
         this.commentIds = commentIds;
     }
-
 
 }
 
