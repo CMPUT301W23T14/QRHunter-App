@@ -84,11 +84,9 @@ public class QrCodeFragment extends Fragment {
                     }
                 });
 
-
         binding.qrBackButton.setOnClickListener(v -> {
             Navigation.findNavController(binding.getRoot()).popBackStack();
         });
-
 
         return binding.getRoot();
     }
