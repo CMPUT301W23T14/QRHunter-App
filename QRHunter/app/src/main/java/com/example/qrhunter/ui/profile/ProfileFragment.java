@@ -3,9 +3,11 @@ package com.example.qrhunter.ui.profile;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,12 +19,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.qrhunter.data.model.QRCode;
 import com.example.qrhunter.databinding.FragmentProfileBinding;
 import com.example.qrhunter.ui.adapters.QRCodesAdapter;
+import com.jakewharton.rxbinding4.widget.RxTextView;
 
 import java.util.ArrayList;
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.rxjava3.disposables.Disposable;
 
 public class ProfileFragment extends Fragment {
 
     private FragmentProfileBinding binding;
+    private Disposable phoneNumberText;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -66,15 +74,19 @@ public class ProfileFragment extends Fragment {
                     qrCodesAdapter.notifyDataSetChanged();
                     binding.scannedText.setText("(" + qrCodes.size() + ")");
                 });
+                phoneNumberText = RxTextView.textChanges(binding.phoneNumberEditText).debounce(2000, TimeUnit.MILLISECONDS)
+                        .subscribe(phoneNumber -> {
+                            profileViewModel.addPhoneNumber(player.getId(), Objects.requireNonNull(binding.phoneNumberEditText.getText()).toString());
+                        });
             }
 
         });
-
         return binding.getRoot();
     }
 
     @Override
     public void onDestroyView() {
+        phoneNumberText.dispose();
         super.onDestroyView();
         binding = null;
     }
