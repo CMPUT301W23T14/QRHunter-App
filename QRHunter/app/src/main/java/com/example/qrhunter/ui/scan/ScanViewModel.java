@@ -93,8 +93,8 @@ public class ScanViewModel extends ViewModel {
 
     public void setGeolocation(double latitude, double longitude) {
         Location currentLocation = this.location.getValue();
-        currentLocation.latitude = latitude;
-        currentLocation.longitude = longitude;
+        currentLocation.latitude = Math.round(latitude*10000d)/10000d;
+        currentLocation.longitude = Math.round(longitude*10000d)/10000d;
 
         location.setValue(currentLocation);
     }
