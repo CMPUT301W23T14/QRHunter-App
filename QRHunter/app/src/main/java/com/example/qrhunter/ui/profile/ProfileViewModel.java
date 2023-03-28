@@ -19,7 +19,7 @@ public class ProfileViewModel extends ViewModel {
     private final MutableLiveData<Double> lowScore = new MutableLiveData<>();
 
 
-    private final MutableLiveData<ArrayList<QRCode>> scannedQRCodes = new MutableLiveData<>();
+    private final MutableLiveData<ArrayList<QRCode>> scannedQRCodes = new MutableLiveData<>(new ArrayList<>());
     private PlayerRepository playerRepository = new PlayerRepository();
     private QRCodeRepository qrCodeRepository = new QRCodeRepository();
 
