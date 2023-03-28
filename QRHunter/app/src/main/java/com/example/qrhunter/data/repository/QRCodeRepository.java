@@ -1,9 +1,11 @@
 package com.example.qrhunter.data.repository;
 
+import android.graphics.Bitmap;
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.qrhunter.data.model.Location;
 import com.example.qrhunter.data.model.Player;
 import com.example.qrhunter.data.model.QRCode;
 import com.example.qrhunter.utils.QRCodeUtil;
@@ -12,9 +14,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -28,22 +31,64 @@ public class QRCodeRepository extends DataRepository {
      * @param playerId The id of the player
      * @param qrCode   The id of the qrCode
      */
-    public void addQRCodeToPlayer(QRCode qrCode, String playerId) {
+    public void addQRCodeToPlayer(QRCode qrCode, String playerId, byte[] savedPhoto) {
         PlayerRepository playerRepository = new PlayerRepository();
 
         // Check whether qr code exists.
-        doesQRCodeExist(qrCode, documentSnapshot -> {
-            if (documentSnapshot == null) {
+        doesQRCodeExist(qrCode, existingQRCode -> {
+            if (existingQRCode == null) {
                 // If qr code doesn't exist, add a new document to Firestore
-                Map<String, Object> qrCodeHashMap = QRCodeUtil.convertQRCodeToHashmap(qrCode);
+                String photoPath;
+                ArrayList<String> photos = new ArrayList<>();
+                String qrCodeId = qrCode.getId();
+                if (savedPhoto == null) {
+                    photoPath = null;
+                }
+                else {
+                    photoPath = "photos/" + qrCodeId + "/" + playerId + ".jpg";
+                    photos.add(photoPath);
+                    qrCode.setPhotos(photos);
+                }
 
-                db.collection("qrCodes").add(qrCodeHashMap).addOnCompleteListener(task -> {
+
+                Map<String, Object> qrCodeHashMap = QRCodeUtil.convertQRCodeToHashmap(qrCode);
+                db.collection("qrCodes").document(qrCodeId).set(qrCodeHashMap).addOnCompleteListener(task -> {
                     playerRepository.addScoreToPlayer(playerId, qrCode.getScore());
                 });
+                // Upload photo to Firebase Storage
+                playerRepository.uploadPhoto(savedPhoto, qrCodeId, playerId);
             } else {
-                //Update qr code document
-                db.collection("qrCodes").document(documentSnapshot.getId())
+                // If qr code exists, update the existing document in Firestore
+                String photoPath;
+                ArrayList<String> existingPhotos = qrCode.getPhotos();
+                if (savedPhoto == null) {
+                    photoPath = null;
+                }
+                else {
+                    photoPath = "photos/" + existingQRCode.getId() + "/" + playerId + ".jpg";
+                    existingPhotos.add(photoPath);
+                    qrCode.setPhotos(existingPhotos);
+                }
+
+                playerRepository.uploadPhoto(savedPhoto, existingQRCode.getId(), playerId);
+
+                //Update player count
+                db.collection("qrCodes").document(existingQRCode.getId())
                         .update("playerIds", FieldValue.arrayUnion(playerId));
+
+                // Update location
+                if (!qrCode.getLocations().isEmpty()){
+                    db.collection("qrCodes").document(existingQRCode.getId())
+                            .update("locations", FieldValue.arrayUnion(qrCode.getLocations().get(0)));
+                }
+
+                // Update photos
+                if (!qrCode.getPhotos().isEmpty()) {
+                    db.collection("qrCodes").document(existingQRCode.getId())
+                            .update("photos", FieldValue.arrayUnion(qrCode.getPhotos().get(0)));
+                }
+
+                //TODO: Also update location in qr code document
                 playerRepository.addScoreToPlayer(playerId, qrCode.getScore());
             }
         });
@@ -58,9 +103,36 @@ public class QRCodeRepository extends DataRepository {
     public void removeQRCodeFromPlayer(String qrCodeId, String playerId) {
         PlayerRepository playerRepository = new PlayerRepository();
 
-        // Update qr code document
+        String photoPath = "photos/" + qrCodeId + "/" + playerId + ".jpg";
+
+        // Update qr code document, remove player id. photo path and location.
         db.collection("qrCodes").document(qrCodeId)
                 .update("playerIds", FieldValue.arrayRemove(playerId));
+
+
+        getQRCode(qrCodeId, qrCode1 -> {
+            if (!qrCode1.getLocations().isEmpty()) {
+                db.collection("qrCodes").document(qrCodeId)
+                        .update("locations", FieldValue.arrayRemove(qrCode1.getLocations().get(0)));
+            }
+            if (!qrCode1.getPhotos().isEmpty()) {
+                StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+                StorageReference deleteReference = storageReference.child("photos").child(qrCodeId).child(playerId);
+
+                deleteReference.delete().addOnSuccessListener(aVoid -> {
+                    Log.d("QRCodeRepository", "Photo deleted successfully");
+                }).addOnFailureListener(e -> {
+                    Log.d("QRCodeRepository", "Photo deletion failed");
+                });
+                db.collection("qrCodes").document(qrCodeId)
+                        .update("photos", FieldValue.arrayRemove(photoPath)).addOnSuccessListener(task -> {
+                            Log.d("QRCodeRepository", "Photo path removed successfully");
+                        }).addOnFailureListener(e -> {
+                            Log.d("QRCodeRepository", "Photo path removal failed");
+                        });
+            }
+        });
+
 
         // update player document (reduce score).
         db.collection("qrCodes").document(qrCodeId).get().addOnCompleteListener(task -> {
@@ -80,25 +152,32 @@ public class QRCodeRepository extends DataRepository {
      *
      * @param qrCode The qr code to be checked against
      */
-    public void doesQRCodeExist(QRCode qrCode, RepositoryCallback<DocumentSnapshot> repositoryCallback) {
+    public void doesQRCodeExist(QRCode qrCode, RepositoryCallback<QRCode> repositoryCallback) {
         Query qrCodesQuery = db.collection("qrCodes").whereEqualTo("hash", qrCode.getHash());
-        boolean hasLocation = (qrCode.getLocation().latitude != 0 && qrCode.getLocation().longitude != 0);
+
 
         qrCodesQuery.get().addOnCompleteListener(task -> {
             //If qr code doesn't exist
             if (task.isSuccessful() && task.getResult().isEmpty()) {
                 repositoryCallback.onSuccess(null);
             } else {
-                DocumentSnapshot result = task.getResult().getDocuments().get(0);
+                Boolean doesExist = false;
+                for (DocumentSnapshot documentSnapshot : task.getResult().getDocuments()) {
+                    QRCode queriedQRCode = QRCodeUtil.convertDocumentToQRCode(documentSnapshot);
 
-                // If qr code exist, check whether the location is the same
-                if (hasLocation && (double) result.get("latitude") != 0 && (double) result.get("longitude") != 0) {
-                    repositoryCallback.onSuccess(result);
-                } else if (!hasLocation && (double) result.get("latitude") == 0 && (double) result.get("longitude") == 0) {
-                    repositoryCallback.onSuccess(result);
-                } else {
-                    repositoryCallback.onSuccess(null);
+                    if (qrCode.getLocations().isEmpty() && queriedQRCode.getLocations().isEmpty()) {
+                        doesExist = true;
+                        repositoryCallback.onSuccess(queriedQRCode);
+                        break;
+                    } else if (qrCode.getLocations().size() > 0 && queriedQRCode.getLocations().size() > 0) {
+                        doesExist = true;
+                        repositoryCallback.onSuccess(queriedQRCode);
+                        break;
+                    }
                 }
+
+                if (!doesExist)
+                    repositoryCallback.onSuccess(null);
 
             }
         });
@@ -157,26 +236,27 @@ public class QRCodeRepository extends DataRepository {
                     }
                 });
     }
+
     /**
      * Gets a list of QRCodes from firestore
+     *
      * @return LiveData of a list of QRCode objects
      */
     public LiveData<List<QRCode>> getQRCodeList() {
         MutableLiveData<List<QRCode>> QRCodesLiveData = new MutableLiveData<>();
         CollectionReference QRCodesRef = db.collection("qrCodes");
         QRCodesRef.get().addOnSuccessListener(queryDocumentSnapshots -> {
-            List <QRCode> QRCodes = new ArrayList<>();
+            List<QRCode> QRCodes = new ArrayList<>();
             for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                String id = document.getId();
-                String hash = document.getString("hash");
-                Location location = new Location(document.getDouble("latitude"), document.getDouble("longitude"), null);
-                ArrayList<String> comments = (ArrayList<String>) document.get("comments");
-                ArrayList<String> playerIds = (ArrayList<String>) document.get("playerIds");
-                QRCode QRCode = new QRCode(id, hash, location, comments, playerIds);
-                QRCodes.add(QRCode);
+                QRCodes.add(QRCodeUtil.convertDocumentToQRCode(document));
             }
             QRCodesLiveData.setValue(QRCodes);
         });
         return QRCodesLiveData;
+    }
+
+    public void addCommentId(String qrCodeId, String commentId) {
+        db.collection("qrCodes").document(qrCodeId)
+                .update("commentIds", FieldValue.arrayUnion(commentId));
     }
 }

@@ -1,12 +1,10 @@
 package com.example.qrhunter.utils;
 
-import com.example.qrhunter.data.model.Location;
 import com.example.qrhunter.data.model.QRCode;
 import com.google.common.hash.Hashing;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -100,17 +98,14 @@ public final class QRCodeUtil {
 
     /**
      * Converts A Document Snapshot object to a QR Code object. Used when getting data from Firestore
+     * TODO: Move these convert functions into the model classes themselves?
      *
      * @param qrCodeDoc The document reference to the QR Code object
      * @return A QR Code object
      */
     public static QRCode convertDocumentToQRCode(DocumentSnapshot qrCodeDoc) {
-        String hash = qrCodeDoc.get("hash").toString();
-        Location location = new Location(qrCodeDoc.getDouble("latitude"), qrCodeDoc.getDouble("latitude"), new ArrayList<>());
-        ArrayList<String> commentIds = (ArrayList<String>) qrCodeDoc.get("commentIds");
-        ArrayList<String> playerIds = (ArrayList<String>) qrCodeDoc.get("playerIds");
-
-        QRCode qrCode = new QRCode(qrCodeDoc.getId(), hash, location, commentIds, playerIds);
+        QRCode qrCode = qrCodeDoc.toObject(QRCode.class);
+        qrCode.setId(qrCodeDoc.getId());
 
         return qrCode;
     }
@@ -127,10 +122,11 @@ public final class QRCodeUtil {
         qrCodeHashMap.put("name", qrCode.getName());
         qrCodeHashMap.put("visualRepresentation", qrCode.getVisualRepresentation());
         qrCodeHashMap.put("score", qrCode.getScore());
-        qrCodeHashMap.put("latitude", qrCode.getLocation().latitude);
-        qrCodeHashMap.put("longitude", qrCode.getLocation().longitude);
-        // TODO: Upload location photo to firebase storage
-        qrCodeHashMap.put("comments", qrCode.getCommentIds());
+
+        qrCodeHashMap.put("locations", qrCode.getLocations());
+        qrCodeHashMap.put("photos", qrCode.getPhotos());
+        
+        qrCodeHashMap.put("commentIds", qrCode.getCommentIds());
         qrCodeHashMap.put("playerIds", qrCode.getPlayerIds());
 
         return qrCodeHashMap;
