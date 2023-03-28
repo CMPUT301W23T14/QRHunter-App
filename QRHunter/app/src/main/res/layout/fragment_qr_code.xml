@@ -143,11 +143,11 @@
             android:id="@+id/comment_recycler_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:overScrollMode="never"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardView2" />
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/new_comment_text_layout"
@@ -163,6 +163,8 @@
             app:boxStrokeErrorColor="@color/neutral_black"
             app:boxStrokeWidth="0dp"
             app:boxStrokeWidthFocused="3dp"
+            app:counterEnabled="true"
+            app:counterMaxLength="100"
             app:endIconCheckable="true"
             app:endIconDrawable="@drawable/add_icon"
             app:endIconMode="custom"
@@ -177,11 +179,25 @@
                 android:id="@+id/new_comment_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:maxLength="100"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/username" />
 
         </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/roboto_medium"
+            android:text="Comments: "
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardView2" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
