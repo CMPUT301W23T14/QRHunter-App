@@ -53,6 +53,7 @@ public class ProfileViewModel extends ViewModel {
             this.lowScore.setValue(PlayerUtil.calculateLowestScore(scannedQRCodes));
         });
 
+
         return this.scannedQRCodes;
     }
 
@@ -64,6 +65,11 @@ public class ProfileViewModel extends ViewModel {
         return this.lowScore;
     }
 
+    /**
+     * Remove a QRCode from a player's list of QrCodes
+     *
+     *
+     */
     public void removeScannedQRCode(String qrCodeId, String playerId) {
         // Update Firestore (reduce score and remove from qr code's playerIds)
         qrCodeRepository.removeQRCodeFromPlayer(qrCodeId, playerId);
