@@ -5,7 +5,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
-
+/**
+ * Utility class for Comment objects. This class provides methods for converting DocumentSnapshot objects to Comment objects,
+ * and converting Comment objects to HashMaps for adding data to Firestore.
+ */
 public final class CommentUtil {
     /**
      * Converts A Document Snapshot object to a Comment Object. Used when retrieving data from Firestore

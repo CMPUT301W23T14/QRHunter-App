@@ -43,7 +43,7 @@ import java.io.ByteArrayOutputStream;
 
 
 /**
- * screen segment after scan
+ * Responsible for displaying UI elements and handling user interactions after scanning a QR Code.
  */
 public class AfterScanFragment extends Fragment {
     private final int MY_PERMISSIONS_REQUEST_CAMERA = 1001;
