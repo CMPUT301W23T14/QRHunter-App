@@ -40,7 +40,6 @@
                 android:id="@+id/qr_code_score"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:fontFamily="@font/roboto_medium"
                 android:lineSpacingExtra="16sp"
                 android:text="2000 points "

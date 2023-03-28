@@ -192,4 +192,9 @@ public class QRCodeRepository extends DataRepository {
         });
         return QRCodesLiveData;
     }
+
+    public void addCommentId(String qrCodeId, String commentId) {
+        db.collection("qrCodes").document(qrCodeId)
+                .update("commentIds", FieldValue.arrayUnion(commentId));
+    }
 }

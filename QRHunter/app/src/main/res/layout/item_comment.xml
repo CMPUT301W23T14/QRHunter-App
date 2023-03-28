@@ -32,7 +32,7 @@
                 android:fontFamily="@font/roboto_medium"
                 android:text="FloMoMegaSpectralCrab"
                 android:textColor="@color/secondary_dark"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
