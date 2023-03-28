@@ -14,11 +14,14 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.qrhunter.data.model.Player;
 import com.example.qrhunter.data.model.QRCode;
 import com.example.qrhunter.databinding.FragmentProfileBinding;
 import com.example.qrhunter.ui.adapters.QRCodesAdapter;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class ProfileFragment extends Fragment {
 
@@ -62,6 +65,8 @@ public class ProfileFragment extends Fragment {
                 profileViewModel.getScannedQRCodes(player).observe(getViewLifecycleOwner(), qrCodes -> {
                     scannedQRCodes.clear();
                     scannedQRCodes.addAll(qrCodes);
+                    // sort by name
+                    scannedQRCodes.sort(Comparator.comparing(qrCode -> qrCode.getName().toLowerCase())); // if we want uppercase first, remove .toLowerCase()
                     qrCodesAdapter.notifyDataSetChanged();
                     binding.scannedText.setText("(" + qrCodes.size() + ")");
                 });
