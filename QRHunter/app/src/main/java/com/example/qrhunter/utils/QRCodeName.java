@@ -1,7 +1,7 @@
 package com.example.qrhunter.utils;
 
 /**
- * Class for generating a human readble QR Code name
+ * Class for generating a human readable QR Code name
  */
 public class QRCodeName extends QRCodeConstants {
     /**
