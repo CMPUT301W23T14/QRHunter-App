@@ -1,10 +1,10 @@
 package com.example.qrhunter;
 
-import org.junit.jupiter.api.Test;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import com.example.qrhunter.data.model.Comment;
-import com.example.qrhunter.data.model.Player;
+
+import org.junit.jupiter.api.Test;
 
 /**
  * Unit tests for the Comment class
@@ -19,12 +19,10 @@ public class CommentTest {
      */
     @Test
     public void testGetAuthor() {
-        // Create a player for test
-        Player player = new Player("player123", "John");
-        // Create test comment with player
-        Comment comment = new Comment(player, "Great game!");
+        // Create test comment
+        Comment comment = new Comment("John", "Great game!");
         // Test to see if the comment's author is the same as the one set
-        assertEquals(player, comment.getAuthor());
+        assertEquals("John", comment.getAuthor());
     }
 
     /**
@@ -35,10 +33,8 @@ public class CommentTest {
      */
     @Test
     public void testGetContent() {
-        // Create a player for test
-        Player player = new Player("player123", "John");
-        // Create test comment with player
-        Comment comment = new Comment(player, "Great game!");
+        // Create test comment
+        Comment comment = new Comment("John", "Great game!");
         // Test to see if the comment's content is the same as the one set
         assertEquals("Great game!", comment.getContent());
     }
@@ -52,10 +48,8 @@ public class CommentTest {
      */
     @Test
     public void testSetContent() {
-        // Create a player for test
-        Player player = new Player("player123", "John");
-        // Create test comment with player
-        Comment comment = new Comment(player, "Great game!");
+        // Create test comment
+        Comment comment = new Comment("John", "Great game!");
         // Set content for comment
         comment.setContent("I enjoyed it a lot!");
         // Test to see if the comment's content is the same as the one set
