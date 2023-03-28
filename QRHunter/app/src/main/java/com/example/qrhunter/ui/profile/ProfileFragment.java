@@ -31,7 +31,7 @@ public class ProfileFragment extends Fragment {
         @SuppressLint("HardwareIds") String deviceId = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
 
         //Get ViewModels
-        ProfileViewModel profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+        ProfileViewModel profileViewModel = new ViewModelProvider(getActivity()).get(ProfileViewModel.class);
 
         // Inflate the layout for this fragment
         binding = FragmentProfileBinding.inflate(inflater, container, false);
@@ -39,6 +39,7 @@ public class ProfileFragment extends Fragment {
         // Get recycler view
         RecyclerView rvQRCodes = binding.qrCodeRecyclerView;
 
+        // List of qr codes for the recycler view adapter
         ArrayList<QRCode> scannedQRCodes = new ArrayList<>();
 
         // Set up recycler view

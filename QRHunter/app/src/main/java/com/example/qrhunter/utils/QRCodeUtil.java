@@ -125,9 +125,8 @@ public final class QRCodeUtil {
 
         qrCodeHashMap.put("locations", qrCode.getLocations());
         qrCodeHashMap.put("photos", qrCode.getPhotos());
-
-        // TODO: Upload location photo to firebase storage
-        qrCodeHashMap.put("comments", qrCode.getCommentIds());
+        
+        qrCodeHashMap.put("commentIds", qrCode.getCommentIds());
         qrCodeHashMap.put("playerIds", qrCode.getPlayerIds());
 
         return qrCodeHashMap;
