@@ -3,6 +3,7 @@ package com.example.qrhunter.ui.profile;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.qrhunter.data.model.QRCode;
 import com.example.qrhunter.databinding.FragmentProfileBinding;
 import com.example.qrhunter.ui.adapters.QRCodesAdapter;
+import com.example.qrhunter.utils.PlayerUtil;
+import com.example.qrhunter.utils.QRCodeUtil;
 
 import java.util.ArrayList;
 
@@ -61,14 +64,30 @@ public class ProfileFragment extends Fragment {
                 binding.rank.setText(Integer.toString(player.getRank()));
 
                 profileViewModel.getScannedQRCodes(player).observe(getViewLifecycleOwner(), qrCodes -> {
-                    scannedQRCodes.clear();
+                scannedQRCodes.clear();
                     scannedQRCodes.addAll(qrCodes);
                     qrCodesAdapter.notifyDataSetChanged();
                     binding.scannedText.setText("(" + qrCodes.size() + ")");
+
                 });
             }
+                // Display highest score
+                profileViewModel.getHighestScore().observe(getViewLifecycleOwner(), highScore -> {
+                    binding.highestScore.setText(Double.toString(highScore));
+                });
+                // Display lowest score
+                profileViewModel.getLowestScore().observe(getViewLifecycleOwner(), lowScore -> {
+                    binding.lowestScore.setText(Double.toString(lowScore));
+            });
+
+
+
 
         });
+
+
+
+
 
         return binding.getRoot();
     }
