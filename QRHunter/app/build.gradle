@@ -23,7 +23,10 @@ android {
 
     buildTypes {
         debug{
-            buildConfigField "String", "MAPS_API_KEY", getMapsApiKey()
+//            buildConfigField("String", "MAPS_API_KEY", getMapsApiKey())
+//            buildConfigField "String", "MAPS_API_KEY", "\"AIzaSyCn2hM72tPyDOguYW798N8arpYDUW2VWE4\""
+            buildConfigField "String", "MAPS_API_KEY", getMapsApiKey1()
+
         }
         release {
             minifyEnabled false
@@ -127,4 +130,8 @@ String getMapsApiKey() {
     def properties = new Properties()
     properties.load(new FileInputStream(propFile))
     return properties['MAPS_API_KEY']
+}
+String getMapsApiKey1() {
+    String key = getMapsApiKey()
+    return "\"$key\""
 }
