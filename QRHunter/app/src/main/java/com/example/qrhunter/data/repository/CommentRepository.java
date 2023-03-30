@@ -15,6 +15,9 @@ import java.util.Map;
  */
 public class CommentRepository extends DataRepository {
     public void getComments(ArrayList<String> commentIds, RepositoryCallback<ArrayList<Comment>> repositoryCallback) {
+        if (commentIds.isEmpty())
+            return;
+
         Query commentQuery = db.collection("comments")
                 .whereIn(FieldPath.documentId(), commentIds);
 

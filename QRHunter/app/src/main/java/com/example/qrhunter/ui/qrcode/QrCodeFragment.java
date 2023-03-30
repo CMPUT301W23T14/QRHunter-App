@@ -19,7 +19,18 @@ import com.example.qrhunter.ui.adapters.CommentAdapter;
 import com.example.qrhunter.ui.profile.ProfileViewModel;
 
 import java.util.ArrayList;
+/**
 
+ * QrCodeFragment displays the details of a QR code, including its name, score, visual representation, the number
+ * of players who have scanned it, and comments from players. Users can also add comments to the QR code. The
+ * fragment retrieves the QR code from the ViewModel and populates the UI with its details.
+ * The fragment uses a RecyclerView to display the comments for the QR code. The RecyclerView's adapter is
+ * CommentAdapter, which accepts a list of Comment objects.
+ * The fragment retrieves the QR code's ID from the arguments passed to the fragment. The QR code ID is used
+ * to retrieve the QR code and its comments from Firestore.
+ * The fragment also retrieves the current player's information from the ProfileViewModel. The player's username is
+ * used to identify the author of the comment.
+ */
 public class QrCodeFragment extends Fragment {
 
     FragmentQrCodeBinding binding;

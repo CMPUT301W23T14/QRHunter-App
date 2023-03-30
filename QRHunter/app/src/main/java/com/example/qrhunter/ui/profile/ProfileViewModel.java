@@ -8,13 +8,21 @@ import com.example.qrhunter.data.model.Player;
 import com.example.qrhunter.data.model.QRCode;
 import com.example.qrhunter.data.repository.PlayerRepository;
 import com.example.qrhunter.data.repository.QRCodeRepository;
+import com.example.qrhunter.utils.PlayerUtil;
 
 import java.util.ArrayList;
 import java.util.Objects;
+/**
+ * The ViewModel for the ProfileFragment that stores and manages data related to the user profile.
+ */
 
 public class ProfileViewModel extends ViewModel {
     private final MutableLiveData<Player> player = new MutableLiveData<>();
-    private final MutableLiveData<ArrayList<QRCode>> scannedQRCodes = new MutableLiveData<>();
+    private final MutableLiveData<Double> highScore = new MutableLiveData<>(0.0);
+    private final MutableLiveData<Double> lowScore = new MutableLiveData<>(0.0);
+
+
+    private final MutableLiveData<ArrayList<QRCode>> scannedQRCodes = new MutableLiveData<>(new ArrayList<>());
     private PlayerRepository playerRepository = new PlayerRepository();
     private QRCodeRepository qrCodeRepository = new QRCodeRepository();
 
@@ -53,11 +61,36 @@ public class ProfileViewModel extends ViewModel {
     public LiveData<ArrayList<QRCode>> getScannedQRCodes(Player player) {
         qrCodeRepository.getScannedQRCodes(player, scannedQRCodes -> {
             this.scannedQRCodes.setValue(scannedQRCodes);
+            this.highScore.setValue(PlayerUtil.calculateHighestScore(scannedQRCodes));
+            this.lowScore.setValue(PlayerUtil.calculateLowestScore(scannedQRCodes));
         });
+
+
 
         return this.scannedQRCodes;
     }
 
+    /**
+     * Removes a QR code from the list of scanned QR codes for the given player and updates the
+     * player's total score.
+     *
+     * @param qrCodeId The ID of the QR code to remove.
+     * @param playerId The ID of the player who scanned the QR code.
+     */
+
+    public LiveData<Double> getHighestScore(){
+        return this.highScore;
+    }
+
+    public LiveData<Double> getLowestScore(){
+        return this.lowScore;
+    }
+
+    /**
+     * Remove a QRCode from a player's list of QrCodes
+     *
+     *
+     */
     public void removeScannedQRCode(String qrCodeId, String playerId) {
         // Update Firestore (reduce score and remove from qr code's playerIds)
         qrCodeRepository.removeQRCodeFromPlayer(qrCodeId, playerId);
@@ -79,4 +112,6 @@ public class ProfileViewModel extends ViewModel {
 
         this.scannedQRCodes.setValue(currentScannedQRCodes);
     }
+
+
 }

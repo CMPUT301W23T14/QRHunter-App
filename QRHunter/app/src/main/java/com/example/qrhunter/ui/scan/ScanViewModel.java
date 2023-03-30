@@ -17,7 +17,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-
+/**
+ * The ScanViewModel class is responsible for handling the logic and data for the scan fragment.
+ */
 public class ScanViewModel extends ViewModel {
     private final MutableLiveData<String> qrCodeContent = new MutableLiveData<>();
     private final MutableLiveData<String> qrCodeHash = new MutableLiveData<>();
@@ -93,9 +95,8 @@ public class ScanViewModel extends ViewModel {
 
     public void setGeolocation(double latitude, double longitude) {
         Location currentLocation = this.location.getValue();
-        // Rounding to one decimal places
-        currentLocation.latitude = Math.round(latitude * 100.0) / 10.0;
-        currentLocation.longitude = Math.round(longitude * 100.0) / 10.0;
+        currentLocation.latitude = Math.round(latitude*10000d)/10000d;
+        currentLocation.longitude = Math.round(longitude*10000d)/10000d;
 
         location.setValue(currentLocation);
     }
