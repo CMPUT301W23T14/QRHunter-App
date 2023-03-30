@@ -1,6 +1,8 @@
 package com.example.qrhunter.data.repository;
 
 
+import android.util.Log;
+
 import com.example.qrhunter.data.model.Comment;
 import com.example.qrhunter.utils.CommentUtil;
 import com.google.firebase.firestore.FieldPath;

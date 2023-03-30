@@ -69,7 +69,7 @@ public class ScanFragment extends Fragment {
                         Navigation.findNavController(binding.getRoot()).navigate(R.id.action_scanFragment_to_afterScanFragment);
 //                        Toast.makeText(activity, scanViewModel.getQRCodeContent().toString(), Toast.LENGTH_SHORT).show();
                         scanViewModel.getQRCodeContent().observe(requireActivity(), newQRCodeContent -> {
-                            Toast.makeText(activity, newQRCodeContent, Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(activity, newQRCodeContent, Toast.LENGTH_SHORT).show();
                         });
                     }
                 });

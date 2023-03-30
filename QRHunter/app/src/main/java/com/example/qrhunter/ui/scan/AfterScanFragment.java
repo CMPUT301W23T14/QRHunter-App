@@ -18,6 +18,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -181,19 +182,26 @@ public class AfterScanFragment extends Fragment {
         binding.saveButton.setOnClickListener(view -> {
             // use the model to add the qrcode
             @SuppressLint("HardwareIds") String deviceId = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
+            boolean added = false;
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             DocumentReference ref = db.collection("qrCodes").document();
             String qrCodeId = ref.getId();
             if (savedPhoto == null) {
-                scanViewModel.completeScan(qrCodeId, deviceId, null);
+                added = scanViewModel.completeScan(qrCodeId, deviceId, null);
+                if (added) {
+                    Toast.makeText(view.getContext(), "QR Code already scanned once!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(view.getContext(), "QR Code not added!", Toast.LENGTH_SHORT).show();
+                }
             } else {
                 // convert the bitmap to a byte array
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 savedPhoto.compress(Bitmap.CompressFormat.PNG, 25, stream);
                 byte[] byteArray = stream.toByteArray();
-                scanViewModel.completeScan(qrCodeId, deviceId, byteArray);
+                added = scanViewModel.completeScan(qrCodeId, deviceId, byteArray);
+                if (added) {
+                    Toast.makeText(view.getContext(), "QR Code already scanned once!", Toast.LENGTH_SHORT).show();
+                }
             }
-
             // navigate to somewhere after this is done
             Navigation.findNavController(binding.getRoot()).navigate(R.id.action_navigation_after_scan_to_navigation_map);
 
@@ -201,5 +209,6 @@ public class AfterScanFragment extends Fragment {
 
         return binding.getRoot();
     }
+
 
 }

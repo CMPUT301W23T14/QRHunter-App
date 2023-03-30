@@ -48,7 +48,7 @@ public class ScanViewModel extends ViewModel {
      *
      * @param playerId The player that's scanning the qr code
      */
-    public void completeScan(String qrCodeId, String playerId, byte[] savedPhoto) {
+    public boolean completeScan(String qrCodeId, String playerId, byte[] savedPhoto) {
         ArrayList<Location> locations = new ArrayList<>();
         ArrayList<String> photos = new ArrayList<>();
 
@@ -64,7 +64,9 @@ public class ScanViewModel extends ViewModel {
             }
         });
 
-        qrCodeRepository.addQRCodeToPlayer(newQRCode, playerId, savedPhoto);
+
+        qrCodeRepository.addQRCodeToPlayer(newQRCode, playerId, savedPhoto, location);
+        return qrCodeRepository.getAdded();
     }
 
     /**
@@ -112,5 +114,6 @@ public class ScanViewModel extends ViewModel {
     public void setPhoto(Bitmap photo) {
         this.photo.setValue(photo);
     }
+
 
 }
