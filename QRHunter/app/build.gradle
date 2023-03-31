@@ -44,6 +44,8 @@ android {
         unitTests.all {
             useJUnitPlatform()
         }
+        animationsDisabled = true
+
     }
 
 }
