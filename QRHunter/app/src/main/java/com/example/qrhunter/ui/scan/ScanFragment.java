@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,7 +31,6 @@ public class ScanFragment extends Fragment {
     private final int MY_PERMISSIONS_REQUEST_CAMERA = 1001;
     private FragmentScanBinding binding;
     private CodeScanner mCodeScanner;
-
 
 
     @Nullable
@@ -64,13 +62,9 @@ public class ScanFragment extends Fragment {
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-//                        Toast.makeText(activity, result.getText(), Toast.LENGTH_SHORT).show();
                         scanViewModel.scanQRCode(result.getText());
                         Navigation.findNavController(binding.getRoot()).navigate(R.id.action_scanFragment_to_afterScanFragment);
-//                        Toast.makeText(activity, scanViewModel.getQRCodeContent().toString(), Toast.LENGTH_SHORT).show();
-                        scanViewModel.getQRCodeContent().observe(requireActivity(), newQRCodeContent -> {
-                            Toast.makeText(activity, newQRCodeContent, Toast.LENGTH_SHORT).show();
-                        });
+
                     }
                 });
             }
