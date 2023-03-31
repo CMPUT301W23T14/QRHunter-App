@@ -96,7 +96,6 @@ public class AfterScanFragment extends Fragment {
                     if (gps_enabled) {
                         Location lastKnownLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                         if (lastKnownLocation != null) {
-                            System.out.println(binding.addGeoLocationButton.isChecked());
                             scanViewModel.setGeolocation(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
                         }
                     }
@@ -184,15 +183,16 @@ public class AfterScanFragment extends Fragment {
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             DocumentReference ref = db.collection("qrCodes").document();
             String qrCodeId = ref.getId();
-            if (savedPhoto == null) {
-                scanViewModel.completeScan(qrCodeId, deviceId, null);
-            } else {
+            byte[] byteArray = null;
+            if (savedPhoto != null) {
                 // convert the bitmap to a byte array
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 savedPhoto.compress(Bitmap.CompressFormat.PNG, 25, stream);
-                byte[] byteArray = stream.toByteArray();
-                scanViewModel.completeScan(qrCodeId, deviceId, byteArray);
+                byteArray = stream.toByteArray();
             }
+            scanViewModel.completeScan(qrCodeId, deviceId, byteArray, scanMessage -> {
+                Toast.makeText(view.getContext(), scanMessage, Toast.LENGTH_SHORT).show();
+            });
 
             // navigate to somewhere after this is done
             Navigation.findNavController(binding.getRoot()).navigate(R.id.action_navigation_after_scan_to_navigation_map);

@@ -43,7 +43,6 @@ public class ScanFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentScanBinding.inflate(inflater, container, false);
 
-
         //request permission to use the camera if permission is not granted
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -64,7 +63,6 @@ public class ScanFragment extends Fragment {
                     public void run() {
                         scanViewModel.scanQRCode(result.getText());
                         Navigation.findNavController(binding.getRoot()).navigate(R.id.action_scanFragment_to_afterScanFragment);
-
                     }
                 });
             }

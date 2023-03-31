@@ -30,7 +30,7 @@ public class QRCodeRepository extends DataRepository {
      * @param playerId The id of the player
      * @param qrCode   The id of the qrCode
      */
-    public void addQRCodeToPlayer(QRCode qrCode, String playerId, byte[] savedPhoto) {
+    public void addQRCodeToPlayer(QRCode qrCode, String playerId, byte[] savedPhoto, RepositoryCallback<String> repositoryCallback) {
         PlayerRepository playerRepository = new PlayerRepository();
 
         // Check whether qr code exists.
@@ -57,6 +57,8 @@ public class QRCodeRepository extends DataRepository {
 
                 // Upload photo to Firebase Storage
                 playerRepository.uploadPhoto(savedPhoto, qrCodeId, playerId);
+
+                repositoryCallback.onSuccess("QR Code successfully added!");
             } else {
                 // If qr code exists, update the existing document in Firestore
                 String photoPath;
@@ -87,8 +89,12 @@ public class QRCodeRepository extends DataRepository {
                             .update("photos", FieldValue.arrayUnion(qrCode.getPhotos().get(0)));
                 }
 
-                if (!existingQRCode.getPlayerIds().contains(playerId))
+                if (!existingQRCode.getPlayerIds().contains(playerId)) {
                     playerRepository.addScoreToPlayer(playerId, qrCode.getScore());
+                    repositoryCallback.onSuccess("QR Code successfully added!");
+                } else {
+                    repositoryCallback.onSuccess("QR Code already scanned.");
+                }
             }
         });
     }
