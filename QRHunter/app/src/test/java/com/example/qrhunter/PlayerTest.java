@@ -21,7 +21,6 @@ public class PlayerTest {
         assertEquals("player123", player.getId());
         assertEquals("John", player.getUsername());
         assertEquals("", player.getPhoneNumber());
-        assertEquals(0, player.getRank());
         assertEquals(0, player.getTotalScore(), 0.001);
     }
 
@@ -31,12 +30,11 @@ public class PlayerTest {
     @Test
     public void testConstructorWithAllFields() {
         // Create a test player that already exists
-        Player player = new Player("player123", "John", "123-456-7890", 3, 500);
+        Player player = new Player("player123", "John", "123-456-7890", 500);
         // Test all getters
         assertEquals("player123", player.getId());
         assertEquals("John", player.getUsername());
         assertEquals("123-456-7890", player.getPhoneNumber());
-        assertEquals(3, player.getRank());
         assertEquals(500.0, player.getTotalScore(), 0.001);
     }
 
@@ -53,9 +51,6 @@ public class PlayerTest {
         // Set phone-number and test
         player.setPhoneNumber("987-654-3210");
         assertEquals("987-654-3210", player.getPhoneNumber());
-        // Set rank and test
-        player.setRank(2);
-        assertEquals(2, player.getRank());
         // Set totalscore and test
         player.setTotalScore(1000.0);
         assertEquals(1000.0, player.getTotalScore(), 0.001);

@@ -1,5 +1,7 @@
 package com.example.qrhunter.ui.qrcode;
 
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -98,8 +100,15 @@ public class QrCodeFragment extends Fragment {
                                 binding.scannedByText.setText(amountScannedBy.toString() + " players");
                             }
                         });
+
                         // Get and bind the comments
                         qrCodeViewModel.getComments(qrCode).observe(getViewLifecycleOwner(), newComments -> {
+                            if (binding.newCommentEditText.getText().length() <= 0) {
+                                binding.newCommentTextLayout.setHelperTextColor(ColorStateList.valueOf(Color.rgb(179, 38, 30)));
+                                binding.newCommentTextLayout.setHelperText("Comment cannot be empty!");
+                                return;
+                            }
+
                             comments.clear();
                             comments.addAll(newComments);
                             commentAdapter.notifyDataSetChanged();
@@ -111,6 +120,7 @@ public class QrCodeFragment extends Fragment {
 
                             qrCodeViewModel.addComment(qrCode, newComment);
                             binding.newCommentEditText.setText("");
+                            binding.newCommentTextLayout.setHelperText("");
                             binding.newCommentEditText.clearFocus();
                         });
                     }
