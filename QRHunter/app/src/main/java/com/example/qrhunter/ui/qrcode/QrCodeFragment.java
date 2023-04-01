@@ -84,13 +84,6 @@ public class QrCodeFragment extends Fragment {
 
                         // get addresses
                         address.set(qrCodeViewModel.getAddress(qrCode, getContext()));
-                        /*
-                        ArrayList<String> testing = new ArrayList<String>();
-                        testing.add("4455 Landing Lange, APT 4, Louisville, KY 40018-1234");
-                        testing.add("90210 Broadway Blvd, Nashville, TN 37011-5678");
-                        testing.add("6543 N 9th Street, APO, AA 33608-1234");
-                        address.set(testing);
-                         */
                         addressAdapter.set(new AddressAdapter(address.get()));
                         rvAddress.setAdapter(addressAdapter.get());
 
