@@ -64,7 +64,6 @@ public class ProfileFragment extends Fragment {
                 binding.username.setText(player.getUsername());
                 binding.phoneNumberEditText.setText(player.getPhoneNumber());
                 binding.totalScore.setText(Double.toString(player.getTotalScore()));
-                binding.rank.setText(Integer.toString(player.getRank()));
 
                 profileViewModel.getScannedQRCodes(player).observe(getViewLifecycleOwner(), qrCodes -> {
                 scannedQRCodes.clear();
