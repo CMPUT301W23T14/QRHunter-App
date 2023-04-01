@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,7 +33,6 @@ public class ScanFragment extends Fragment {
     private CodeScanner mCodeScanner;
 
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -44,7 +42,6 @@ public class ScanFragment extends Fragment {
 
         // Inflate the layout for this fragment
         binding = FragmentScanBinding.inflate(inflater, container, false);
-
 
         //request permission to use the camera if permission is not granted
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA)
@@ -64,13 +61,8 @@ public class ScanFragment extends Fragment {
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-//                        Toast.makeText(activity, result.getText(), Toast.LENGTH_SHORT).show();
                         scanViewModel.scanQRCode(result.getText());
                         Navigation.findNavController(binding.getRoot()).navigate(R.id.action_scanFragment_to_afterScanFragment);
-//                        Toast.makeText(activity, scanViewModel.getQRCodeContent().toString(), Toast.LENGTH_SHORT).show();
-                        scanViewModel.getQRCodeContent().observe(requireActivity(), newQRCodeContent -> {
-                            Toast.makeText(activity, newQRCodeContent, Toast.LENGTH_SHORT).show();
-                        });
                     }
                 });
             }
