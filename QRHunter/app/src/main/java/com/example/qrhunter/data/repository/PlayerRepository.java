@@ -145,5 +145,9 @@ public class PlayerRepository extends DataRepository {
 
     }
 
+    public void addPhoneNumber(String playerID, String phoneNumber) {
+        db.collection("players").document(playerID).update("phoneNumber", phoneNumber);
+    }
+
 
 }

@@ -107,5 +107,9 @@ public class ProfileViewModel extends ViewModel {
         this.scannedQRCodes.setValue(currentScannedQRCodes);
     }
 
+    public void addPhoneNumber(String playerID, String phoneNumber) {
+        playerRepository.addPhoneNumber(playerID, phoneNumber);
+    }
+
 
 }

@@ -19,14 +19,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.qrhunter.data.model.QRCode;
 import com.example.qrhunter.databinding.FragmentProfileBinding;
 import com.example.qrhunter.ui.adapters.QRCodesAdapter;
+import com.jakewharton.rxbinding4.widget.RxTextView;
 import com.example.qrhunter.utils.PlayerUtil;
 
 import java.util.ArrayList;
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.rxjava3.disposables.Disposable;
 import java.util.Comparator;
 
 public class ProfileFragment extends Fragment {
 
     private FragmentProfileBinding binding;
+    private Disposable phoneNumberText;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -55,6 +61,11 @@ public class ProfileFragment extends Fragment {
 
         rvQRCodes.setAdapter(qrCodesAdapter);
         rvQRCodes.setLayoutManager(new LinearLayoutManager(requireContext()));
+
+        phoneNumberText = RxTextView.textChanges(binding.phoneNumberEditText).debounce(1000, TimeUnit.MILLISECONDS).
+                subscribe(phoneNumber -> {
+                    profileViewModel.addPhoneNumber(deviceId, Objects.requireNonNull(binding.phoneNumberEditText.getText()).toString());
+                });
 
         // Bind player info to texts
         profileViewModel.getPlayer(deviceId).observe(getViewLifecycleOwner(), player -> {
@@ -101,12 +112,12 @@ public class ProfileFragment extends Fragment {
                 });
             }
         });
-
         return binding.getRoot();
     }
 
     @Override
     public void onDestroyView() {
+        phoneNumberText.dispose();
         super.onDestroyView();
         binding = null;
     }
