@@ -62,7 +62,7 @@ public class ProfileFragment extends Fragment {
         rvQRCodes.setAdapter(qrCodesAdapter);
         rvQRCodes.setLayoutManager(new LinearLayoutManager(requireContext()));
 
-        phoneNumberText = RxTextView.textChanges(binding.phoneNumberEditText).debounce(2000, TimeUnit.MILLISECONDS).
+        phoneNumberText = RxTextView.textChanges(binding.phoneNumberEditText).debounce(1000, TimeUnit.MILLISECONDS).
                 subscribe(phoneNumber -> {
                     profileViewModel.addPhoneNumber(deviceId, Objects.requireNonNull(binding.phoneNumberEditText.getText()).toString());
                 });
