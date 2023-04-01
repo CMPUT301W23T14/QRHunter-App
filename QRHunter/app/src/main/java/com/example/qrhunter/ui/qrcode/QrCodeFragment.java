@@ -15,10 +15,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.qrhunter.data.model.Comment;
 import com.example.qrhunter.databinding.FragmentQrCodeBinding;
+import com.example.qrhunter.ui.adapters.AddressAdapter;
 import com.example.qrhunter.ui.adapters.CommentAdapter;
 import com.example.qrhunter.ui.profile.ProfileViewModel;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicReference;
+
 /**
 
  * QrCodeFragment displays the details of a QR code, including its name, score, visual representation, the number
@@ -62,6 +65,13 @@ public class QrCodeFragment extends Fragment {
         rvComments.setAdapter(commentAdapter);
         rvComments.setLayoutManager(new LinearLayoutManager(requireContext()));
 
+        // recycler view for addresses
+        RecyclerView rvAddress = binding.QRCodeAddressRecyclerView;
+        AtomicReference<ArrayList<String>> address = new AtomicReference<>(new ArrayList<>());
+        AtomicReference<AddressAdapter> addressAdapter = new AtomicReference<>(new AddressAdapter(address.get()));
+        rvAddress.setAdapter(addressAdapter.get());
+        rvAddress.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
+
         // Bind data to ui
         qrCodeViewModel.getQRCode(qrCodeId)
                 .observe(getViewLifecycleOwner(), qrCode -> {
@@ -69,7 +79,18 @@ public class QrCodeFragment extends Fragment {
                         binding.QRName.setText(qrCode.getName());
                         binding.QRCodeScoretext.setText(Double.toString(qrCode.getScore()));
                         binding.QRVisual.setText(qrCode.getVisualRepresentation());
-                        binding.QRCodeAddresstext.setText(qrCodeViewModel.getAddress(qrCode, getContext()));
+
+                        // get addresses
+                        address.set(qrCodeViewModel.getAddress(qrCode, getContext()));
+                        /*
+                        ArrayList<String> testing = new ArrayList<String>();
+                        testing.add("4455 Landing Lange, APT 4, Louisville, KY 40018-1234");
+                        testing.add("90210 Broadway Blvd, Nashville, TN 37011-5678");
+                        testing.add("6543 N 9th Street, APO, AA 33608-1234");
+                        address.set(testing);
+                         */
+                        addressAdapter.set(new AddressAdapter(address.get()));
+                        rvAddress.setAdapter(addressAdapter.get());
 
                         // Get and bind the amount of players who scanned the code
                         qrCodeViewModel.getScannedBy(qrCode).observe(getViewLifecycleOwner(), amountScannedBy -> {

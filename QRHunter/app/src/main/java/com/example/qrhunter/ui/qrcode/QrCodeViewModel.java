@@ -60,24 +60,20 @@ public class QrCodeViewModel extends ViewModel {
         });
     }
 
-    public String getAddress(QRCode qrCode, Context context){
+    public ArrayList<String> getAddress(QRCode qrCode, Context context){
         Geocoder geocoder;
         List<Address> addresses;
+        ArrayList<String> stringAddresses = new ArrayList<>();
         geocoder = new Geocoder(context, Locale.getDefault());
-        try {
-            addresses = geocoder.getFromLocation(qrCode.getLocations().get(0).getLatitude(), qrCode.getLocations().get(0).getLongitude(), 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+        for(int i = 0; i < qrCode.getLocations().size(); i++){
+            try {
+                addresses = geocoder.getFromLocation(qrCode.getLocations().get(i).getLatitude(), qrCode.getLocations().get(0).getLongitude(), 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+                String address = addresses.get(0).getAddressLine(0);
+                stringAddresses.add(String.format("%s", address));
+            } catch (Exception e) {
+                stringAddresses.add("");
+            }
         }
-        catch (Exception e){
-            return "None, None, None";
-        }
-        String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-        String city = addresses.get(0).getLocality();
-        String postalCode = addresses.get(0).getPostalCode();
-        if(city == null && postalCode == null) {
-            return String.format("%s", address);
-        }
-        else{
-            return String.format("%s, %s, %s", address, city, postalCode);
-        }
+        return stringAddresses;
     }
 }
