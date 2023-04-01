@@ -3,16 +3,16 @@ package com.example.qrhunter.ui.profile;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,12 +20,14 @@ import com.example.qrhunter.data.model.QRCode;
 import com.example.qrhunter.databinding.FragmentProfileBinding;
 import com.example.qrhunter.ui.adapters.QRCodesAdapter;
 import com.jakewharton.rxbinding4.widget.RxTextView;
+import com.example.qrhunter.utils.PlayerUtil;
 
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.disposables.Disposable;
+import java.util.Comparator;
 
 public class ProfileFragment extends Fragment {
 
@@ -71,15 +73,43 @@ public class ProfileFragment extends Fragment {
                 profileViewModel.getScannedQRCodes(player).observe(getViewLifecycleOwner(), qrCodes -> {
                     scannedQRCodes.clear();
                     scannedQRCodes.addAll(qrCodes);
+
+                    // Sort by name. If we want uppercase first, remove .toLowerCase()
+                    scannedQRCodes.sort(Comparator.comparing(qrCode -> qrCode.getName().toLowerCase()));
+
                     qrCodesAdapter.notifyDataSetChanged();
                     binding.scannedText.setText("(" + qrCodes.size() + ")");
+
+                    if (qrCodes.isEmpty()) {
+                        return;
+                    }
+
+                    // Lowest and highest scoring qr code
+                    QRCode lowScoreQRCode = PlayerUtil.calculateLowestScoreQRCode(qrCodes);
+                    QRCode highScoreQRCode = PlayerUtil.calculateHighestScoreQRCode(qrCodes);
+
+
+                    binding.lowestScore.setText(Double.toString(lowScoreQRCode.getScore()));
+                    binding.highestScore.setText(Double.toString(highScoreQRCode.getScore()));
+
+                    // Set navigation to lowest and highest scoring qr code
+                    NavController navController = NavHostFragment.findNavController(this);
+                    binding.lowestScoreContainer.setOnClickListener(v -> {
+                        ProfileFragmentDirections.ActionNavigationProfileToQrCodeFragment action =
+                                ProfileFragmentDirections.actionNavigationProfileToQrCodeFragment(lowScoreQRCode.getId());
+                        navController.navigate(action);
+                    });
+                    binding.highestScoreContainer.setOnClickListener(v -> {
+                        ProfileFragmentDirections.ActionNavigationProfileToQrCodeFragment action =
+                                ProfileFragmentDirections.actionNavigationProfileToQrCodeFragment(highScoreQRCode.getId());
+                        navController.navigate(action);
+                    });
                 });
                 phoneNumberText = RxTextView.textChanges(binding.phoneNumberEditText).debounce(2000, TimeUnit.MILLISECONDS)
                         .subscribe(phoneNumber -> {
                             profileViewModel.addPhoneNumber(player.getId(), Objects.requireNonNull(binding.phoneNumberEditText.getText()).toString());
                         });
             }
-
         });
         return binding.getRoot();
     }

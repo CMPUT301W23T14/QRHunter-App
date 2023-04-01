@@ -11,18 +11,21 @@ import com.example.qrhunter.data.model.Location;
 import com.example.qrhunter.data.model.QRCode;
 import com.example.qrhunter.data.repository.PlayerRepository;
 import com.example.qrhunter.data.repository.QRCodeRepository;
+import com.example.qrhunter.data.repository.RepositoryCallback;
 import com.example.qrhunter.utils.QRCodeUtil;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
+/**
+ * The ScanViewModel class is responsible for handling the logic and data for the scan fragment.
+ */
 public class ScanViewModel extends ViewModel {
     private final MutableLiveData<String> qrCodeContent = new MutableLiveData<>();
     private final MutableLiveData<String> qrCodeHash = new MutableLiveData<>();
     private final MutableLiveData<Location> location = new MutableLiveData<>(new Location(0, 0));
     private final MutableLiveData<Bitmap> photo = new MutableLiveData<>(null);
+    private final MutableLiveData<String> scanMessage = new MutableLiveData<>("");
     private QRCodeRepository qrCodeRepository = new QRCodeRepository();
     private PlayerRepository playerRepository = new PlayerRepository();
 
@@ -44,9 +47,12 @@ public class ScanViewModel extends ViewModel {
     /**
      * Called when user has reviewed the QR Code details and wants to add to account
      *
-     * @param playerId The player that's scanning the qr code
+     * @param playerId           The player that's scanning the qr code
+     * @param savedPhoto         The bytes of the photo location, could be null
+     * @param repositoryCallback The repository callback that has the scan message. Ex: "QR Code already scanned".
+     *                           This is a quick hack to display a toast from a method in the repository class
      */
-    public void completeScan(String qrCodeId, String playerId, byte[] savedPhoto) {
+    public void completeScan(String qrCodeId, String playerId, byte[] savedPhoto, RepositoryCallback<String> repositoryCallback) {
         ArrayList<Location> locations = new ArrayList<>();
         ArrayList<String> photos = new ArrayList<>();
 
@@ -62,7 +68,7 @@ public class ScanViewModel extends ViewModel {
             }
         });
 
-        qrCodeRepository.addQRCodeToPlayer(newQRCode, playerId, savedPhoto);
+        qrCodeRepository.addQRCodeToPlayer(newQRCode, playerId, savedPhoto, repositoryCallback);
     }
 
     /**
@@ -93,8 +99,8 @@ public class ScanViewModel extends ViewModel {
 
     public void setGeolocation(double latitude, double longitude) {
         Location currentLocation = this.location.getValue();
-        currentLocation.latitude = Math.round(latitude*10000d)/10000d;
-        currentLocation.longitude = Math.round(longitude*10000d)/10000d;
+        currentLocation.latitude = Math.round(latitude * 10000d) / 10000d;
+        currentLocation.longitude = Math.round(longitude * 10000d) / 10000d;
 
         location.setValue(currentLocation);
     }
@@ -111,4 +117,7 @@ public class ScanViewModel extends ViewModel {
         this.photo.setValue(photo);
     }
 
+    public LiveData<String> getScanMessage() {
+        return scanMessage;
+    }
 }

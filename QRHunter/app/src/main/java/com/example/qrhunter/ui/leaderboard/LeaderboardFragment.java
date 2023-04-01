@@ -33,7 +33,7 @@ import java.util.Objects;
 public class LeaderboardFragment extends Fragment {
     private FragmentLeaderboardBinding binding;
 
-    private LeaderboardViewModel leaderboardViewModel;
+    public LeaderboardViewModel leaderboardViewModel;
 
     private ListView listView;
 
