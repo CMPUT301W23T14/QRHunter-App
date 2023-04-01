@@ -62,6 +62,11 @@ public class ProfileFragment extends Fragment {
         rvQRCodes.setAdapter(qrCodesAdapter);
         rvQRCodes.setLayoutManager(new LinearLayoutManager(requireContext()));
 
+        phoneNumberText = RxTextView.textChanges(binding.phoneNumberEditText).debounce(2000, TimeUnit.MILLISECONDS).
+                subscribe(phoneNumber -> {
+                    profileViewModel.addPhoneNumber(deviceId, Objects.requireNonNull(binding.phoneNumberEditText.getText()).toString());
+                });
+
         // Bind player info to texts
         profileViewModel.getPlayer(deviceId).observe(getViewLifecycleOwner(), player -> {
             if (!player.getId().isEmpty()) {
@@ -105,10 +110,6 @@ public class ProfileFragment extends Fragment {
                         navController.navigate(action);
                     });
                 });
-                phoneNumberText = RxTextView.textChanges(binding.phoneNumberEditText).debounce(2000, TimeUnit.MILLISECONDS)
-                        .subscribe(phoneNumber -> {
-                            profileViewModel.addPhoneNumber(player.getId(), Objects.requireNonNull(binding.phoneNumberEditText.getText()).toString());
-                        });
             }
         });
         return binding.getRoot();
