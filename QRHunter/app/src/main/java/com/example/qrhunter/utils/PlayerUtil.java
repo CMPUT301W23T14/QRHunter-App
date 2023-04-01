@@ -22,10 +22,9 @@ public final class PlayerUtil {
     public static Player convertDocumentToPlayer(DocumentSnapshot documentSnapshot) {
         String username = documentSnapshot.get("username").toString();
         String phoneNumber = documentSnapshot.get("phoneNumber").toString();
-        int rank = documentSnapshot.getLong("rank").intValue();
         int totalScore = documentSnapshot.getLong("totalScore").intValue();
 
-        Player player = new Player(documentSnapshot.getId(), username, phoneNumber, rank, totalScore);
+        Player player = new Player(documentSnapshot.getId(), username, phoneNumber, totalScore);
 
         return player;
     }
@@ -40,8 +39,6 @@ public final class PlayerUtil {
         Map<String, Object> playerHashMap = new HashMap<>();
         playerHashMap.put("username", player.getUsername());
         playerHashMap.put("phoneNumber", player.getPhoneNumber());
-        // TODO: Calculate the correct rank
-        playerHashMap.put("rank", player.getRank());
         playerHashMap.put("totalScore", player.getTotalScore());
 
         return playerHashMap;
@@ -98,7 +95,7 @@ public final class PlayerUtil {
             if (i == 0) {
                 currentHighestScoreQRCode = qrcode;
             } else {
-                if (qrcode.getScore() > currentHighestScoreQRCode.getScore()) ;
+                if (qrcode.getScore() > currentHighestScoreQRCode.getScore())
                 {
                     currentHighestScoreQRCode = qrcode;
                 }
