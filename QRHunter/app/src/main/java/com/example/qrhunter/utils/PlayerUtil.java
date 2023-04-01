@@ -95,7 +95,7 @@ public final class PlayerUtil {
             if (i == 0) {
                 currentHighestScoreQRCode = qrcode;
             } else {
-                if (qrcode.getScore() > currentHighestScoreQRCode.getScore()) ;
+                if (qrcode.getScore() > currentHighestScoreQRCode.getScore())
                 {
                     currentHighestScoreQRCode = qrcode;
                 }
