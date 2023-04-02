@@ -36,6 +36,8 @@ public class QRCodeRepository extends DataRepository {
         // Check whether qr code exists.
         doesQRCodeExist(qrCode, existingQRCode -> {
             if (existingQRCode == null) {
+                Log.d("++++++++", "addQRCodeToPlayer: "+qrCode.isUnique());
+                qrCode.setUnique();
                 // If qr code doesn't exist, add a new document to Firestore
                 String photoPath;
                 ArrayList<String> photos = new ArrayList<>();
@@ -49,7 +51,6 @@ public class QRCodeRepository extends DataRepository {
                     qrCode.setPhotos(photos);
                 }
 
-
                 Map<String, Object> qrCodeHashMap = QRCodeUtil.convertQRCodeToHashmap(qrCode);
                 db.collection("qrCodes").document(qrCodeId).set(qrCodeHashMap).addOnCompleteListener(task -> {
                     playerRepository.addScoreToPlayer(playerId, qrCode.getScore());
@@ -57,6 +58,7 @@ public class QRCodeRepository extends DataRepository {
                 // Upload photo to Firebase Storage
                 playerRepository.uploadPhoto(savedPhoto, qrCodeId, playerId);
             } else {
+                qrCode.setUnique();
                 // If qr code exists, update the existing document in Firestore
                 String photoPath;
                 ArrayList<String> existingPhotos = qrCode.getPhotos();
@@ -130,6 +132,7 @@ public class QRCodeRepository extends DataRepository {
                             Log.d("QRCodeRepository", "Photo path removal failed");
                         });
             }
+            qrCode1.setUnique();
         });
 
 

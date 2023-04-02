@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,6 +23,9 @@ import com.example.qrhunter.utils.PlayerUtil;
 import com.example.qrhunter.utils.QRCodeUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ProfileFragment extends Fragment {
 
@@ -35,6 +39,32 @@ public class ProfileFragment extends Fragment {
 
         //Get ViewModels
         ProfileViewModel profileViewModel = new ViewModelProvider(getActivity()).get(ProfileViewModel.class);
+
+        // Get List of all QR codes
+        LiveData<List<QRCode>> qrList = profileViewModel.uniqueQRCodes();
+        // Get the list of QR codes scanned by only one player
+        qrList.observe(getViewLifecycleOwner(), qrCodes -> {
+            HashMap<String, Double> scoreMap = new HashMap<>();
+            HashMap<String, String> playerMap = new HashMap<>();
+            for (QRCode qrCode : qrCodes) {
+                if (qrCode.getPlayerIds().size() == 1){
+                    scoreMap.put(qrCode.getId(), qrCode.getScore());
+                    playerMap.put(qrCode.getId(), qrCode.getPlayerIds().get(0));
+                }
+            }
+            // Sorting the score map
+            HashMap<String, Double> sortedScoreMap = (HashMap<String, Double>) QRCodeUtil.sortByValue(scoreMap);
+            HashMap<String, Integer> uniqueHighestQRCode = (HashMap<String, Integer>) QRCodeUtil.checkUniqueQRCode(deviceId, sortedScoreMap, playerMap);
+
+            // Set the rank of the QR code for the current player
+            for (QRCode qrCode : qrCodes) {
+                if (uniqueHighestQRCode.containsKey(qrCode.getId()) && qrCode.isUnique()){
+                    qrCode.setHighestUnique();
+                    qrCode.setRank(uniqueHighestQRCode.get(qrCode.getId()));
+                    Log.d("=========================", "onCreateView: "+qrCode.getId()+" "+qrCode.getRank());
+                }
+            }
+        });
 
         // Inflate the layout for this fragment
         binding = FragmentProfileBinding.inflate(inflater, container, false);
@@ -79,6 +109,30 @@ public class ProfileFragment extends Fragment {
                 profileViewModel.getLowestScore().observe(getViewLifecycleOwner(), lowScore -> {
                     binding.lowestScore.setText(Double.toString(lowScore));
             });
+                /*// get all qr codes from players
+                // make a hash score, playerList
+                // sort hash score for playerlist of size 1
+                // get the player id from the player list
+                // display it in the player profile
+                LiveData<List<QRCode>> qrList = profileViewModel.uniqueQRCodes();
+
+                qrList.observe(getViewLifecycleOwner(), qrCodes -> {
+                    HashMap<String, Double> scoreMap = new HashMap<>();
+                    HashMap<String, String> playerMap = new HashMap<>();
+                    for (QRCode qrCode : qrCodes) {
+                        if (qrCode.getPlayerIds().size() == 1){
+                            scoreMap.put(qrCode.getId(), qrCode.getScore());
+                            playerMap.put(qrCode.getId(), qrCode.getPlayerIds().get(0));
+                        }
+                    }
+                    HashMap<String, Double> sortedScoreMap = (HashMap<String, Double>) QRCodeUtil.sortByValue(scoreMap);
+                    int count = 0;
+                    for (Map.Entry<String, Double> entry : sortedScoreMap.entrySet()) {
+                        if (entry.getKey().equals(playerMap.get(entry.getKey())) && deviceId.equals(playerMap.get(entry.getKey()))){
+                        }
+                        count++;
+                    }
+                });*/
 
 
 
