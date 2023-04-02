@@ -25,8 +25,9 @@ import com.google.zxing.Result;
 
 
 /**
- * This screen might make more sense as an activity
+ * Fragment which displays the ability to scan QRCodes.
  */
+
 public class ScanFragment extends Fragment {
     private final int MY_PERMISSIONS_REQUEST_CAMERA = 1001;
     private FragmentScanBinding binding;

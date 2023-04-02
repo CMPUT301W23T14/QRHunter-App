@@ -11,6 +11,9 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.qrhunter.data.repository.PlayerRepository;
 import com.example.qrhunter.databinding.ActivityMainBinding;
+/**
+ * Responsible for connecting components of the app in order for the application to run.
+ */
 
 public class MainActivity extends AppCompatActivity {
 
