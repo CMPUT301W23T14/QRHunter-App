@@ -17,6 +17,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Gets the QR code with the specified ID.
+ *
+ * @param qrCodeId The ID of the QR code to get.
+ * @return The QR code to be returned.
+ */
+
 public class QrCodeViewModel extends ViewModel {
     private final MutableLiveData<QRCode> qrCode = new MutableLiveData<>(null);
     private final MutableLiveData<Integer> scannedBy = new MutableLiveData<>(0);
