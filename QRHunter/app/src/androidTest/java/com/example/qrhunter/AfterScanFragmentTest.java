@@ -69,13 +69,12 @@ public class AfterScanFragmentTest {
         playerRepository = Mockito.mock(PlayerRepository.class);
         List<Player> dummyData = new ArrayList<>();
         dummyData.add(new Player("fsdf", "John Doe", "1234567890",100));
-        MutableLiveData<String> qrCodeHash = new MutableLiveData<>();
         String playerId1 = "456";
         QRCode newQRCode = new QRCode("123", "hashValue", new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<String>() {{
             add(playerId1);
         }});
         QRCodesLiveData = new MutableLiveData<>();
-
+        MutableLiveData<String> qrCodeHash = new MutableLiveData<>();
         scanViewModel.setQRCodeRepository(qrCodeRepository);
         scanViewModel.setPlayerRepository(playerRepository);
         LiveData<List<Player>> mockedLiveData = Mockito.mock(LiveData.class);
@@ -138,16 +137,20 @@ public class AfterScanFragmentTest {
         scanViewModel.completeScan(qrCodeId, playerId, null, repositoryCallback);
     }
 
-    /*
     @Test
     public void scanQRCode_updatesQRCodeContentAndHash() {
         String qrCodeContent = "Hello, World!";
         String expectedHash = QRCodeUtil.generateHash(qrCodeContent);
+        QRCode qrCode = new QRCode("1", expectedHash, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+        List<QRCode> qrCodesList = new ArrayList<>();
+        qrCodesList.add(qrCode);
+        MutableLiveData<List<QRCode>> qrCodesLiveData = new MutableLiveData<>();
         scanViewModel.scanQRCode(qrCodeContent);
-        verify(qrCodeContentObserver).onChanged(qrCodeContent);
-        verify(qrCodeHashObserver).onChanged(anyString());
+        String result = QRCodeUtil.generateHash(qrCodeContent);
+        verify(scanViewModel.getQrCodeLiveDataHash()).setValue(result);
     }
 
+    /*
     @Test
     public void completeScan_addsNewQRCodeToPlayer() {
         String playerId = "player1";

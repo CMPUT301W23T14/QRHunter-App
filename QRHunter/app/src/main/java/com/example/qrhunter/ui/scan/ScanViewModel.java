@@ -127,4 +127,8 @@ public class ScanViewModel extends ViewModel {
     public void setPlayerRepository(PlayerRepository playerRepository) {
         this.playerRepository = playerRepository;
     }
+
+    public MutableLiveData<String> getQrCodeLiveDataHash() {
+        return this.qrCodeHash;
+    }
 }
