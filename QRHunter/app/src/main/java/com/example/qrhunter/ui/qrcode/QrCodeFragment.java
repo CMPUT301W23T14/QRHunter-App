@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
-
  * QrCodeFragment displays the details of a QR code, including its name, score, visual representation, the number
  * of players who have scanned it, and comments from players. Users can also add comments to the QR code. The
  * fragment retrieves the QR code from the ViewModel and populates the UI with its details.
@@ -96,18 +95,18 @@ public class QrCodeFragment extends Fragment {
 
                         // Get and bind the comments
                         qrCodeViewModel.getComments(qrCode).observe(getViewLifecycleOwner(), newComments -> {
-                            if (binding.newCommentEditText.getText().length() <= 0) {
-                                binding.newCommentTextLayout.setHelperTextColor(ColorStateList.valueOf(Color.rgb(179, 38, 30)));
-                                binding.newCommentTextLayout.setHelperText("Comment cannot be empty!");
-                                return;
-                            }
-
                             comments.clear();
                             comments.addAll(newComments);
                             commentAdapter.notifyDataSetChanged();
                         });
 
                         binding.newCommentTextLayout.setEndIconOnClickListener(v -> {
+                            if (binding.newCommentEditText.getText().length() <= 0) {
+                                binding.newCommentTextLayout.setHelperTextColor(ColorStateList.valueOf(Color.rgb(179, 38, 30)));
+                                binding.newCommentTextLayout.setHelperText("Comment cannot be empty!");
+                                return;
+                            }
+
                             String author = profileViewModel.getPlayer().getValue().getUsername();
                             Comment newComment = new Comment(author, binding.newCommentEditText.getText().toString());
 

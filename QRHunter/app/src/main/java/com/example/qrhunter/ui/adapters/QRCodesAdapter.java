@@ -1,6 +1,5 @@
 package com.example.qrhunter.ui.adapters;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +42,7 @@ public class QRCodesAdapter extends RecyclerView.Adapter<QRCodesAdapter.ViewHold
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_qr_code, parent, false);
 
-        return new  ViewHolder(view);
+        return new ViewHolder(view);
     }
 
     @Override
@@ -51,11 +50,10 @@ public class QRCodesAdapter extends RecyclerView.Adapter<QRCodesAdapter.ViewHold
         QRCode qrCode = qrCodes.get(position);
 
         holder.qrCodeNameTextView.setText(qrCode.getName());
-        if (qrCode.isUnique() && qrCode.getRank() != 0){
-            String text = qrCode.getScore() + ", Rank " + qrCode.getRank();
+        if (qrCode.isUnique() && qrCode.getRank() != 0) {
+            String text = qrCode.getScore() + ", Estimated Rank: " + qrCode.getRank();
             holder.qrCodeScoreTextView.setText(text);
-        }
-        else {
+        } else {
             holder.qrCodeScoreTextView.setText(Double.toString(qrCode.getScore()));
         }
 

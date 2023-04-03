@@ -32,7 +32,7 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.disposables.Disposable;
-import java.util.Comparator;
+
 /**
  * This fragment is for viewing other the current player's profile page
  */
@@ -104,7 +104,7 @@ public class ProfileFragment extends Fragment {
                                 qrCode.setRank(Integer.parseInt(rankQRCode.get(1)));
                             }
                         }
-                        
+
                         scannedQRCodes.clear();
                         scannedQRCodes.addAll(qrCodes);
 
@@ -115,6 +115,10 @@ public class ProfileFragment extends Fragment {
                         binding.scannedText.setText("(" + qrCodes.size() + ")");
 
                         if (qrCodes.isEmpty()) {
+                            binding.lowestScore.setText("0");
+                            binding.highestScore.setText("0");
+                            binding.lowestScoreContainer.setOnClickListener(null);
+                            binding.highestScoreContainer.setOnClickListener(null);
                             return;
                         }
 
