@@ -51,8 +51,7 @@ public class QRCodesAdapter extends RecyclerView.Adapter<QRCodesAdapter.ViewHold
         QRCode qrCode = qrCodes.get(position);
 
         holder.qrCodeNameTextView.setText(qrCode.getName());
-        Log.d("!!!!!!!!!!!!!!!!!!!", "onBindViewHolder: "+ qrCode.getRank());
-        if (qrCode.isHighestUnique()){
+        if (qrCode.isUnique() && qrCode.getRank() != 0){
             String text = qrCode.getScore() + ", Rank " + qrCode.getRank();
             holder.qrCodeScoreTextView.setText(text);
         }

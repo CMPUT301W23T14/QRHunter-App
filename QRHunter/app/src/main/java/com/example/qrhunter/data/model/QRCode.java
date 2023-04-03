@@ -242,22 +242,6 @@ public class QRCode {
     }
 
     /**
-     * Sets the highest unique status of this QR code.
-     */
-    public void setHighestUnique() {
-        if (unique) {
-            highestUnique = true;
-        }
-    }
-
-    /**
-     * Returns the highest unique status of this QR code.
-     * @return the highest unique status of this QR code.
-     */
-    public boolean isHighestUnique() {
-        return highestUnique;
-    }
-    /**
      * Sets the rank of this QR code.
      * @param rank the rank to set for this QR code.
      */

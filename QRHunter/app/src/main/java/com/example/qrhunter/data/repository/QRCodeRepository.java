@@ -36,7 +36,6 @@ public class QRCodeRepository extends DataRepository {
         // Check whether qr code exists.
         doesQRCodeExist(qrCode, existingQRCode -> {
             if (existingQRCode == null) {
-                Log.d("++++++++", "addQRCodeToPlayer: "+qrCode.isUnique());
                 qrCode.setUnique();
                 // If qr code doesn't exist, add a new document to Firestore
                 String photoPath;

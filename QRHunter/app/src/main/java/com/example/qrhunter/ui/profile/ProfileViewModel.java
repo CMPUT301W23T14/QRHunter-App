@@ -11,10 +11,14 @@ import com.example.qrhunter.data.model.QRCode;
 import com.example.qrhunter.data.repository.PlayerRepository;
 import com.example.qrhunter.data.repository.QRCodeRepository;
 import com.example.qrhunter.utils.PlayerUtil;
+import com.example.qrhunter.utils.QRCodeUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
+
 /**
  * The ViewModel for the ProfileFragment that stores and manages data related to the user profile.
  */
@@ -108,7 +112,7 @@ public class ProfileViewModel extends ViewModel {
         this.scannedQRCodes.setValue(currentScannedQRCodes);
     }
 
-    public LiveData<List<QRCode>> uniqueQRCodes() {
+    public LiveData<List<QRCode>> getQRCodes(){
         LiveData<List<QRCode>> qrList = qrCodeRepository.getQRCodeList();
         return qrList;
     }

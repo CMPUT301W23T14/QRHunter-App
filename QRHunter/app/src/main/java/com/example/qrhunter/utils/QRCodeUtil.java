@@ -7,6 +7,7 @@ import com.google.common.hash.Hashing;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -162,18 +163,17 @@ public final class QRCodeUtil {
         return temp;
     }
 
-    public static HashMap<String, Integer> checkUniqueQRCode(String deviceId, HashMap<String, Double> sortedMap, HashMap<String, String> playerMap) {
+    public static List<String> checkUniqueQRCode(String deviceId, HashMap<String, Double> sortedMap, HashMap<String, String> playerMap) {
         Integer count = 0;
-        HashMap<String, Integer> id = new HashMap<>();
+        List<String> id = new ArrayList<>();
         for (Map.Entry<String, Double> entry : sortedMap.entrySet()) {
             String key = entry.getKey();
             if (playerMap.containsKey(key)) {
                 if (playerMap.get(key).equals(deviceId)) {
-                    Log.d("#####################", "checkUniqueQRCode: "+key+" "+deviceId);
-                    id.put(key, count+1);
+                    id.add(key);
+                    id.add(String.valueOf(count+1));
                     break;
                 }
-
             }
             count++;
         }
