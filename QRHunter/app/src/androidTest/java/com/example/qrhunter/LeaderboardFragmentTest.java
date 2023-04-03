@@ -3,31 +3,45 @@ package com.example.qrhunter;
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.pressImeActionButton;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+
 import static org.hamcrest.CoreMatchers.anything;
 
+import android.provider.Settings;
 import android.view.View;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.test.InstrumentationRegistry;
+import androidx.test.core.app.ActivityScenario;
+import androidx.test.espresso.Espresso;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.action.CoordinatesProvider;
 import androidx.test.espresso.action.GeneralClickAction;
 import androidx.test.espresso.action.Press;
 import androidx.test.espresso.action.Tap;
+import androidx.test.espresso.action.ViewActions;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.example.qrhunter.MainActivity;
+import com.example.qrhunter.R;
 import com.example.qrhunter.data.model.Player;
 import com.example.qrhunter.data.repository.PlayerRepository;
 import com.example.qrhunter.ui.leaderboard.LeaderboardViewModel;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -42,10 +56,10 @@ import java.util.List;
 @RunWith(MockitoJUnitRunner.class)
 public class LeaderboardFragmentTest {
 
-    //    @Rule
+//    @Rule
 //    public ActivityScenarioRule<MainActivity> activityScenarioRule = new ActivityScenarioRule<>(MainActivity.class);
-    @Rule
-    public ActivityScenarioRule<MainActivity> activityScenarioRule = new ActivityScenarioRule<>(MainActivity.class);
+@Rule
+public ActivityScenarioRule<MainActivity> activityScenarioRule = new ActivityScenarioRule<>(MainActivity.class);
 
 
     @Before
@@ -54,9 +68,9 @@ public class LeaderboardFragmentTest {
         PlayerRepository playerRepository = Mockito.mock(PlayerRepository.class);
         LeaderboardViewModel leaderboardViewModel = Mockito.mock(LeaderboardViewModel.class);
         List<Player> dummyData = new ArrayList<>();
-        dummyData.add(new Player("fsdf", "John Doe", "1234567890", 100));
+        dummyData.add(new Player("fsdf", "John Doe", "1234567890",100));
         dummyData.add(new Player("fsdf1", "Jane Doe", "1234567890", 90));
-        dummyData.add(new Player("fsdf2", "John Smith", "1234567890", 80));
+        dummyData.add(new Player("fsdf2",   "John Smith", "1234567890", 80));
         dummyData.add(new Player("fsd43f", "Jane Smith", "1234567890", 70));
         dummyData.add(new Player("fsd5f", "John Doe", "1234567890", 60));
 
@@ -82,8 +96,10 @@ public class LeaderboardFragmentTest {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Player player = new Player("fsdwergibhliuhgrf", "TestingWinner", "1234567890", 99999999);
         db.collection("players").document("TestPlayer").set(player);
-    }
 
+
+
+    }
     /**
      * Tests that the leaderboard fragment is displayed when you navigate to it
      */
@@ -127,12 +143,17 @@ public class LeaderboardFragmentTest {
         onView(withId(R.id.leaderboard_list_view)).check(matches(isDisplayed()));
 
 
+
+
+
+
         // Click on the first item in the list
 //        onView(withId(R.id.leaderboard_list_view)).perform(click());
         onData(anything())
                 .inAdapterView(withId(R.id.leaderboard_list_view))
                 .atPosition(0)
                 .perform(click());
+
 
 
         // Check that the navigation to the profile fragment occurred
@@ -153,7 +174,6 @@ public class LeaderboardFragmentTest {
 
 
     }
-
     @Test
     public void testRefreshButton() {
         // Launch the leaderboard fragment
@@ -195,6 +215,7 @@ public class LeaderboardFragmentTest {
     }
 
 
+
     @Test
     public void testSearchView() {
         // Launch the leaderboard fragment
@@ -205,7 +226,7 @@ public class LeaderboardFragmentTest {
         }
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         PlayerRepository playerRepository = new PlayerRepository();
-        Player player = new Player("fsdwergibhliuhgrf", "Rr0zlcsK1JDDSDd@Q9#*kLT6TS8aPGLBmjU2iv@mvE8eTmXqkg", "1234567890", 100);
+        Player player = new Player("fsdwergibhliuhgrf", "Rr0zlcsK1JDDSDd@Q9#*kLT6TS8aPGLBmjU2iv@mvE8eTmXqkg", "1234567890",  100);
         db.collection("players").document("TestPlayer").set(player);
 
 
@@ -234,11 +255,14 @@ public class LeaderboardFragmentTest {
                         view.getLocationOnScreen(locationOnScreen);
                         int x = locationOnScreen[0] + 16; // Adjust this value to match the size of your search icon
                         int y = locationOnScreen[1] + view.getHeight() / 2;
-                        return new float[]{x, y};
+                        return new float[] {x, y};
                     }
                 },
                 Press.FINGER
         ));
+
+
+
 
 
         onView(withId(R.id.leaderboard_search_user))
