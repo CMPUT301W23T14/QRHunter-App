@@ -18,6 +18,7 @@ import com.example.qrhunter.databinding.FragmentOtherProfileBinding;
 import com.example.qrhunter.ui.adapters.QRCodesAdapter;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 /**
  * This fragment is for viewing other players' profile page
@@ -60,11 +61,11 @@ public class OtherProfileFragment extends Fragment {
                 binding.username.setText(player.getUsername());
                 binding.phoneNumberEditText.setText(player.getPhoneNumber());
                 binding.totalScore.setText(Double.toString(player.getTotalScore()));
-                binding.rank.setText(Integer.toString(player.getRank()));
 
                 otherProfileViewModel.getScannedQRCodes(player).observe(getViewLifecycleOwner(), qrCodes -> {
                     scannedQRCodes.clear();
                     scannedQRCodes.addAll(qrCodes);
+                    scannedQRCodes.sort(Comparator.comparing(qrCode -> qrCode.getName().toLowerCase())); // if we want uppercase first, remove .toLowerCase()
                     qrCodesAdapter.notifyDataSetChanged();
                     binding.scannedText.setText("(" + qrCodes.size() + ")");
                 });

@@ -25,8 +25,8 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class ProfileViewModel extends ViewModel {
     private final MutableLiveData<Player> player = new MutableLiveData<>();
-    private final MutableLiveData<Double> highScore = new MutableLiveData<>(0.0);
-    private final MutableLiveData<Double> lowScore = new MutableLiveData<>(0.0);
+    private final MutableLiveData<QRCode> highScoreQRCode = new MutableLiveData<>(new QRCode());
+    private final MutableLiveData<QRCode> lowScoreQRCode = new MutableLiveData<>(new QRCode());
 
 
     private final MutableLiveData<ArrayList<QRCode>> scannedQRCodes = new MutableLiveData<>(new ArrayList<>());
@@ -68,19 +68,25 @@ public class ProfileViewModel extends ViewModel {
     public LiveData<ArrayList<QRCode>> getScannedQRCodes(Player player) {
         qrCodeRepository.getScannedQRCodes(player, scannedQRCodes -> {
             this.scannedQRCodes.setValue(scannedQRCodes);
-            this.highScore.setValue(PlayerUtil.calculateHighestScore(scannedQRCodes));
-            this.lowScore.setValue(PlayerUtil.calculateLowestScore(scannedQRCodes));
         });
 
         return this.scannedQRCodes;
     }
 
-    public LiveData<Double> getHighestScore(){
-        return this.highScore;
+    /**
+     * Removes a QR code from the list of scanned QR codes for the given player and updates the
+     * player's total score.
+     *
+     * @param qrCodeId The ID of the QR code to remove.
+     * @param playerId The ID of the player who scanned the QR code.
+     */
+
+    public LiveData<QRCode> getHighestScore() {
+        return this.highScoreQRCode;
     }
 
-    public LiveData<Double> getLowestScore(){
-        return this.lowScore;
+    public LiveData<QRCode> getLowestScore() {
+        return this.lowScoreQRCode;
     }
 
     /**
@@ -120,4 +126,9 @@ public class ProfileViewModel extends ViewModel {
         LiveData<List<QRCode>> qrList = qrCodeRepository.getQRCodeList();
         return qrList;
     }
+    public void addPhoneNumber(String playerID, String phoneNumber) {
+        playerRepository.addPhoneNumber(playerID, phoneNumber);
+    }
+
+
 }

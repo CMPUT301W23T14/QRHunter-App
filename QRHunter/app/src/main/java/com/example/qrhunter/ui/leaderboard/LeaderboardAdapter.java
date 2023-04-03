@@ -64,22 +64,22 @@ public class LeaderboardAdapter extends ArrayAdapter<Player> {
             }
         });
 
-        if (otherPlayer.getRank() == 1) {
+        if (position == 0) {
             Drawable drawable = ResourcesCompat.getDrawable(getContext().getResources(), R.drawable.placement_first, null);
             player_rank.setBackground(drawable);
             player_rank.setText("");
-        } else if (otherPlayer.getRank() == 2) {
+        } else if (position == 1) {
             Drawable drawable = ResourcesCompat.getDrawable(getContext().getResources(), R.drawable.placement_second, null);
             player_rank.setBackground(drawable);
             player_rank.setText("");
 
-        } else if (otherPlayer.getRank() == 3) {
+        } else if (position == 2) {
             Drawable drawable = ResourcesCompat.getDrawable(getContext().getResources(), R.drawable.placement_third, null);
             player_rank.setBackground(drawable);
             player_rank.setText("");
 
         } else {
-            player_rank.setText(String.valueOf(otherPlayer.getRank()));
+            player_rank.setText(String.valueOf(position));
             player_rank.setBackground(null);
         }
         if (Objects.equals(otherPlayer.getId(), playerId)) {

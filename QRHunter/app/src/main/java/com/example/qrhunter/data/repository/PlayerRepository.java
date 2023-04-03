@@ -126,10 +126,7 @@ public class PlayerRepository extends DataRepository {
                 String username = document.getString("username");
                 int totalScore = Objects.requireNonNull(document.getLong("totalScore")).intValue();
                 String phoneNumber = document.getString("phoneNumber");
-//                int rank = Objects.requireNonNull(document.getLong("rank")).intValue(); // currently i am setting rank based on highest scores, should it be set here or somewhere else?
-                rank.addAndGet(1);
-                document.getReference().update("rank", rank.get());
-                Player player = new Player(id, username, phoneNumber, rank.get(), totalScore);
+                Player player = new Player(id, username, phoneNumber, totalScore);
                 users.add(player);
             }
             usersLiveData.setValue(users);
@@ -143,6 +140,10 @@ public class PlayerRepository extends DataRepository {
             storageReference.child("photos").child(qrCodeId).child(playerId).putBytes(savedPhoto);
         }
 
+    }
+
+    public void addPhoneNumber(String playerID, String phoneNumber) {
+        db.collection("players").document(playerID).update("phoneNumber", phoneNumber);
     }
 
 

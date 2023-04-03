@@ -22,6 +22,7 @@ public class LeaderboardViewModel extends ViewModel {
         players = playerRepository.getUsers();
     }
 
+
     public LiveData<List<Player>> getPlayers() {
         return players;
     }
@@ -50,5 +51,9 @@ public class LeaderboardViewModel extends ViewModel {
         // Set the filtered list as the value of filteredPlayers
         filteredPlayers.setValue(filteredList);
         return filteredPlayers;
+    }
+
+    public void setPlayerRepository(PlayerRepository playerRepository) {
+        this.playerRepository = playerRepository;
     }
 }
