@@ -140,4 +140,15 @@ public class ScanViewModel extends ViewModel {
     public LiveData<String> getScanMessage() {
         return scanMessage;
     }
+
+    public void setQRCodeRepository(QRCodeRepository qrCodeRepository) {
+        this.qrCodeRepository = qrCodeRepository;
+    }
+    public void setPlayerRepository(PlayerRepository playerRepository) {
+        this.playerRepository = playerRepository;
+    }
+
+    public MutableLiveData<String> getQrCodeLiveDataHash() {
+        return this.qrCodeHash;
+    }
 }
