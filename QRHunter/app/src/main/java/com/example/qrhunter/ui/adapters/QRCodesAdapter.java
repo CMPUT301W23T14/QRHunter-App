@@ -80,7 +80,10 @@ public class QRCodesAdapter extends RecyclerView.Adapter<QRCodesAdapter.ViewHold
         });
 
     }
-
+    /**
+     * Gets the number of qrCodes
+     * @return The number of qrCodes
+     */
     @Override
     public int getItemCount() {
         return qrCodes.size();

@@ -17,6 +17,10 @@ public class MapViewModel extends ViewModel {
         qrCodeRepository = new QRCodeRepository();
         qrCodes = qrCodeRepository.getQRCodeList();
     }
+    /**
+     * Gets the qrCodes in the Map
+     * @return The qrCodes in the Map
+     */
     public LiveData<List<QRCode>> getQRCodes() {
         return qrCodes;
     }
