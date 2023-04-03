@@ -68,11 +68,11 @@ public ActivityScenarioRule<MainActivity> activityScenarioRule = new ActivitySce
         PlayerRepository playerRepository = Mockito.mock(PlayerRepository.class);
         LeaderboardViewModel leaderboardViewModel = Mockito.mock(LeaderboardViewModel.class);
         List<Player> dummyData = new ArrayList<>();
-        dummyData.add(new Player("fsdf", "John Doe", "1234567890", 1, 100));
-        dummyData.add(new Player("fsdf1", "Jane Doe", "1234567890", 2, 90));
-        dummyData.add(new Player("fsdf2",   "John Smith", "1234567890", 3, 80));
-        dummyData.add(new Player("fsd43f", "Jane Smith", "1234567890", 4, 70));
-        dummyData.add(new Player("fsd5f", "John Doe", "1234567890", 5, 60));
+        dummyData.add(new Player("fsdf", "John Doe", "1234567890", 100));
+        dummyData.add(new Player("fsdf1", "Jane Doe", "1234567890", 90));
+        dummyData.add(new Player("fsdf2",   "John Smith", "1234567890", 80));
+        dummyData.add(new Player("fsd43f", "Jane Smith", "1234567890", 70));
+        dummyData.add(new Player("fsd5f", "John Doe", "1234567890", 60));
 
 
         leaderboardViewModel.setPlayerRepository(playerRepository);
@@ -94,7 +94,7 @@ public ActivityScenarioRule<MainActivity> activityScenarioRule = new ActivitySce
 //        });
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        Player player = new Player("fsdwergibhliuhgrf", "TestingWinner", "1234567890", 1, 99999999);
+        Player player = new Player("fsdwergibhliuhgrf", "TestingWinner", "1234567890", 99999999);
         db.collection("players").document("TestPlayer").set(player);
 
 
@@ -159,7 +159,7 @@ public ActivityScenarioRule<MainActivity> activityScenarioRule = new ActivitySce
             navController.navigate(R.id.navigation_leaderboard);
         });
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        Player player = new Player("fsdwergibhliuhgrf", "TestingWinner2", "1234567890", 1, 99999999);
+        Player player = new Player("fsdwergibhliuhgrf", "TestingWinner2", "1234567890", 99999999);
         db.collection("players").document("TestPlayer").set(player);
 
         try {
@@ -203,7 +203,7 @@ public ActivityScenarioRule<MainActivity> activityScenarioRule = new ActivitySce
         }
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         PlayerRepository playerRepository = new PlayerRepository();
-        Player player = new Player("fsdwergibhliuhgrf", "Rr0zlcsK1JDDSDd@Q9#*kLT6TS8aPGLBmjU2iv@mvE8eTmXqkg", "1234567890", 1, 100);
+        Player player = new Player("fsdwergibhliuhgrf", "Rr0zlcsK1JDDSDd@Q9#*kLT6TS8aPGLBmjU2iv@mvE8eTmXqkg", "1234567890", 100);
         db.collection("players").document("TestPlayer").set(player);
 
 
