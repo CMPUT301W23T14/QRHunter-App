@@ -264,6 +264,12 @@ public class QRCodeRepository extends DataRepository {
         return QRCodesLiveData;
     }
 
+    /**
+     * Attach a comment to the player document
+     *
+     * @param qrCodeId  The id of the qr code
+     * @param commentId The id of the comment
+     */
     public void addCommentId(String qrCodeId, String commentId) {
         db.collection("qrCodes").document(qrCodeId)
                 .update("commentIds", FieldValue.arrayUnion(commentId));

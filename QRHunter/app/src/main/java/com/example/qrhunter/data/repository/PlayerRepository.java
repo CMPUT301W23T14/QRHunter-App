@@ -134,14 +134,27 @@ public class PlayerRepository extends DataRepository {
         return usersLiveData;
     }
 
+    /**
+     * Uploads a photo that a player have added as location photo
+     *
+     * @param savedPhoto The photo that needs to be saved
+     * @param qrCodeId   The id of the qr code where the photo is attached to
+     * @param playerId   THe id of the player that added the photo
+     */
     public void uploadPhoto(byte[] savedPhoto, String qrCodeId, String playerId) {
         StorageReference storageReference = FirebaseStorage.getInstance().getReference();
-        if (savedPhoto != null){
+        if (savedPhoto != null) {
             storageReference.child("photos").child(qrCodeId).child(playerId).putBytes(savedPhoto);
         }
 
     }
 
+    /**
+     * Updates or Add the phone number of a player
+     *
+     * @param playerID    The id of the player
+     * @param phoneNumber The phone number
+     */
     public void addPhoneNumber(String playerID, String phoneNumber) {
         db.collection("players").document(playerID).update("phoneNumber", phoneNumber);
     }

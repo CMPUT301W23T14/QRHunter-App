@@ -9,9 +9,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.qrhunter.R;
+
 import java.util.ArrayList;
 
-public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHolder>{
+/**
+ * An adapter for displaying address in the QR Code page
+ */
+public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHolder> {
     private ArrayList<String> addresses;
 
     public AddressAdapter(ArrayList<String> address) {
@@ -38,6 +42,7 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHold
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView addressItem;
+
         public ViewHolder(View itemView) {
             super(itemView);
             addressItem = (TextView) itemView;
