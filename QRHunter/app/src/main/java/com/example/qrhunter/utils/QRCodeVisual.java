@@ -12,7 +12,10 @@ public class QRCodeVisual extends QRCodeConstants {
     QRCodeConstants qrCodeConstants;
     // for the qrcode visual representation
     private String visualRepresentation = "";
-
+    /**
+     * Generates the qrCodeVisual
+     * @param hashValue The hash value of the qrCode to be turned into a visualization
+     */
     public QRCodeVisual(String hashValue) {
         super(hashValue);
         qrCodeConstants = new QRCodeConstants(hashValue);

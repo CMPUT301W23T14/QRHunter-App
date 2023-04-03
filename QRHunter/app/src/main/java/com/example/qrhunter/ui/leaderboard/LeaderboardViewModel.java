@@ -24,17 +24,28 @@ public class LeaderboardViewModel extends ViewModel {
         players = playerRepository.getUsers();
     }
 
-
+    /**
+     * Gets the players in the leaderboard
+     * @return The players in the leaderboard
+     */
     public LiveData<List<Player>> getPlayers() {
         return players;
     }
+    /**
+     * Updates the players in the leaderboard
+     * @return The players in the leaderboard
+     */
 
     public LiveData<List<Player>> updatePlayers() {
         playerRepository = new PlayerRepository();
         players = playerRepository.getUsers();
         return players;
     }
-
+    /**
+     * Searches for players in the leaderboard
+     * @param query The input by the user
+     * @return The player(s) to be searched for
+     */
     public LiveData<List<Player>> searchPlayers(String query) {
 
         MutableLiveData<List<Player>> filteredPlayers = new MutableLiveData<>();
@@ -54,7 +65,10 @@ public class LeaderboardViewModel extends ViewModel {
         filteredPlayers.setValue(filteredList);
         return filteredPlayers;
     }
-
+    /**
+     * Setter for the playerRepository
+     * @param playerRepository The playerRepository to be set
+     */
     public void setPlayerRepository(PlayerRepository playerRepository) {
         this.playerRepository = playerRepository;
     }

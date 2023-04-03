@@ -97,7 +97,11 @@ public class ScanViewModel extends ViewModel {
         qrCodeContent.setValue("");
         qrCodeHash.setValue("");
     }
-
+    /**
+     * Sets the geolocation using math logic
+     * @param latitude The latitude that needs to be corrected
+     * @param longitude The longitude that needs to be corrected
+     */
     public void setGeolocation(double latitude, double longitude) {
         Location currentLocation = this.location.getValue();
         currentLocation.latitude = Math.round(latitude * 10000d) / 10000d;
@@ -105,19 +109,34 @@ public class ScanViewModel extends ViewModel {
 
         location.setValue(currentLocation);
     }
-
+    /**
+     * Gets the geolocation of the qrCode
+     * @return The location of the qrCode
+     */
     public LiveData<Location> getLocation() {
         return location;
     }
 
+    /**
+     * Gets the photo of the qrCode
+     * @return The photo of the qrCode
+     */
     public LiveData<Bitmap> getPhoto() {
         return photo;
     }
 
+    /**
+     * Sets the photo of the qrCode
+     * @return The photo of the qrCode
+     */
     public void setPhoto(Bitmap photo) {
         this.photo.setValue(photo);
     }
 
+    /**
+     * Gets the scanMessage of the qrCode
+     * @return The scanMessage
+     */
     public LiveData<String> getScanMessage() {
         return scanMessage;
     }
