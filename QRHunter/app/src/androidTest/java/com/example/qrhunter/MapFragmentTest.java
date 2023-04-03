@@ -42,6 +42,9 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+/**
+ * Intent tests for MapFragment page
+ */
 
 public class MapFragmentTest {
     @Rule
@@ -53,6 +56,9 @@ public class MapFragmentTest {
             navController.navigate(R.id.navigation_map);
         });
     }
+    /**
+     * Tests getting location
+     */
     @Test
     public void testLocation() {
         Context context = ApplicationProvider.getApplicationContext();
@@ -70,6 +76,9 @@ public class MapFragmentTest {
         android.location.Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         assertNotNull(location);
     }
+    /**
+     * Tests search button functionality
+     */
     @Test
     public void TestSearchButton() {
         onView(withId(R.id.navigation_map)).check(matches(isDisplayed()));
