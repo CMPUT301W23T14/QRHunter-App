@@ -85,6 +85,27 @@ public class LeaderboardFragmentTest {
     }
 
     /**
+     * Tests that the leaderboard fragment is displayed when you navigate to it
+     */
+    @Test
+    public void testNavigation(){
+        // Launch the leaderboard fragment
+        activityScenarioRule.getScenario().onActivity(activity -> {
+            NavController navController = Navigation.findNavController(activity, R.id.nav_host_fragment);
+            navController.navigate(R.id.navigation_leaderboard);
+        });
+        // add delay
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        // Wait for the leaderboard fragment to be displayed
+        onView(withId(R.id.leaderboard_list_view)).check(matches(isDisplayed()));
+    }
+
+
+    /**
      * Tests that the you navigate to the profile fragment when you click on a list item
      */
     @Test
@@ -237,6 +258,14 @@ public class LeaderboardFragmentTest {
         db.collection("players").document("TestPlayer").delete();
 
     }
+
+
+
+
+
+
+
+
 //    @After
 //    public void tearDown() {
 //        // Enable animations after each test
