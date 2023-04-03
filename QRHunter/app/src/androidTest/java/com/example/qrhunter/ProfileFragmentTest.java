@@ -1,22 +1,15 @@
 package com.example.qrhunter;
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withInputType;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-
-import static org.junit.Assert.assertTrue;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.test.espresso.Espresso;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 
-import com.example.qrhunter.ui.profile.ProfileFragmentDirections;
 import com.robotium.solo.Solo;
 
 import org.junit.Before;
@@ -42,6 +35,7 @@ public class ProfileFragmentTest {
             e.printStackTrace();
         }
     }
+
     @Test
     public void add_phone_number(){
         // Type and enter phone number
