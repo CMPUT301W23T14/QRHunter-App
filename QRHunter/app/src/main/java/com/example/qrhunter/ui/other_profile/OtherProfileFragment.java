@@ -9,13 +9,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.qrhunter.data.model.QRCode;
 import com.example.qrhunter.databinding.FragmentOtherProfileBinding;
 import com.example.qrhunter.ui.adapters.QRCodesAdapter;
+import com.example.qrhunter.utils.PlayerUtil;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -47,13 +50,8 @@ public class OtherProfileFragment extends Fragment {
         // Set up recycler view
         QRCodesAdapter qrCodesAdapter = new QRCodesAdapter(scannedQRCodes, true);
 
-        qrCodesAdapter.setOnClickListeners(position -> {
-            //profileViewModel.removeScannedQRCode(scannedQRCodes.get(position).getId(), deviceId);
-        });
-
         rvQRCodes.setAdapter(qrCodesAdapter);
         rvQRCodes.setLayoutManager(new LinearLayoutManager(requireContext()));
-
 
         // Bind player info to texts
         otherProfileViewModel.getPlayer(deviceId).observe(getViewLifecycleOwner(), player -> {
@@ -65,7 +63,39 @@ public class OtherProfileFragment extends Fragment {
                 otherProfileViewModel.getScannedQRCodes(player).observe(getViewLifecycleOwner(), qrCodes -> {
                     scannedQRCodes.clear();
                     scannedQRCodes.addAll(qrCodes);
-                    scannedQRCodes.sort(Comparator.comparing(qrCode -> qrCode.getName().toLowerCase())); // if we want uppercase first, remove .toLowerCase()
+
+                    // Sort by name. If we want uppercase first, remove .toLowerCase()
+                    scannedQRCodes.sort(Comparator.comparing(qrCode -> qrCode.getName().toLowerCase()));
+
+                    if (qrCodes.isEmpty()) {
+                        binding.lowestScore.setText("0");
+                        binding.highestScore.setText("0");
+                        binding.lowestScoreContainer.setOnClickListener(null);
+                        binding.highestScoreContainer.setOnClickListener(null);
+                        return;
+                    }
+
+                    // Lowest and highest scoring qr code
+                    QRCode lowScoreQRCode = PlayerUtil.calculateLowestScoreQRCode(qrCodes);
+                    QRCode highScoreQRCode = PlayerUtil.calculateHighestScoreQRCode(qrCodes);
+
+
+                    binding.lowestScore.setText(Double.toString(lowScoreQRCode.getScore()));
+                    binding.highestScore.setText(Double.toString(highScoreQRCode.getScore()));
+
+                    // Set navigation to lowest and highest scoring qr code
+                    NavController navController = NavHostFragment.findNavController(this);
+                    binding.lowestScoreContainer.setOnClickListener(v -> {
+                        com.example.qrhunter.ui.other_profile.OtherProfileFragmentDirections.ActionOtherProfileFragmentToQrCodeFragment action =
+                                OtherProfileFragmentDirections.actionOtherProfileFragmentToQrCodeFragment(lowScoreQRCode.getId());
+                        navController.navigate(action);
+                    });
+                    binding.highestScoreContainer.setOnClickListener(v -> {
+                        com.example.qrhunter.ui.other_profile.OtherProfileFragmentDirections.ActionOtherProfileFragmentToQrCodeFragment action =
+                                OtherProfileFragmentDirections.actionOtherProfileFragmentToQrCodeFragment(highScoreQRCode.getId());
+                        navController.navigate(action);
+                    });
+
                     qrCodesAdapter.notifyDataSetChanged();
                     binding.scannedText.setText("(" + qrCodes.size() + ")");
                 });
