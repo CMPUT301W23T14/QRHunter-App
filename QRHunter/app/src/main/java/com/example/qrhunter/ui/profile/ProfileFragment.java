@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -19,10 +20,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.qrhunter.data.model.QRCode;
 import com.example.qrhunter.databinding.FragmentProfileBinding;
 import com.example.qrhunter.ui.adapters.QRCodesAdapter;
-import com.jakewharton.rxbinding4.widget.RxTextView;
 import com.example.qrhunter.utils.PlayerUtil;
+import com.example.qrhunter.utils.QRCodeUtil;
+import com.jakewharton.rxbinding4.widget.RxTextView;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -54,6 +59,7 @@ public class ProfileFragment extends Fragment {
 
         // List of qr codes for the recycler view adapter
         ArrayList<QRCode> scannedQRCodes = new ArrayList<>();
+        List<String> rankQRCode = new ArrayList<>();
 
         // Set up recycler view
         QRCodesAdapter qrCodesAdapter = new QRCodesAdapter(scannedQRCodes, false);
@@ -78,39 +84,63 @@ public class ProfileFragment extends Fragment {
                 binding.totalScore.setText(Double.toString(player.getTotalScore()));
 
                 profileViewModel.getScannedQRCodes(player).observe(getViewLifecycleOwner(), qrCodes -> {
-                    scannedQRCodes.clear();
-                    scannedQRCodes.addAll(qrCodes);
+                    LiveData<List<QRCode>> qrCodesLiveData = profileViewModel.getQRCodes();
+                    qrCodesLiveData.observe(getViewLifecycleOwner(), qrCodes1 -> {
+                        HashMap<String, Double> qrCodeMap = new HashMap<>();
+                        HashMap<String, String> idMap = new HashMap<>();
+                        for (QRCode qrCode : qrCodes1) {
+                            if (qrCode.getPlayerIds().size() == 1) {
+                                qrCodeMap.put(qrCode.getId(), qrCode.getScore());
+                                idMap.put(qrCode.getId(), qrCode.getPlayerIds().get(0));
+                            }
+                        }
+                        HashMap<String, Double> sortByValue = (HashMap<String, Double>) QRCodeUtil.sortByValue(qrCodeMap);
+                        List<String> temp = QRCodeUtil.checkUniqueQRCode(deviceId, sortByValue, idMap);
+                        rankQRCode.clear();
+                        rankQRCode.addAll(temp);
 
-                    // Sort by name. If we want uppercase first, remove .toLowerCase()
-                    scannedQRCodes.sort(Comparator.comparing(qrCode -> qrCode.getName().toLowerCase()));
+                        for (QRCode qrCode : qrCodes) {
+                            if (rankQRCode.contains(qrCode.getId()) && qrCode.isUnique()) {
+                                qrCode.setRank(Integer.parseInt(rankQRCode.get(1)));
+                            }
+                        }
+                        
+                        scannedQRCodes.clear();
+                        scannedQRCodes.addAll(qrCodes);
 
-                    qrCodesAdapter.notifyDataSetChanged();
-                    binding.scannedText.setText("(" + qrCodes.size() + ")");
+                        // Sort by name. If we want uppercase first, remove .toLowerCase()
+                        scannedQRCodes.sort(Comparator.comparing(qrCode -> qrCode.getName().toLowerCase()));
 
-                    if (qrCodes.isEmpty()) {
-                        return;
-                    }
+                        qrCodesAdapter.notifyDataSetChanged();
+                        binding.scannedText.setText("(" + qrCodes.size() + ")");
 
-                    // Lowest and highest scoring qr code
-                    QRCode lowScoreQRCode = PlayerUtil.calculateLowestScoreQRCode(qrCodes);
-                    QRCode highScoreQRCode = PlayerUtil.calculateHighestScoreQRCode(qrCodes);
+                        if (qrCodes.isEmpty()) {
+                            return;
+                        }
+
+                        // Lowest and highest scoring qr code
+                        QRCode lowScoreQRCode = PlayerUtil.calculateLowestScoreQRCode(qrCodes);
+                        QRCode highScoreQRCode = PlayerUtil.calculateHighestScoreQRCode(qrCodes);
 
 
-                    binding.lowestScore.setText(Double.toString(lowScoreQRCode.getScore()));
-                    binding.highestScore.setText(Double.toString(highScoreQRCode.getScore()));
+                        binding.lowestScore.setText(Double.toString(lowScoreQRCode.getScore()));
+                        binding.highestScore.setText(Double.toString(highScoreQRCode.getScore()));
 
-                    // Set navigation to lowest and highest scoring qr code
-                    NavController navController = NavHostFragment.findNavController(this);
-                    binding.lowestScoreContainer.setOnClickListener(v -> {
-                        ProfileFragmentDirections.ActionNavigationProfileToQrCodeFragment action =
-                                ProfileFragmentDirections.actionNavigationProfileToQrCodeFragment(lowScoreQRCode.getId());
-                        navController.navigate(action);
+                        // Set navigation to lowest and highest scoring qr code
+                        NavController navController = NavHostFragment.findNavController(this);
+                        binding.lowestScoreContainer.setOnClickListener(v -> {
+                            ProfileFragmentDirections.ActionNavigationProfileToQrCodeFragment action =
+                                    ProfileFragmentDirections.actionNavigationProfileToQrCodeFragment(lowScoreQRCode.getId());
+                            navController.navigate(action);
+                        });
+                        binding.highestScoreContainer.setOnClickListener(v -> {
+                            ProfileFragmentDirections.ActionNavigationProfileToQrCodeFragment action =
+                                    ProfileFragmentDirections.actionNavigationProfileToQrCodeFragment(highScoreQRCode.getId());
+                            navController.navigate(action);
+                        });
                     });
-                    binding.highestScoreContainer.setOnClickListener(v -> {
-                        ProfileFragmentDirections.ActionNavigationProfileToQrCodeFragment action =
-                                ProfileFragmentDirections.actionNavigationProfileToQrCodeFragment(highScoreQRCode.getId());
-                        navController.navigate(action);
-                    });
+
+
                 });
             }
         });
