@@ -1,5 +1,7 @@
 package com.example.qrhunter.ui.profile;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -8,9 +10,14 @@ import com.example.qrhunter.data.model.Player;
 import com.example.qrhunter.data.model.QRCode;
 import com.example.qrhunter.data.repository.PlayerRepository;
 import com.example.qrhunter.data.repository.QRCodeRepository;
+import com.example.qrhunter.utils.PlayerUtil;
+import com.example.qrhunter.utils.QRCodeUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * The ViewModel for the ProfileFragment that stores and manages data related to the user profile.
@@ -83,7 +90,11 @@ public class ProfileViewModel extends ViewModel {
     }
 
     /**
-     * Remove a QRCode from a player's list of QrCodes
+     * Removes a QR code from the list of scanned QR codes for the given player and updates the
+     * player's total score.
+     *
+     * @param qrCodeId The ID of the QR code to remove.
+     * @param playerId The ID of the player who scanned the QR code.
      */
     public void removeScannedQRCode(String qrCodeId, String playerId) {
         // Update Firestore (reduce score and remove from qr code's playerIds)
@@ -107,6 +118,14 @@ public class ProfileViewModel extends ViewModel {
         this.scannedQRCodes.setValue(currentScannedQRCodes);
     }
 
+    /**
+     * Gets the list of all QR codes in the database
+     * @return A live data object of the list of QR codes
+     */
+    public LiveData<List<QRCode>> getQRCodes(){
+        LiveData<List<QRCode>> qrList = qrCodeRepository.getQRCodeList();
+        return qrList;
+    }
     public void addPhoneNumber(String playerID, String phoneNumber) {
         playerRepository.addPhoneNumber(playerID, phoneNumber);
     }
