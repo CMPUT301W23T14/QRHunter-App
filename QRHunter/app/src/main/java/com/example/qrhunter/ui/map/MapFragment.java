@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -34,7 +35,7 @@ import java.util.ArrayList;
  */
 
 public class MapFragment extends Fragment {
-    private static final int DEFAULT_ZOOM = 15;
+    private static final int DEFAULT_ZOOM = 16;
     // Default location (Sydney, Australia) and default zoom to use when location permission is not granted
     private final LatLng defaultLocation = new LatLng(-33.8523341, 151.2106085);
     private FragmentMapBinding binding;
@@ -43,6 +44,7 @@ public class MapFragment extends Fragment {
     private Location lastKnownLocation;
     private ArrayList<QRCode> dataList;
     private MapViewModel mapViewModel;
+    private Button searchButton;
     /*
     Asks for location permissions and updates map view to current location if permission is granted
     Website: Stackoverflow
@@ -119,13 +121,12 @@ public class MapFragment extends Fragment {
         } catch (SecurityException e) {
             Log.e("Exception: %s", e.getMessage());
         }
-        map.setOnMyLocationButtonClickListener(() -> {
+        searchButton = binding.searchNearbyQRCodes;
+        searchButton.setOnClickListener(view -> {
             if (map != null) {
                 map.clear();
-                updateLocationUI();
                 getDeviceLocation();
             }
-            return false;
         });
     }
 
