@@ -112,6 +112,10 @@ public class ProfileViewModel extends ViewModel {
         this.scannedQRCodes.setValue(currentScannedQRCodes);
     }
 
+    /**
+     * Gets the list of all QR codes in the database
+     * @return A live data object of the list of QR codes
+     */
     public LiveData<List<QRCode>> getQRCodes(){
         LiveData<List<QRCode>> qrList = qrCodeRepository.getQRCodeList();
         return qrList;

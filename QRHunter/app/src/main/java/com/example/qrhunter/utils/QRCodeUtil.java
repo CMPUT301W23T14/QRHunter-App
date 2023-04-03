@@ -140,9 +140,13 @@ public final class QRCodeUtil {
         return qrCodeHashMap;
     }
 
+    // From GeekForGeeks
+    // URL: https://www.geeksforgeeks.org/sorting-a-hashmap-according-to-values/
+    // Author: Saurav Jain
     /**
-     * Sorts Hashmap by value
-     *
+     * Sorts Hashmap by points of the QRCode
+     * @param hm The hashmap to be sorted
+     * @return A sorted hashmap
      */
     public static Map<String, Double> sortByValue(Map<String, Double> hm) {
         // Create a list from elements of HashMap
@@ -163,6 +167,13 @@ public final class QRCodeUtil {
         return temp;
     }
 
+    /**
+     * Checks if the QRCode is unique
+     * @param deviceId The device ID of the player
+     * @param sortedMap The sorted map of QRCode according to score
+     * @param playerMap The map of QRCode and player ID
+     * @return A list of the QRCode ID and the rank of the QRCode
+     */
     public static List<String> checkUniqueQRCode(String deviceId, HashMap<String, Double> sortedMap, HashMap<String, String> playerMap) {
         Integer count = 0;
         List<String> id = new ArrayList<>();
