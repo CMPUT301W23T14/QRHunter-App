@@ -22,6 +22,10 @@ import com.example.qrhunter.data.model.Player;
 import java.util.ArrayList;
 import java.util.Objects;
 
+/**
+ * Adapter used to help display the leaderboard. Leaderboard displays players and their rankings through score.
+ */
+
 public class LeaderboardAdapter extends ArrayAdapter<Player> {
     private String playerId;
 

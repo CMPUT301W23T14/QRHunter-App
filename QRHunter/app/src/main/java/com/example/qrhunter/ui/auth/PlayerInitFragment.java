@@ -23,6 +23,9 @@ import com.jakewharton.rxbinding4.widget.RxTextView;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.disposables.Disposable;
+/**
+ * Fragment for player user name. Used also to validate player user names.
+ */
 
 public class PlayerInitFragment extends Fragment {
 

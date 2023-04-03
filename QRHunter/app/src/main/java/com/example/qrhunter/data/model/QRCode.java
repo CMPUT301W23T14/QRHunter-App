@@ -44,6 +44,12 @@ public class QRCode {
      * List of player id who scanned this qr code
      */
     private ArrayList<String> playerIds = new ArrayList<>();
+    /**
+     * If qrCode has only one player, then it will be unique
+     */
+    private boolean unique;
+
+    private int rank;
 
     /**
      * Constructor for a QR Code
@@ -65,6 +71,7 @@ public class QRCode {
         this.photos = photos;
         this.commentIds = commentIds;
         this.playerIds = playerIds;
+        this.unique = playerIds.size() == 1;
     }
     public QRCode() {
     }
@@ -214,6 +221,37 @@ public class QRCode {
      */
     public void setCommentIds(ArrayList<String> commentIds) {
         this.commentIds = commentIds;
+    }
+
+    /**
+     * Sets the unique status of this QR code.
+     */
+    public void setUnique() {
+        unique = playerIds.size() == 1;
+    }
+
+    /**
+     * Returns the unique status of this QR code.
+     * @return the unique status of this QR code.
+     */
+    public boolean isUnique() {
+        unique = playerIds.size() == 1;
+        return unique;
+    }
+
+    /**
+     * Sets the rank of this QR code.
+     * @param rank the rank to set for this QR code.
+     */
+    public void setRank(int rank) {
+        this.rank = rank;
+    }
+    /**
+     * Returns the rank of this QR code.
+     * @return the rank of this QR code.
+     */
+    public int getRank() {
+        return rank;
     }
 
 }

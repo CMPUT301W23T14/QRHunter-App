@@ -1,11 +1,19 @@
 package com.example.qrhunter.utils;
 
+import android.util.Log;
+
 import com.example.qrhunter.data.model.QRCode;
 import com.google.common.hash.Hashing;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -130,5 +138,56 @@ public final class QRCodeUtil {
         qrCodeHashMap.put("playerIds", qrCode.getPlayerIds());
 
         return qrCodeHashMap;
+    }
+
+    // From GeekForGeeks
+    // URL: https://www.geeksforgeeks.org/sorting-a-hashmap-according-to-values/
+    // Author: Saurav Jain
+    /**
+     * Sorts Hashmap by points of the QRCode
+     * @param hm The hashmap to be sorted
+     * @return A sorted hashmap
+     */
+    public static Map<String, Double> sortByValue(Map<String, Double> hm) {
+        // Create a list from elements of HashMap
+        List<Map.Entry<String, Double>> list = new LinkedList<Map.Entry<String, Double>>(hm.entrySet());
+
+        // Sort the list
+        Collections.sort(list, new Comparator<Map.Entry<String, Double>>() {
+            public int compare(Map.Entry<String, Double> o1, Map.Entry<String, Double> o2) {
+                return (o2.getValue()).compareTo(o1.getValue());
+            }
+        });
+
+        // put data from sorted list to hashmap
+        Map<String, Double> temp = new LinkedHashMap<String, Double>();
+        for (Map.Entry<String, Double> aa : list) {
+            temp.put(aa.getKey(), aa.getValue());
+        }
+        return temp;
+    }
+
+    /**
+     * Checks if the QRCode is unique
+     * @param deviceId The device ID of the player
+     * @param sortedMap The sorted map of QRCode according to score
+     * @param playerMap The map of QRCode and player ID
+     * @return A list of the QRCode ID and the rank of the QRCode
+     */
+    public static List<String> checkUniqueQRCode(String deviceId, HashMap<String, Double> sortedMap, HashMap<String, String> playerMap) {
+        Integer count = 0;
+        List<String> id = new ArrayList<>();
+        for (Map.Entry<String, Double> entry : sortedMap.entrySet()) {
+            String key = entry.getKey();
+            if (playerMap.containsKey(key)) {
+                if (playerMap.get(key).equals(deviceId)) {
+                    id.add(key);
+                    id.add(String.valueOf(count+1));
+                    break;
+                }
+            }
+            count++;
+        }
+        return id;
     }
 }

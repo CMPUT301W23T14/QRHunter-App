@@ -20,6 +20,7 @@ import java.util.ArrayList;
 /**
  * The ScanViewModel class is responsible for handling the logic and data for the scan fragment.
  */
+
 public class ScanViewModel extends ViewModel {
     private final MutableLiveData<String> qrCodeContent = new MutableLiveData<>();
     private final MutableLiveData<String> qrCodeHash = new MutableLiveData<>();

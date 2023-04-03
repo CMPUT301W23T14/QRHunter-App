@@ -116,13 +116,24 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:fontFamily="@font/roboto_medium"
-            android:text="0 points"
+            android:text="0.0"
             android:textColor="@color/primary"
             android:textColorLink="@color/primary"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/QR_name" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/QRCode_address_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            android:overScrollMode="never"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/QRCodeScoretext" />
 
         <TextView
             android:id="@+id/QR_Visual"
@@ -137,7 +148,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.355"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/QRCodeScoretext" />
+            app:layout_constraintTop_toBottomOf="@+id/QRCode_address_recyclerView" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/comment_recycler_view"
@@ -166,6 +177,7 @@
             app:counterEnabled="true"
             app:counterMaxLength="100"
             app:endIconCheckable="true"
+            app:endIconContentDescription="add comment"
             app:endIconDrawable="@drawable/add_icon"
             app:endIconMode="custom"
             app:hintTextColor="@color/neutral_black"

@@ -2,13 +2,6 @@ package com.example.qrhunter.ui.leaderboard;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import android.os.Handler;
 import android.provider.Settings;
 import android.view.LayoutInflater;
@@ -21,20 +14,21 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
-import com.example.qrhunter.R;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.example.qrhunter.data.model.Player;
-import com.example.qrhunter.data.repository.PlayerRepository;
 import com.example.qrhunter.databinding.FragmentLeaderboardBinding;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+
+/**
+ * Fragment used to display the leaderboard. Also can utilize a search bar for specific players in the leaderboard.
+ */
 
 public class LeaderboardFragment extends Fragment {
-    private FragmentLeaderboardBinding binding;
-
     public LeaderboardViewModel leaderboardViewModel;
-
+    private FragmentLeaderboardBinding binding;
     private ListView listView;
 
     private LeaderboardAdapter leaderboardAdapter;
@@ -48,8 +42,8 @@ public class LeaderboardFragment extends Fragment {
     private Runnable runnable;
 
 
-
     private SearchView searchView;
+
     @SuppressLint("HardwareIds")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -134,7 +128,8 @@ public class LeaderboardFragment extends Fragment {
             });
         }
     }
-    public void getList(){
+
+    public void getList() {
         leaderboardViewModel.getPlayers().observe(getViewLifecycleOwner(), players -> {
             dataList = new ArrayList<>(players);
             leaderboardAdapter = new LeaderboardAdapter(getContext(), dataList, deviceId);

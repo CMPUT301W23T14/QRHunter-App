@@ -17,10 +17,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.qrhunter.data.model.Comment;
 import com.example.qrhunter.databinding.FragmentQrCodeBinding;
+import com.example.qrhunter.ui.adapters.AddressAdapter;
 import com.example.qrhunter.ui.adapters.CommentAdapter;
 import com.example.qrhunter.ui.profile.ProfileViewModel;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * QrCodeFragment displays the details of a QR code, including its name, score, visual representation, the number
@@ -64,13 +66,25 @@ public class QrCodeFragment extends Fragment {
         rvComments.setAdapter(commentAdapter);
         rvComments.setLayoutManager(new LinearLayoutManager(requireContext()));
 
+        // recycler view for addresses
+        RecyclerView rvAddress = binding.QRCodeAddressRecyclerView;
+        AtomicReference<ArrayList<String>> address = new AtomicReference<>(new ArrayList<>());
+        AtomicReference<AddressAdapter> addressAdapter = new AtomicReference<>(new AddressAdapter(address.get()));
+        rvAddress.setAdapter(addressAdapter.get());
+        rvAddress.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
+
         // Bind data to ui
         qrCodeViewModel.getQRCode(qrCodeId)
                 .observe(getViewLifecycleOwner(), qrCode -> {
                     if (qrCode != null) {
                         binding.QRName.setText(qrCode.getName());
-                        binding.QRCodeScoretext.setText(Double.toString(qrCode.getScore()) + " points");
+                        binding.QRCodeScoretext.setText(Double.toString(qrCode.getScore()));
                         binding.QRVisual.setText(qrCode.getVisualRepresentation());
+
+                        // get addresses
+                        address.set(qrCodeViewModel.getAddress(qrCode, getContext()));
+                        addressAdapter.set(new AddressAdapter(address.get()));
+                        rvAddress.setAdapter(addressAdapter.get());
 
                         // Get and bind the amount of players who scanned the code
                         qrCodeViewModel.getScannedBy(qrCode).observe(getViewLifecycleOwner(), amountScannedBy -> {
