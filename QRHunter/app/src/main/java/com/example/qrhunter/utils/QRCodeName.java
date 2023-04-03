@@ -67,6 +67,8 @@ public class QRCodeName extends QRCodeConstants {
     }
 
     /**
+     * Retrieve the generated name
+     *
      * @return The name of the qrcode
      */
     public String getQRName() {

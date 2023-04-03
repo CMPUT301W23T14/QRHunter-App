@@ -10,6 +10,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
+/**
+ * Unit test for QR Code model class
+ */
 public class QRCodeTest {
 
     /**

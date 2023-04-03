@@ -6,6 +6,9 @@ import com.example.qrhunter.utils.QRCodeUtil;
 
 import org.junit.jupiter.api.Test;
 
+/**
+ * Unit tests for the QR Code utility class
+ */
 public class QRCodeUtilTest {
 
     @Test
@@ -19,11 +22,13 @@ public class QRCodeUtilTest {
         // Testing math.pow function for number case
         assertEquals(3125, QRCodeUtil.generatePoints('5', 5));
     }
+
     @Test
     public void hashQR_isCorrect() {
         // Hash given in example is wrong since echo call does not include -n to remove newline character
         assertEquals("8227ad036b504e39fe29393ce170908be2b1ea636554488fa86de5d9d6cd2c32", QRCodeUtil.generateHash("BFG5DGW54"));
     }
+
     @Test
     public void calculateScore_isCorrect() {
         String qrCode = QRCodeUtil.generateHash("BFG5DGW54");
@@ -37,7 +42,7 @@ public class QRCodeUtilTest {
 
 
     @Test
-    public void checkGenerateVisualRepresentation(){
+    public void checkGenerateVisualRepresentation() {
         String hasValue = QRCodeUtil.generateHash("BFG5DGW54");
         // check if the two generation given the same hash is consistent
         String expectedOutput = QRCodeUtil.generateVisualRepresentation(hasValue);
@@ -50,7 +55,7 @@ public class QRCodeUtilTest {
     }
 
     @Test
-    public void checkGenerateName(){
+    public void checkGenerateName() {
         String hasValue = QRCodeUtil.generateHash("BFG5DGW54");
         // check if the two generation given the same hash is consistent
         String expectedOutput = QRCodeUtil.generateName(hasValue);
