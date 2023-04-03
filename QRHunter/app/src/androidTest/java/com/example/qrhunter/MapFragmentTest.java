@@ -43,7 +43,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-@RunWith(MockitoJUnitRunner.class)
 public class MapFragmentTest {
     @Rule
     public ActivityScenarioRule<MainActivity> activityScenarioRule = new ActivityScenarioRule<>(MainActivity.class);
@@ -80,6 +79,11 @@ public class MapFragmentTest {
             e.printStackTrace();
         }
         onView(withText("Search")).perform(click());
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         onView(withId(R.id.navigation_map)).check(matches(isDisplayed()));
     }
 }
