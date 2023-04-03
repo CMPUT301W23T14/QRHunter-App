@@ -30,7 +30,7 @@ public class QRCodeRepository extends DataRepository {
      * @param playerId The id of the player
      * @param qrCode   The id of the qrCode
      */
-    public void addQRCodeToPlayer(QRCode qrCode, String playerId, byte[] savedPhoto) {
+    public void addQRCodeToPlayer(QRCode qrCode, String playerId, byte[] savedPhoto, RepositoryCallback<String> repositoryCallback) {
         PlayerRepository playerRepository = new PlayerRepository();
 
         // Check whether qr code exists.
@@ -41,21 +41,25 @@ public class QRCodeRepository extends DataRepository {
                 String photoPath;
                 ArrayList<String> photos = new ArrayList<>();
                 String qrCodeId = qrCode.getId();
+
                 if (savedPhoto == null) {
                     photoPath = null;
-                }
-                else {
+                } else {
                     photoPath = "photos/" + qrCodeId + "/" + playerId + ".jpg";
                     photos.add(photoPath);
                     qrCode.setPhotos(photos);
                 }
 
+                // Create new QR Code document
                 Map<String, Object> qrCodeHashMap = QRCodeUtil.convertQRCodeToHashmap(qrCode);
                 db.collection("qrCodes").document(qrCodeId).set(qrCodeHashMap).addOnCompleteListener(task -> {
                     playerRepository.addScoreToPlayer(playerId, qrCode.getScore());
                 });
+
                 // Upload photo to Firebase Storage
                 playerRepository.uploadPhoto(savedPhoto, qrCodeId, playerId);
+
+                repositoryCallback.onSuccess("QR Code successfully added!");
             } else {
                 qrCode.setUnique();
                 // If qr code exists, update the existing document in Firestore
@@ -63,8 +67,7 @@ public class QRCodeRepository extends DataRepository {
                 ArrayList<String> existingPhotos = qrCode.getPhotos();
                 if (savedPhoto == null) {
                     photoPath = null;
-                }
-                else {
+                } else {
                     photoPath = "photos/" + existingQRCode.getId() + "/" + playerId + ".jpg";
                     existingPhotos.add(photoPath);
                     qrCode.setPhotos(existingPhotos);
@@ -77,7 +80,7 @@ public class QRCodeRepository extends DataRepository {
                         .update("playerIds", FieldValue.arrayUnion(playerId));
 
                 // Update location
-                if (!qrCode.getLocations().isEmpty()){
+                if (!qrCode.getLocations().isEmpty()) {
                     db.collection("qrCodes").document(existingQRCode.getId())
                             .update("locations", FieldValue.arrayUnion(qrCode.getLocations().get(0)));
                 }
@@ -88,8 +91,12 @@ public class QRCodeRepository extends DataRepository {
                             .update("photos", FieldValue.arrayUnion(qrCode.getPhotos().get(0)));
                 }
 
-                //TODO: Also update location in qr code document
-                playerRepository.addScoreToPlayer(playerId, qrCode.getScore());
+                if (!existingQRCode.getPlayerIds().contains(playerId)) {
+                    playerRepository.addScoreToPlayer(playerId, qrCode.getScore());
+                    repositoryCallback.onSuccess("QR Code successfully added!");
+                } else {
+                    repositoryCallback.onSuccess("QR Code already scanned.");
+                }
             }
         });
     }

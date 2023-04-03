@@ -20,7 +20,6 @@
             android:backgroundTint="@color/white"
             android:textColorHighlight="@color/white"
             android:textColorLink="#000000"
-            app:layout_constraintEnd_toStartOf="@+id/otherPlayerActionBarLabel"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -103,12 +102,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:layout_marginEnd="176dp"
             android:fontFamily="@font/roboto_medium"
             android:text="QR Code Details"
             android:textColorLink="#000000"
             android:textSize="24sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/save_button"
+            app:layout_constraintStart_toEndOf="@+id/qrBackButton"
+            app:layout_constraintHorizontal_bias="0.2"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -163,8 +163,6 @@
             android:layout_marginTop="16dp"
             android:backgroundTint="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.897"
-            app:layout_constraintStart_toEndOf="@+id/otherPlayerActionBarLabel"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/check_mark" />
 

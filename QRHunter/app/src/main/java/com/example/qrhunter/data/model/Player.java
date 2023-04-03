@@ -15,7 +15,6 @@ public class Player {
     private final String id;
     private String username;
     private String phoneNumber;
-    private int rank;
     private double totalScore;
 
     /**
@@ -27,7 +26,6 @@ public class Player {
         this.id = id;
         this.username = username;
         this.totalScore = 0;
-        this.rank = 0;
         this.phoneNumber = "";
     }
 
@@ -39,11 +37,10 @@ public class Player {
      * @param rank The rank of the player.
      * @param totalScore The total score of the player.
      */
-    public Player(String id, String username, String phoneNumber, int rank, int totalScore) {
+    public Player(String id, String username, String phoneNumber, int totalScore) {
         this.id = id;
         this.username = username;
         this.phoneNumber = phoneNumber;
-        this.rank = rank;
         this.totalScore = totalScore;
     }
 
@@ -92,23 +89,7 @@ public class Player {
         this.phoneNumber = phoneNumber;
     }
 
-    /**
-     * Returns the rank of the player.
-     *
-     * @return The rank of the player.
-     */
-    public int getRank() {
-        return rank;
-    }
 
-    /**
-     * Sets the rank of the player.
-     *
-     * @param rank The new rank of the player.
-     */
-    public void setRank(int rank) {
-        this.rank = rank;
-    }
 
     /**
      * Returns the total score of the player.
