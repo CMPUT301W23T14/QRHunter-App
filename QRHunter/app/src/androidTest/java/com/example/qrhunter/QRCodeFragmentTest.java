@@ -11,6 +11,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.test.espresso.Espresso;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 
 import com.example.qrhunter.ui.profile.ProfileFragmentDirections;
