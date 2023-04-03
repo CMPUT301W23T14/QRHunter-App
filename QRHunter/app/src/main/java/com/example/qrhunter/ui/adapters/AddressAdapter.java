@@ -16,6 +16,7 @@ import java.util.ArrayList;
  * An adapter for displaying address in the QR Code page
  */
 public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHolder> {
+
     private ArrayList<String> addresses;
 
     public AddressAdapter(ArrayList<String> address) {
@@ -34,7 +35,10 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHold
         String text = addresses.get(position);
         holder.addressItem.setText(text);
     }
-
+    /**
+     * Gets the number of addresses
+     * @return The number of addresses
+     */
     @Override
     public int getItemCount() {
         return this.addresses.size();

@@ -67,16 +67,17 @@ public class LeaderboardAdapter extends ArrayAdapter<Player> {
                 navController.navigate(action);
             }
         });
-
+        // Check if in position 0
         if (position == 0) {
             Drawable drawable = ResourcesCompat.getDrawable(getContext().getResources(), R.drawable.placement_first, null);
             player_rank.setBackground(drawable);
             player_rank.setText("");
+        // Check if in position 1
         } else if (position == 1) {
             Drawable drawable = ResourcesCompat.getDrawable(getContext().getResources(), R.drawable.placement_second, null);
             player_rank.setBackground(drawable);
             player_rank.setText("");
-
+        // Check if in position 2
         } else if (position == 2) {
             Drawable drawable = ResourcesCompat.getDrawable(getContext().getResources(), R.drawable.placement_third, null);
             player_rank.setBackground(drawable);

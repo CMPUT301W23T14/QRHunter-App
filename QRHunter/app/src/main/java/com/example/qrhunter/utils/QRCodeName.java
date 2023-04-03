@@ -5,7 +5,7 @@ package com.example.qrhunter.utils;
  */
 public class QRCodeName extends QRCodeConstants {
     /**
-     * generates the name for qrcode
+     * Generates the name of the qrCode
      */
     private final String bitValues;
     QRCodeConstants qrCodeConstants;
@@ -24,7 +24,7 @@ public class QRCodeName extends QRCodeConstants {
     }
 
     /**
-     * generate a name based on the hashValue
+     * Generate a name based on the hashValue
      */
     public void createQRName() {
 
