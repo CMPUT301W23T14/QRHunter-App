@@ -9,8 +9,11 @@ import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
+import static org.junit.Assert.assertTrue;
+
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.test.espresso.Espresso;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 
 import com.example.qrhunter.ui.profile.ProfileFragmentDirections;
@@ -59,5 +62,13 @@ public class QRCodeFragmentTest {
 
         // Check whether comment exist. FloMoMegaSpectralCrab is the default author name
         onView(withText("New comment")).check(matches(isDisplayed()));
+    }
+    @Test
+    public void add_phone_number(){
+        // Type and enter phone number
+        onView(withId(R.id.phone_number_edit_text)).perform(typeText("000222333"));
+        Espresso.closeSoftKeyboard();
+        // Check whether the phone number is the one correctly inputted
+        onView(withText("000222333")).check(matches(isDisplayed()));
     }
 }
