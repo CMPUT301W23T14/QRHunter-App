@@ -48,7 +48,6 @@ public class QRCode {
      * If qrCode has only one player, then it will be unique
      */
     private boolean unique;
-    private boolean highestUnique;
 
     private int rank;
 
@@ -73,7 +72,6 @@ public class QRCode {
         this.commentIds = commentIds;
         this.playerIds = playerIds;
         this.unique = playerIds.size() == 1;
-        this.highestUnique = false;
     }
     public QRCode() {
     }
