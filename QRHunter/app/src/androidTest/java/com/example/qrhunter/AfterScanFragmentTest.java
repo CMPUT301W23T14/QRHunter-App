@@ -31,6 +31,7 @@ import com.example.qrhunter.utils.QRCodeVisual;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.robotium.solo.Solo;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -205,5 +206,12 @@ public class AfterScanFragmentTest {
         onView(withId(R.id.addGeoLocationButton)).perform(click());
         scanViewModel.completeScan(qrCodeId, playerId, null, repositoryCallback);
         onView(withId(R.id.save_button)).perform(click());
+    }
+
+
+    @After
+    public void tearDown() throws Exception {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("players").document("TestPlayer").delete();
     }
 }

@@ -118,6 +118,8 @@ public ActivityScenarioRule<MainActivity> activityScenarioRule = new ActivitySce
         }
         // Wait for the leaderboard fragment to be displayed
         onView(withId(R.id.leaderboard_list_view)).check(matches(isDisplayed()));
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("players").document("TestPlayer").delete();
     }
 
 
