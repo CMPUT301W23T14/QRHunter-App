@@ -29,7 +29,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
-
+/**
+ * Fragment used to display the Map. Also contains the ability to show nearby QRCodes.
+ */
 
 public class MapFragment extends Fragment {
     private static final int DEFAULT_ZOOM = 15;
