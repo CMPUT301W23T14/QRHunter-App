@@ -8,5 +8,10 @@ package com.example.qrhunter.data.repository;
  * @param <T> The type of the result you're expecting
  */
 public interface RepositoryCallback<T> {
+    /**
+     * The callback method to be called
+     *
+     * @param result The result of the callback method
+     */
     void onSuccess(T result);
 }
