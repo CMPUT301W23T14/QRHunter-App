@@ -8,13 +8,19 @@ public class QRCodeConstants {
     private final String hashValue;
     private String bitValues;
 
+    /**
+     * Constructor for the qrCode hashvalue and bitvalues
+     * @param hashValue The hashvalue of the qrCode
+     */
     public QRCodeConstants(String hashValue) {
         this.hashValue = hashValue;
         this.bitValues = strToBinary(this.hashValue);
     }
 
     /**
-     * turns the string into binary values
+     * Turns the string into binary values
+     * @param s The string to be turned into binary values
+     * @return The binary as a string
      */
     private String strToBinary(String s) {
         StringBuilder binary = new StringBuilder();
@@ -32,7 +38,8 @@ public class QRCodeConstants {
     }
 
     /**
-     * @return The bit values of the qr code
+     * Gets the bit values of the QrCode
+     * @return The bit values of the qrCode
      */
     public String getBitValues() {
         return bitValues;

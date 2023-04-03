@@ -15,12 +15,19 @@ import com.robotium.solo.Solo;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
+/**
+ * Intent test for profile fragment
+ *
+ */
 public class ProfileFragmentTest {
     @Rule
     public ActivityScenarioRule<MainActivity> activityScenarioRule = new ActivityScenarioRule<>(MainActivity.class);
     private Solo solo;
-
+    /**
+     * Runs before all tests and sets up for test environment
+     *
+     * @throws Exception
+     */
     @Before
     public void setup() {
         // Launch the profile fragment
@@ -35,7 +42,10 @@ public class ProfileFragmentTest {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Tests to see if phone number input works
+     *
+     */
     @Test
     public void add_phone_number(){
         // Type and enter phone number
@@ -44,4 +54,6 @@ public class ProfileFragmentTest {
         // Check whether the phone number is the one correctly inputted
         onView(withId(R.id.phone_number_edit_text)).check(matches(withText("000222333")));
     }
+
+
 }

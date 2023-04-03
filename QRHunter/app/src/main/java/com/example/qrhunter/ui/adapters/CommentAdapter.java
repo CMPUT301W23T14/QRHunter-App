@@ -44,7 +44,10 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         holder.commentAuthor.setText(comment.getAuthor());
         holder.commentContent.setText(comment.getContent());
     }
-
+    /**
+     * Gets the number of comments
+     * @return The number of comments
+     */
     @Override
     public int getItemCount() {
         return comments.size();

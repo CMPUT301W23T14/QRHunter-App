@@ -17,14 +17,26 @@ public class PlayerInitViewModel extends ViewModel {
     private final MutableLiveData<Boolean> validUsername = new MutableLiveData<>(false);
     PlayerRepository playerRepository = new PlayerRepository();
 
+    /**
+     * Gets the username of the player
+     * @return The username of the player
+     */
     public LiveData<String> getUsername() {
         return username;
     }
 
+    /**
+     * Gets to check if the username of a player is valid
+     * @return The validity of a player's username
+     */
     public LiveData<Boolean> getValidUsername() {
         return validUsername;
     }
 
+    /**
+     * Gets the player
+     * @return The player
+     */
     public LiveData<Player> getPlayer() {
         return player;
     }
