@@ -7,6 +7,9 @@ import androidx.lifecycle.ViewModel;
 import com.example.qrhunter.data.model.Player;
 import com.example.qrhunter.data.repository.PlayerRepository;
 
+/**
+ * Model for PlayerInitFragment which stores the player, username, and validity of the username.
+ */
 
 public class PlayerInitViewModel extends ViewModel {
     private final MutableLiveData<Player> player = new MutableLiveData<>();

@@ -12,7 +12,9 @@ import com.example.qrhunter.data.repository.PlayerRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
+/**
+ * Model for LeaderboardFragment. Logic for getting, updating, and searching for players.
+ */
 public class LeaderboardViewModel extends ViewModel {
     private PlayerRepository playerRepository;
     private LiveData<List<Player>> players;

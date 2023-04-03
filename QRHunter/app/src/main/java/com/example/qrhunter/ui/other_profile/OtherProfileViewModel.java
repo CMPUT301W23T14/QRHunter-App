@@ -10,6 +10,9 @@ import com.example.qrhunter.data.repository.PlayerRepository;
 import com.example.qrhunter.data.repository.QRCodeRepository;
 
 import java.util.ArrayList;
+/**
+ * Model for OtherProfileFragment. Is used to get the "other" player and the "other" player's QRCode(s).
+ */
 
 public class OtherProfileViewModel extends ViewModel {
 

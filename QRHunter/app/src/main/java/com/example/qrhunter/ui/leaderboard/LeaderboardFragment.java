@@ -29,6 +29,9 @@ import com.example.qrhunter.databinding.FragmentLeaderboardBinding;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+/**
+ * Fragment used to display the leaderboard. Also can utilize a search bar for specific players in the leaderboard.
+ */
 
 public class LeaderboardFragment extends Fragment {
     private FragmentLeaderboardBinding binding;

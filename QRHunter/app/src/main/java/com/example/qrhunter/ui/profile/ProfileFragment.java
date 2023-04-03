@@ -32,6 +32,10 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.disposables.Disposable;
+import java.util.Comparator;
+/**
+ * This fragment is for viewing other the current player's profile page
+ */
 
 public class ProfileFragment extends Fragment {
 
