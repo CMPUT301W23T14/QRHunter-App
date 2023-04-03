@@ -34,7 +34,6 @@ public class Player {
      * @param id The unique ID of the player.
      * @param username The username of the player.
      * @param phoneNumber The phone number of the player.
-     * @param rank The rank of the player.
      * @param totalScore The total score of the player.
      */
     public Player(String id, String username, String phoneNumber, int totalScore) {
