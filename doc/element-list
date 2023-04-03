@@ -5,6 +5,7 @@ com.example.qrhunter.ui.adapters
 com.example.qrhunter.ui.auth
 com.example.qrhunter.ui.leaderboard
 com.example.qrhunter.ui.map
+com.example.qrhunter.ui.other_profile
 com.example.qrhunter.ui.profile
 com.example.qrhunter.ui.qrcode
 com.example.qrhunter.ui.scan

@@ -20,6 +20,9 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+/**
+ * Intent test for the QR Code page
+ */
 public class QRCodeFragmentTest {
     @Rule
     public ActivityScenarioRule<MainActivity> activityScenarioRule = new ActivityScenarioRule<>(MainActivity.class);
@@ -52,7 +55,7 @@ public class QRCodeFragmentTest {
     }
 
     @Test
-    public void adding_comment() {
+    public void comment_can_be_added() {
         // Type and enter comment
         onView(withId(R.id.new_comment_edit_text)).perform(typeText("New comment"));
         onView(withContentDescription("add comment")).perform(click());

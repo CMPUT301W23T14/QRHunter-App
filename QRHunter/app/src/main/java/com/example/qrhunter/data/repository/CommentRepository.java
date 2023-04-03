@@ -14,6 +14,13 @@ import java.util.Map;
  * A repository class for containing any data access and business logic related to Comments
  */
 public class CommentRepository extends DataRepository {
+
+    /**
+     * Get a list of comments given an array of comment ids.
+     *
+     * @param commentIds         The list of comment ids
+     * @param repositoryCallback Returns a list of comment in the callback
+     */
     public void getComments(ArrayList<String> commentIds, RepositoryCallback<ArrayList<Comment>> repositoryCallback) {
         if (commentIds.isEmpty())
             return;

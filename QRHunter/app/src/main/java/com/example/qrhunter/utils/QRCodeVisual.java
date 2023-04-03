@@ -13,8 +13,6 @@ public class QRCodeVisual extends QRCodeConstants {
     // for the qrcode visual representation
     private String visualRepresentation = "";
 
-    // Constants for the visual representation
-
     public QRCodeVisual(String hashValue) {
         super(hashValue);
         qrCodeConstants = new QRCodeConstants(hashValue);
@@ -38,7 +36,7 @@ public class QRCodeVisual extends QRCodeConstants {
     }
 
     /**
-     * transforms the string into a visual representation based on the hashValue
+     * Transforms the string into a visual representation based on the hashValue
      */
     public void generateVisuals() {
         // bit 0 head
@@ -92,6 +90,8 @@ public class QRCodeVisual extends QRCodeConstants {
     }
 
     /**
+     * Get the generated visual representation
+     *
      * @return A string of visual representation based on the hashValue
      */
     public String getVisualRepresentation() {
