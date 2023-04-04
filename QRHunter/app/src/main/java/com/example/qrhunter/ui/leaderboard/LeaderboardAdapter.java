@@ -84,7 +84,7 @@ public class LeaderboardAdapter extends ArrayAdapter<Player> {
             player_rank.setText("");
 
         } else {
-            player_rank.setText(String.valueOf(position));
+            player_rank.setText(String.valueOf(position+1));
             player_rank.setBackground(null);
         }
         if (Objects.equals(otherPlayer.getId(), playerId)) {

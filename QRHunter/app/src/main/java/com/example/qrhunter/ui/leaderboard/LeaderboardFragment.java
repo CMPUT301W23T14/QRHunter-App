@@ -94,12 +94,18 @@ public class LeaderboardFragment extends Fragment {
                 runnable = new Runnable() {
                     @Override
                     public void run() {
-                        leaderboardViewModel.searchPlayers(newText).observe(getViewLifecycleOwner(), players -> {
-                            // Update the data list in the adapter
-                            dataList.clear();
-                            dataList.addAll(players);
-                            leaderboardAdapter.notifyDataSetChanged();
-                        });
+                        try {
+                            leaderboardViewModel.searchPlayers(newText).observe(getViewLifecycleOwner(), players -> {
+                                // Update the data list in the adapter
+                                dataList.clear();
+                                dataList.addAll(players);
+                                leaderboardAdapter.notifyDataSetChanged();
+                            });
+                        }
+                        catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
                     }
                 };
                 handler.postDelayed(runnable, 500); // Schedule the new search query
