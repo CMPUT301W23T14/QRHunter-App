@@ -43,6 +43,22 @@ Following Android's official recommendation, application data in the database is
 
 Anything related to the data goes under the `data` package in the app. This package contains **model classes** and **repository classes**. *Note: All the repository classes (`PlayerRepository.java` and `QRCodeRepository.java`*) extends from `DataRepository.java` that holds a static reference to the Firestore database. 
 
+## Demo
+Testing of Scanning and Profile
+
+https://user-images.githubusercontent.com/56093344/235988351-9868311d-e219-4f6b-98b4-ff193d89af32.mp4
+
+Testing of leaderbord
+
+https://user-images.githubusercontent.com/56093344/235988673-3cdce2a7-aff5-40ae-a053-891ccec1adee.mp4
+
+Testing of Map
+
+
+https://user-images.githubusercontent.com/56093344/235989075-9ecec0ea-83ba-430c-8ee3-80b3b6ba9491.mp4
+
+
+
 ## Other Documentations
 Other documentations are available in the [wiki](https://github.com/CMPUT301W23T14/QRHunter-App/wiki). 
 
